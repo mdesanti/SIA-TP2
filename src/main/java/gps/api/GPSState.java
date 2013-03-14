@@ -14,4 +14,6 @@ public interface GPSState {
 	 */
 	boolean compare(GPSState state);
 	
+	Piece[][] getBoard();
+	
 }

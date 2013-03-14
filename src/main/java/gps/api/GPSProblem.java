@@ -17,7 +17,7 @@ public interface GPSProblem {
 	 * Provides the goal state for the GPS know when the goal is reached.
 	 * @return The state of the problem that indicates that it has been solved.
 	 */
-	GPSState getGoalState();
+	boolean checkGoalState(GPSState state);
 
 	
 	/**
