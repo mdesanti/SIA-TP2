@@ -38,7 +38,6 @@ public class GPSRuleImpl implements GPSRule{
 		down = getDownPiece(board);
 		left = getLeftPiece(board);
 		
-		//faltan muchas validaciones!!
 		if(up == null) {
 			if(piece.getUpColor() != 0) {
 				throw new NotAppliableException();

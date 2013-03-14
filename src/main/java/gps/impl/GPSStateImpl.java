@@ -17,6 +17,15 @@ public class GPSStateImpl implements GPSState {
 		if(state.getChecksum() != this.getChecksum()) {
 			return false;
 		}
+		//rotate the piece four times
+		Board rotated = state.getBoard();
+		for(int i = 0; i < 4; i++) {
+			if(rotated.equals(board)) {
+				return true;
+			}
+			rotated = rotated.clone();
+		}
+		return false;
 	}
 	
 	public Board getBoard() {

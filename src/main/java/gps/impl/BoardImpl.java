@@ -7,8 +7,12 @@ public class BoardImpl implements Board {
 
 	private Piece[][] board;
 	private int checksum = 0;
+	private int height;
+	private int width;
 	
 	public BoardImpl(int height, int width) {
+		this.height = height;
+		this.width = width;
 		board = new Piece[height][width];
 		initBoard();
 	}
@@ -27,8 +31,17 @@ public class BoardImpl implements Board {
 	}
 
 	public Board rotateBoard() {
-		// TODO Auto-generated method stub
-		return null;
+		Board rotated = new BoardImpl(new Piece[height][width]);
+		int ii = 0;
+        int jj = 0;
+        for(int i=0; i<width; i++){
+            for(int j=height; j>=0; j--){
+            	rotated.setPieceIn(ii, jj, this.getPieceIn(j, i).rotate());
+                jj++;
+            }
+            ii++;
+        }
+		return rotated;
 	}
 	
 	public Piece getPieceIn(int y, int x) {
@@ -66,6 +79,22 @@ public class BoardImpl implements Board {
 	@Override
 	public Board clone() {
 		return new BoardImpl(board.clone());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Board board2 = (Board)obj;
+		if(this.getChecksum() != board2.getChecksum()) {
+			return false;
+		}
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if(!this.getPieceIn(i, j).equals(board2.getPieceIn(i, j))) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 }
