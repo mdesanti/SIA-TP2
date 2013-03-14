@@ -23,8 +23,8 @@ public class GameXML {
 		@Element
 		public int right;
 
-		public GameNode(final int up, final int down, final int left,
-				final int right) {
+		public GameNode(final int up, final int right, final int down,
+				final int left) {
 			super();
 			this.up = up;
 			this.down = down;

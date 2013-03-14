@@ -71,7 +71,7 @@
             <up>1</up>
             <down>0</down>
             <left>0</left>
-            <right>0</right>
+            <right>1</right>
          </gameNode>
       </entry>
       <entry>
@@ -95,7 +95,7 @@
             <up>1</up>
             <down>1</down>
             <left>0</left>
-            <right>0</right>
+            <right>1</right>
          </gameNode>
       </entry>
       <entry>
