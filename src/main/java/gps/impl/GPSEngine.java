@@ -5,6 +5,7 @@ import gps.api.GPSRule;
 import gps.api.GPSState;
 import gps.api.SearchStrategy;
 import gps.exception.NotAppliableException;
+import gps.renderer.BoardRenderer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -49,6 +50,7 @@ public abstract class GPSEngine {
 				open.remove(0);
 				if (isGoal(currentNode)) {
 					finished = true;
+					new BoardRenderer(currentNode.getState().getBoard()).render();
 					System.out.println(currentNode.getSolution());
 					System.out.println("Expanded nodes: " + explosionCounter);
 				} else {
