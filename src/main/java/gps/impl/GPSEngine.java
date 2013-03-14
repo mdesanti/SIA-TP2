@@ -17,6 +17,14 @@ public abstract class GPSEngine {
 	private List<GPSNode> closed = new ArrayList<GPSNode>();
 
 	private GPSProblem problem;
+	
+	
+
+	public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
+		super();
+		this.problem = problem;
+		this.strategy = strategy;
+	}
 
 	// Use this variable in the addNode implementation
 	private SearchStrategy strategy;
@@ -112,5 +120,9 @@ public abstract class GPSEngine {
 	}
 
 	public abstract  void addNode(GPSNode node);
+	
+	public List<GPSNode> getOpen() {
+		return open;
+	}
 	
 }

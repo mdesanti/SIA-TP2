@@ -2,6 +2,7 @@ package gps;
 
 import gps.api.GPSProblem;
 import gps.api.Piece;
+import gps.impl.DFSEngine;
 import gps.impl.GPSEngine;
 import gps.impl.GPSProblemImpl;
 import gps.impl.PieceImpl;
@@ -26,6 +27,7 @@ public class App {
 			pieces.add(piece);
 		}
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
+		GPSEngine engine = new DFSEngine(problem, null);
 	}
 	
 }
