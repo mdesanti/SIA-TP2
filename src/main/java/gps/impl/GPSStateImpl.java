@@ -34,5 +34,5 @@ public class GPSStateImpl implements GPSState {
 	public int getChecksum() {
 		return board.getChecksum();
 	}
-
+	
 }

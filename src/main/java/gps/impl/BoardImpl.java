@@ -1,5 +1,7 @@
 package gps.impl;
 
+import com.google.common.base.Preconditions;
+
 import gps.api.Board;
 import gps.api.Piece;
 
@@ -20,6 +22,8 @@ public class BoardImpl implements Board {
 	
 	public BoardImpl(Piece[][] board) {
 		this.board = board;
+		height = board.length;
+		width = board[0].length;
 		generateCheckSum();
 	}
 	
