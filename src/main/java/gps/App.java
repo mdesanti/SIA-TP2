@@ -1,18 +1,20 @@
 package gps;
 
+import com.google.common.collect.Lists;
+import gps.api.Board;
 import gps.api.GPSProblem;
 import gps.api.Piece;
+import gps.impl.BoardImpl;
 import gps.impl.DFSEngine;
 import gps.impl.GPSEngine;
 import gps.impl.GPSProblemImpl;
 import gps.persist.GameXML;
 import gps.persist.GameXML.GameNode;
+import gps.renderer.BoardRenderer;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
 
 public class App {
 
@@ -24,7 +26,8 @@ public class App {
 			GameNode node = map.get(p);
             pieces.add(node.toPiece());
 		}
-//        Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
+        Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
+        new BoardRenderer(board).render();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
 		GPSEngine engine = new DFSEngine(problem, null);
 		engine.engine(problem, null);

@@ -27,7 +27,8 @@ public class GPSRuleImpl implements GPSRule{
 		return "Put " + piece.toString() + " in " + y + " " + x;
 	}
 
-	public GPSState evalRule(GPSState state) throws NotAppliableException {
+    @Override
+    public GPSState evalRule(GPSState state) throws NotAppliableException {
 		Board board = state.getBoard();
 		if(!board.getPieceIn(y, x).isEmtpy()) {
 			throw new NotAppliableException();

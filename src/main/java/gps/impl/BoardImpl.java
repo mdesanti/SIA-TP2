@@ -115,14 +115,14 @@ public class BoardImpl implements Board {
 	}
 
     public static Board withPieces(int width, int height, Map<Point, GameXML.GameNode> map) {
-        BoardImpl b = new BoardImpl(width, height);
+        BoardImpl b = new BoardImpl();
         b.width = width;
         b.height = height;
         b.board = new Piece[height][width];
-
         for (Point point : map.keySet()) {
-            b.board[point.y][point.x] = map.get(point).toPiece();
+            b.board[point.x][point.y] = map.get(point).toPiece();
         }
+        b.generateCheckSum();
         return b;
     }
 }
