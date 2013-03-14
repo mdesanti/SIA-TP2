@@ -1,9 +1,11 @@
 package gps.impl;
 
-import com.google.common.base.Preconditions;
-
 import gps.api.Board;
 import gps.api.Piece;
+import gps.persist.GameXML;
+
+import java.awt.*;
+import java.util.Map;
 
 public class BoardImpl implements Board {
 
@@ -11,7 +13,9 @@ public class BoardImpl implements Board {
 	private int checksum = 0;
 	private int height;
 	private int width;
-	
+
+    private BoardImpl() {}
+
 	public BoardImpl(int height, int width) {
 		this.height = height;
 		this.width = width;
@@ -109,5 +113,16 @@ public class BoardImpl implements Board {
 		}
 		return true;
 	}
-	
+
+    public static Board withPieces(int width, int height, Map<Point, GameXML.GameNode> map) {
+        BoardImpl b = new BoardImpl(width, height);
+        b.width = width;
+        b.height = height;
+        b.board = new Piece[height][width];
+
+        for (Point point : map.keySet()) {
+            b.board[point.y][point.x] = map.get(point).toPiece();
+        }
+        return b;
+    }
 }

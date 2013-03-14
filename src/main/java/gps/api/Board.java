@@ -15,4 +15,6 @@ public interface Board {
 	int getChecksum();
 
 	Board clone();
+
+
 }

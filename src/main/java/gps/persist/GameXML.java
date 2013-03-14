@@ -1,14 +1,16 @@
 package gps.persist;
 
-import java.awt.Point;
-import java.io.File;
-import java.util.Map;
-
+import gps.api.Piece;
+import gps.impl.PieceImpl;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+
+import java.awt.*;
+import java.io.File;
+import java.util.Map;
 
 @Root
 public class GameXML {
@@ -35,6 +37,11 @@ public class GameXML {
 		public GameNode() {
 			// TODO Auto-generated constructor stub
 		}
+
+        public Piece toPiece() {
+            return new PieceImpl(up, right, down, left);
+        }
+
 	}
 
 	public static GameXML fromDomain(final Object domainObject) {
