@@ -75,6 +75,8 @@ public class BoardImpl implements Board {
 	
 	public void setPieceIn(int y, int x, Piece piece) {
 		board[y][x] = piece;
+		checksum = 0;
+		generateCheckSum();
 	}
 	
 	@Override
