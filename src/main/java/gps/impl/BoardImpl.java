@@ -15,6 +15,7 @@ public class BoardImpl implements Board {
 		this.width = width;
 		board = new Piece[height][width];
 		initBoard();
+		generateCheckSum();
 	}
 	
 	public BoardImpl(Piece[][] board) {
@@ -78,7 +79,13 @@ public class BoardImpl implements Board {
 	
 	@Override
 	public Board clone() {
-		return new BoardImpl(board.clone());
+		Piece[][] clone = new Piece[height][width];
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				clone[i][j] = board[i][j];
+			}
+		}
+		return new BoardImpl(clone);
 	}
 	
 	@Override

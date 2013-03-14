@@ -50,7 +50,7 @@ public class GPSProblemImpl implements GPSProblem {
 		Board board = state.getBoard();
 		for (int i = 0; i < board.getHeight(); i++) {
 			for(int j = 0; j < board.getWidth(); j++) {
-				if(board.getPieceIn(i, j) == null) {
+				if(board.getPieceIn(i, j).isEmtpy()) {
 					return false;
 				}
 			}

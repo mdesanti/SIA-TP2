@@ -7,7 +7,6 @@ import gps.api.Piece;
 public class GPSStateImpl implements GPSState {
 	
 	private Board board;
-	private int checksum = 0;
 	
 	public GPSStateImpl(Board board) {
 		this.board = board;
@@ -33,7 +32,7 @@ public class GPSStateImpl implements GPSState {
 	}
 	
 	public int getChecksum() {
-		return checksum;
+		return board.getChecksum();
 	}
 
 }

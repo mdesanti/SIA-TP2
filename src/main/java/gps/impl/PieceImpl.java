@@ -76,4 +76,8 @@ public class PieceImpl implements Piece {
 		return true;
 	}
 	
+	public boolean isEmtpy() {
+		return up == -1 && down == -1 && left == -1 && right == -1;
+	}
+	
 }

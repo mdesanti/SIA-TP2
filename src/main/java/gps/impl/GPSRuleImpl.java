@@ -20,7 +20,7 @@ public class GPSRuleImpl implements GPSRule{
 	}
 
 	public Integer getCost() {
-		return null;
+		return 0;
 	}
 
 	public String getName() {
@@ -29,7 +29,7 @@ public class GPSRuleImpl implements GPSRule{
 
 	public GPSState evalRule(GPSState state) throws NotAppliableException {
 		Board board = state.getBoard();
-		if(board.getPieceIn(y, x) != null) {
+		if(!board.getPieceIn(y, x).isEmtpy()) {
 			throw new NotAppliableException();
 		}
 		Piece up, right, down, left;

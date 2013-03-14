@@ -28,6 +28,7 @@ public class App {
 		}
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
 		GPSEngine engine = new DFSEngine(problem, null);
+		engine.engine(problem, null);
 	}
 	
 }

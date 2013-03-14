@@ -15,5 +15,7 @@ public interface Piece {
 	 * @return
 	 */
 	Piece rotate();
+	
+	boolean isEmtpy();
 
 }

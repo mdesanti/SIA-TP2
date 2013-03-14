@@ -31,6 +31,10 @@ public class GameXML {
 			this.left = left;
 			this.right = right;
 		}
+		
+		public GameNode() {
+			// TODO Auto-generated constructor stub
+		}
 	}
 
 	public static GameXML fromDomain(final Object domainObject) {
