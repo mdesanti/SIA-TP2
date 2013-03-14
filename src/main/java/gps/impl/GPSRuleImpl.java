@@ -1,5 +1,6 @@
 package gps.impl;
 
+import gps.api.Board;
 import gps.api.GPSRule;
 import gps.api.GPSState;
 import gps.api.Piece;
@@ -27,8 +28,8 @@ public class GPSRuleImpl implements GPSRule{
 	}
 
 	public GPSState evalRule(GPSState state) throws NotAppliableException {
-		Piece[][] board = state.getBoard();
-		if(board[y][x] != null) {
+		Board board = state.getBoard();
+		if(board.getPieceIn(y, x) != null) {
 			throw new NotAppliableException();
 		}
 		Piece up, right, down, left;
@@ -75,38 +76,38 @@ public class GPSRuleImpl implements GPSRule{
 			}
 		}
 		
-		Piece[][] cloned = board.clone();
-		cloned[y][x] = piece;
+		Board cloned = board.clone();
+		cloned.setPieceIn(y, x, piece);
 		return new GPSStateImpl(cloned);
 		
 	}
 
-	private Piece getUpPiece(Piece[][] board) {
+	private Piece getUpPiece(Board board) {
 		if(y-1 < 0) {
 			return null;
 		}
-		return board[y-1][x];
+		return board.getPieceIn(y-1, x);
 	}
 	
-	private Piece getLeftPiece(Piece[][] board) {
+	private Piece getLeftPiece(Board board) {
 		if(x-1 < 0) {
 			return null;
 		}
-		return board[y][x-1];
+		return board.getPieceIn(y, x-1);
 	}
 	
-	private Piece getRightPiece(Piece[][] board) {
-		if(x+1 >= board[0].length) {
+	private Piece getRightPiece(Board board) {
+		if(x+1 >= board.getWidth()) {
 			return null;
 		}
-		return board[y][x+1];
+		return board.getPieceIn(y, x+1);
 	}
 	
-	private Piece getDownPiece(Piece[][] board) {
-		if(y+1 >= board.length) {
+	private Piece getDownPiece(Board board) {
+		if(y+1 >= board.getHeight()) {
 			return null;
 		}
-		return board[y+1][x];
+		return board.getPieceIn(y+1, x);
 	}
 
 }

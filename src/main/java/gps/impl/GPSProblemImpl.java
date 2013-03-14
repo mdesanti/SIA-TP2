@@ -1,5 +1,6 @@
 package gps.impl;
 
+import gps.api.Board;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
@@ -33,7 +34,7 @@ public class GPSProblemImpl implements GPSProblem {
 	}
 
 	public GPSState getInitState() {
-		return new GPSStateImpl(height, width);
+		return new GPSStateImpl(new BoardImpl(height, width));
 	}
 
 	public List<GPSRule> getRules() {
@@ -46,10 +47,10 @@ public class GPSProblemImpl implements GPSProblem {
 	}
 
 	public boolean checkGoalState(GPSState state) {
-		Piece[][] board = state.getBoard();
-		for (int i = 0; i < board.length; i++) {
-			for(int j = 0; j < board[0].length; j++) {
-				if(board[i][j] == null) {
+		Board board = state.getBoard();
+		for (int i = 0; i < board.getHeight(); i++) {
+			for(int j = 0; j < board.getWidth(); j++) {
+				if(board.getPieceIn(i, j) == null) {
 					return false;
 				}
 			}

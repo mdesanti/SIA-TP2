@@ -1,35 +1,30 @@
 package gps.impl;
 
+import gps.api.Board;
 import gps.api.GPSState;
 import gps.api.Piece;
 
 public class GPSStateImpl implements GPSState {
 	
-	private Piece[][] board;
+	private Board board;
+	private int checksum = 0;
 	
-	public GPSStateImpl(int height, int width) {
-		board = new Piece[height][width];
-		initBoard();
-	}
-	
-	public GPSStateImpl(Piece[][] board) {
+	public GPSStateImpl(Board board) {
 		this.board = board;
 	}
 
-	private void initBoard() {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				board[i][j] = PieceImpl.empty();
-			}
+	public boolean compare(GPSState state) {
+		if(state.getChecksum() != this.getChecksum()) {
+			return false;
 		}
 	}
-
-	public boolean compare(GPSState state) {
-		return false;
+	
+	public Board getBoard() {
+		return board;
 	}
 	
-	public Piece[][] getBoard() {
-		return board;
+	public int getChecksum() {
+		return checksum;
 	}
 
 }
