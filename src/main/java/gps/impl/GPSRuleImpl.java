@@ -50,7 +50,6 @@ public class GPSRuleImpl implements GPSRule {
 		if(board.containsPiece(piece)) {
 			return null;
 		}
-		System.out.println(state.getX() + " " + state.getY() + " ; " + x + " " + y + " => " + isValidEvalLocation(state,  board));
 		if (!isValidEvalLocation(state, board)) {
 			return null;
 		}
