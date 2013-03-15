@@ -91,4 +91,8 @@ public class PieceImpl implements Piece {
 		return idGenerator++;
 	}
 	
+	public int generateChecksum() {
+		return up + down + left + right;
+	}
+	
 }

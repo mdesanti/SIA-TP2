@@ -7,9 +7,11 @@ import gps.persist.GameXML;
 import java.awt.*;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 public class BoardImpl implements Board {
 
-	private Piece[][] board;
+	private Map<Point, Piece> board = Maps.newHashMap();
 	private int checksum = 0;
 	private int height;
 	private int width;
@@ -22,16 +24,9 @@ public class BoardImpl implements Board {
 	public BoardImpl(int height, int width) {
 		this.height = height;
 		this.width = width;
-		board = new Piece[height][width];
 		generateCheckSum();
 	}
 
-	public BoardImpl(Piece[][] board) {
-		this.board = board;
-		height = board.length;
-		width = board[0].length;
-		generateCheckSum();
-	}
 
 	public Board rotateBoard() {
 		Board rotated = new BoardImpl(height, width);
@@ -49,16 +44,18 @@ public class BoardImpl implements Board {
 	}
 
 	public Piece getPieceIn(int y, int x) {
-		if (board[y][x] == null) {
+		Point p = new Point(x, y);
+		if (board.get(p) == null) {
 			return PieceImpl.empty();
 		}
-		return board[y][x];
+		return board.get(p);
 	}
 
 	private void generateCheckSum() {
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				Piece piece = board[i][j];
+				Point p = new Point(j, i);
+				Piece piece = board.get(p);
 				if (piece == null) {
 					checksum += -4;
 				} else {
@@ -72,11 +69,11 @@ public class BoardImpl implements Board {
 	}
 
 	public int getHeight() {
-		return board.length;
+		return height;
 	}
 
 	public int getWidth() {
-		return board[0].length;
+		return width;
 	}
 
 	public int getPieceCount() {
@@ -88,26 +85,16 @@ public class BoardImpl implements Board {
 	}
 
 	public void setPieceIn(int y, int x, Piece piece) {
-		board[y][x] = piece;
+		Piece old = getPieceIn(y, x);
+		checksum -= old.generateChecksum();
+		checksum += piece.generateChecksum();
+		board.put(new Point(x, y), piece);
 		checksum = 0;
 		if (!piece.isEmtpy()) {
 			pieceCount++;
 		}
-		generateCheckSum();
 	}
 
-	@Override
-	public Board clone() {
-		Piece[][] clone = new Piece[height][width];
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				clone[i][j] = board[i][j];
-			}
-		}
-		BoardImpl b = new BoardImpl(clone);
-		b.pieceCount = this.pieceCount;
-		return b;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -130,10 +117,9 @@ public class BoardImpl implements Board {
 		BoardImpl b = new BoardImpl(width, height);
 		b.width = width;
 		b.height = height;
-		b.board = new Piece[height][width];
 
 		for (Point point : map.keySet()) {
-			b.board[point.y][point.x] = map.get(point).toPiece();
+			b.board.put(point, map.get(point).toPiece());
 		}
 		return b;
 	}
