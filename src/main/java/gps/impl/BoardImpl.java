@@ -16,14 +16,13 @@ public class BoardImpl implements Board {
 
 	private BoardImpl() {
 	}
-    private int pieceCount;
 
+	private int pieceCount;
 
 	public BoardImpl(int height, int width) {
 		this.height = height;
 		this.width = width;
 		board = new Piece[height][width];
-		initBoard();
 		generateCheckSum();
 	}
 
@@ -32,14 +31,6 @@ public class BoardImpl implements Board {
 		height = board.length;
 		width = board[0].length;
 		generateCheckSum();
-	}
-
-	private void initBoard() {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				board[i][j] = PieceImpl.empty();
-			}
-		}
 	}
 
 	public Board rotateBoard() {
@@ -58,6 +49,9 @@ public class BoardImpl implements Board {
 	}
 
 	public Piece getPieceIn(int y, int x) {
+		if (board[y][x] == null) {
+			return PieceImpl.empty();
+		}
 		return board[y][x];
 	}
 
@@ -65,10 +59,14 @@ public class BoardImpl implements Board {
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				Piece piece = board[i][j];
-				checksum += piece.getDownColor();
-				checksum += piece.getLeftColor();
-				checksum += piece.getRightColor();
-				checksum += piece.getUpColor();
+				if (piece == null) {
+					checksum += -4;
+				} else {
+					checksum += piece.getDownColor();
+					checksum += piece.getLeftColor();
+					checksum += piece.getRightColor();
+					checksum += piece.getUpColor();
+				}
 			}
 		}
 	}
@@ -81,9 +79,9 @@ public class BoardImpl implements Board {
 		return board[0].length;
 	}
 
-    public int getPieceCount() {
-        return pieceCount;
-    }
+	public int getPieceCount() {
+		return pieceCount;
+	}
 
 	public int getChecksum() {
 		return checksum;
@@ -92,7 +90,9 @@ public class BoardImpl implements Board {
 	public void setPieceIn(int y, int x, Piece piece) {
 		board[y][x] = piece;
 		checksum = 0;
-        pieceCount++;
+		if (!piece.isEmtpy()) {
+			pieceCount++;
+		}
 		generateCheckSum();
 	}
 
@@ -105,8 +105,8 @@ public class BoardImpl implements Board {
 			}
 		}
 		BoardImpl b = new BoardImpl(clone);
-        b.pieceCount = this.pieceCount;
-        return b;
+		b.pieceCount = this.pieceCount;
+		return b;
 	}
 
 	@Override

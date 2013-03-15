@@ -1,5 +1,7 @@
 package gps.api;
 
+import java.awt.Point;
+
 /**
  * GPSState interface.
  */
@@ -18,4 +20,5 @@ public interface GPSState {
 	
 	int getChecksum();
 	
+	Piece getPieceIn(Point p);
 }
