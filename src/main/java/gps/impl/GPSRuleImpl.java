@@ -48,6 +48,8 @@ public class GPSRuleImpl implements GPSRule {
 		} else {
 			if(up.getDownColor() != -1 && piece.getUpColor() != up.getDownColor()) {
 				return null;
+			} else if(up.getDownColor() == -1 && piece.getUpColor() == 0) {
+				return null;
 			}
 		}
 		if(right == null) {
@@ -56,6 +58,8 @@ public class GPSRuleImpl implements GPSRule {
 			}
 		} else {
 			if(right.getLeftColor() != -1 && piece.getRightColor() != right.getLeftColor()) {
+				return null;
+			} else if(right.getLeftColor() == -1 && piece.getRightColor() == 0) {
 				return null;
 			}
 		}
@@ -66,6 +70,8 @@ public class GPSRuleImpl implements GPSRule {
 		} else {
 			if(left.getRightColor() != -1 && piece.getLeftColor() != left.getRightColor()) {
 				return null;
+			} else if(left.getRightColor() == -1 && piece.getLeftColor() == 0) {
+				return null;
 			}
 		}
 		if(down == null) {
@@ -74,6 +80,8 @@ public class GPSRuleImpl implements GPSRule {
 			}
 		} else {
 			if(down.getUpColor() != -1 && piece.getDownColor() != down.getUpColor()) {
+				return null;
+			} else if(down.getUpColor() == -1 && piece.getDownColor() == 0) {
 				return null;
 			}
 		}

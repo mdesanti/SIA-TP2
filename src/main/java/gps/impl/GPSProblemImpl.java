@@ -23,11 +23,11 @@ public class GPSProblemImpl implements GPSProblem {
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
 					rules.add(new GPSRuleImpl(piece, i, j));
-					Piece rotated = piece.rotate();
-					for (int k = 0; k < 3; k++) {
-						rules.add(new GPSRuleImpl(rotated, i, j));
-						rotated = rotated.rotate();
-					}
+//					Piece rotated = piece.rotate();
+//					for (int k = 0; k < 3; k++) {
+//						rules.add(new GPSRuleImpl(rotated, i, j));
+//						rotated = rotated.rotate();
+//					}
 				}
 			}
 		}

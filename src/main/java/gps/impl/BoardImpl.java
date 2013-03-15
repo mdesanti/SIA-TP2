@@ -13,7 +13,7 @@ import com.google.common.collect.Maps;
 public class BoardImpl implements Board {
 
 	private Map<Point, Piece> board = Maps.newHashMap();
-	private int checksum = 0;
+	private Integer checksum = null;
 	private int height;
 	private int width;
 	private GPSState state;
@@ -26,7 +26,6 @@ public class BoardImpl implements Board {
 	public BoardImpl(int height, int width, GPSState state) {
 		this.height = height;
 		this.width = width;
-		generateCheckSum();
 		this.state = state;
 	}
 
@@ -59,7 +58,8 @@ public class BoardImpl implements Board {
 		return board.get(p);
 	}
 
-	private void generateCheckSum() {
+	private int generateCheckSum() {
+		Integer checksum = 0;
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				Piece piece = this.getPieceIn(i, j);
@@ -73,6 +73,7 @@ public class BoardImpl implements Board {
 				}
 			}
 		}
+		return checksum;
 	}
 
 	public int getHeight() {
@@ -88,15 +89,15 @@ public class BoardImpl implements Board {
 	}
 
 	public int getChecksum() {
+		if(checksum == null) {
+			checksum = generateCheckSum();
+		}
 		return checksum;
 	}
 
 	public void setPieceIn(int y, int x, Piece piece) {
-		Piece old = getPieceIn(y, x);
-		checksum -= old.generateChecksum();
-		checksum += piece.generateChecksum();
+		checksum = null;
 		board.put(new Point(x, y), piece);
-		checksum = 0;
 		if (!piece.isEmtpy()) {
 			pieceCount++;
 		}
