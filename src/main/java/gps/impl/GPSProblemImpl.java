@@ -1,14 +1,9 @@
 package gps.impl;
 
-import gps.api.Board;
-import gps.api.GPSProblem;
-import gps.api.GPSRule;
-import gps.api.GPSState;
-import gps.api.Piece;
+import com.google.common.collect.Lists;
+import gps.api.*;
 
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 public class GPSProblemImpl implements GPSProblem {
 
@@ -48,14 +43,7 @@ public class GPSProblemImpl implements GPSProblem {
 
 	public boolean checkGoalState(GPSState state) {
 		Board board = state.getBoard();
-		for (int i = 0; i < board.getHeight(); i++) {
-			for(int j = 0; j < board.getWidth(); j++) {
-				if(board.getPieceIn(i, j).isEmtpy()) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+        return board.getPieceCount() == board.getWidth() * board.getHeight();
+    }
 
 }

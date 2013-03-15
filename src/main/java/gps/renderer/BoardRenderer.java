@@ -25,12 +25,13 @@ public class BoardRenderer {
     public void render() {
 
         clearBoard();
+
         for (int i = 0; i < board.getWidth(); i++) {
             for (int j = 0; j < board.getHeight(); j++) {
-                printMap[i * 5 + 2][j * 5 + 1] = Character.forDigit(board.getPieceIn(i, j).getUpColor(), 10);
-                printMap[i * 5 + 2][j * 5 + 3] = Character.forDigit(board.getPieceIn(i, j).getDownColor(), 10);
-                printMap[i * 5 + 1][j * 5 + 2] = Character.forDigit(board.getPieceIn(i, j).getLeftColor(), 10);
-                printMap[i * 5 + 3][j * 5 + 2] = Character.forDigit(board.getPieceIn(i, j).getRightColor(), 10);
+                printMap[i * 5 + 2][j * 5 + 1] = Character.forDigit(board.getPieceIn(j, i).getUpColor(), 10);
+                printMap[i * 5 + 2][j * 5 + 3] = Character.forDigit(board.getPieceIn(j, i).getDownColor(), 10);
+                printMap[i * 5 + 1][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getLeftColor(), 10);
+                printMap[i * 5 + 3][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getRightColor(), 10);
             }
         }
         StringBuffer buff = new StringBuffer();
