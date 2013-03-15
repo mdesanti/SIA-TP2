@@ -116,7 +116,7 @@ public class BoardImpl implements Board {
 		Board board2 = (Board) obj;
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				if (!this.getPieceIn(i, j).equals(board2.getPieceIn(i, j))) {
+				if (!this.getPieceIn(i, j).equalsNoId(board2.getPieceIn(i, j))) {
 					return false;
 				}
 			}

@@ -21,5 +21,7 @@ public interface Piece {
 	boolean isEmtpy();
 	
 	public int generateChecksum();
+	
+	public boolean equalsNoId(Object obj);
 
 }

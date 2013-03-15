@@ -96,6 +96,25 @@ public class PieceImpl implements Piece {
 			return false;
 		return true;
 	}
+	
+	public boolean equalsNoId(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PieceImpl other = (PieceImpl) obj;
+		if (down != other.down)
+			return false;
+		if (left != other.left)
+			return false;
+		if (right != other.right)
+			return false;
+		if (up != other.up)
+			return false;
+		return true;
+	}
 
 	public boolean isEmtpy() {
 		return up == -1 && down == -1 && left == -1 && right == -1;
