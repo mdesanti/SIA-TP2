@@ -84,14 +84,6 @@ public class PieceImpl implements Piece {
 		if (getClass() != obj.getClass())
 			return false;
 		PieceImpl other = (PieceImpl) obj;
-		if (down != other.down)
-			return false;
-		if (left != other.left)
-			return false;
-		if (right != other.right)
-			return false;
-		if (up != other.up)
-			return false;
 		if (id != other.id)
 			return false;
 		return true;
@@ -116,12 +108,20 @@ public class PieceImpl implements Piece {
 		return true;
 	}
 
-	public boolean isEmtpy() {
+	public boolean isEmpty() {
 		return up == -1 && down == -1 && left == -1 && right == -1;
 	}
 	
 	public int generateChecksum() {
 		return up + down + left + right;
 	}
+
+	@Override
+	public String toString() {
+		return "PieceImpl [up=" + up + ", right=" + right + ", left=" + left
+				+ ", down=" + down + ", id=" + id + "]";
+	}
+	
+	
 	
 }

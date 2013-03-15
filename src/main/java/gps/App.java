@@ -26,11 +26,11 @@ public class App {
 		for(Point p: map.keySet()) {
 			GameNode node = map.get(p);
             pieces.add(node.toPiece());
+            System.out.println(node.toPiece().toString());
 		}
-
 	    Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
-        new BoardRenderer(board).render();
+        new BoardRenderer(board).renderInitial();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
 		GPSEngine engine = new DFSEngine(problem, null);
 		engine.engine(problem, null);

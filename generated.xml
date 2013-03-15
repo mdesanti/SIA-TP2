@@ -23,25 +23,13 @@
             <up>0</up>
             <down>1</down>
             <left>0</left>
-            <right>1</right>
+            <right>2</right>
          </gameNode>
       </entry>
       <entry>
          <point>
             <x>1</x>
             <y>2</y>
-         </point>
-         <gameNode>
-            <up>1</up>
-            <down>1</down>
-            <left>1</left>
-            <right>0</right>
-         </gameNode>
-      </entry>
-      <entry>
-         <point>
-            <x>2</x>
-            <y>1</y>
          </point>
          <gameNode>
             <up>1</up>
@@ -52,20 +40,32 @@
       </entry>
       <entry>
          <point>
+            <x>2</x>
+            <y>1</y>
+         </point>
+         <gameNode>
+            <up>1</up>
+            <down>1</down>
+            <left>5</left>
+            <right>0</right>
+         </gameNode>
+      </entry>
+      <entry>
+         <point>
             <x>1</x>
             <y>1</y>
          </point>
          <gameNode>
             <up>1</up>
             <down>1</down>
-            <left>1</left>
-            <right>1</right>
+            <left>4</left>
+            <right>5</right>
          </gameNode>
       </entry>
       <entry>
          <point>
-            <x>2</x>
-            <y>0</y>
+            <x>0</x>
+            <y>2</y>
          </point>
          <gameNode>
             <up>1</up>
@@ -76,13 +76,13 @@
       </entry>
       <entry>
          <point>
-            <x>0</x>
-            <y>2</y>
+            <x>2</x>
+            <y>0</y>
          </point>
          <gameNode>
             <up>0</up>
             <down>1</down>
-            <left>1</left>
+            <left>3</left>
             <right>0</right>
          </gameNode>
       </entry>
@@ -92,10 +92,10 @@
             <y>0</y>
          </point>
          <gameNode>
-            <up>1</up>
+            <up>0</up>
             <down>1</down>
-            <left>0</left>
-            <right>1</right>
+            <left>2</left>
+            <right>3</right>
          </gameNode>
       </entry>
       <entry>
@@ -104,10 +104,10 @@
             <y>1</y>
          </point>
          <gameNode>
-            <up>0</up>
+            <up>1</up>
             <down>1</down>
-            <left>1</left>
-            <right>1</right>
+            <left>0</left>
+            <right>4</right>
          </gameNode>
       </entry>
    </nodes>

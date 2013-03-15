@@ -58,6 +58,8 @@ public abstract class GPSEngine {
 					System.out.println("Expanded nodes: " + explosionCounter);
 				} else {
 					explosionCounter++;
+					renderer.setBoard(currentNode.getState().getBoard());
+					renderer.render();
 					explode(currentNode);
 				}
 			}
@@ -92,8 +94,7 @@ public abstract class GPSEngine {
 					&& !checkBranch(node, newState)
 					&& !checkOpenAndClosed(node.getCost() + rule.getCost(),
 							newState)) {
-				renderer.setBoard(newState.getBoard());
-				renderer.render();
+
 				GPSNode newNode = new GPSNode(newState, node.getCost()
 						+ rule.getCost());
 				newNode.setParent(node);

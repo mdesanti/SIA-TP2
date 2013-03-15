@@ -17,7 +17,6 @@ public class GPSStateImpl implements GPSState {
 	private int height;
 	private int width;
 	private Map<Point, Piece> cache = Maps.newHashMap();
-
 	public GPSStateImpl(Piece addedPiece, int y, int x, int height, int width,
 			GPSState parent) {
 		super();
@@ -30,7 +29,6 @@ public class GPSStateImpl implements GPSState {
 			cache.put(new Point(x, y), addedPiece);
 		}
 	}
-
 	public boolean compare(GPSState state) {
 		// if(state.getChecksum() != this.getChecksum()) {
 		// return false;
@@ -53,6 +51,17 @@ public class GPSStateImpl implements GPSState {
 		return false;
 	}
 
+	public boolean containsPiece(Piece p) {
+		if(cache.containsValue(p)) {
+			return true;
+		} else {
+			if(parent == null) {
+				return false;
+			}
+			return parent.containsPiece(p);
+		}
+	}
+
 	public Board getBoard() {
 		Board b = new BoardImpl(height, width, this);
 //		for (int i = 0; i < height; i++) {
@@ -63,6 +72,11 @@ public class GPSStateImpl implements GPSState {
 //			}
 //		}
 		return b;
+	}
+
+	public int getChecksum() {
+		// return board.getChecksum();
+		return 0;
 	}
 
 	public Piece getPieceIn(Point point) {
@@ -78,20 +92,12 @@ public class GPSStateImpl implements GPSState {
 		return p;
 	}
 
-	public int getChecksum() {
-		// return board.getChecksum();
-		return 0;
+	public int getX() {
+		return x;
 	}
 	
-	public boolean containsPiece(Piece p) {
-		if(cache.containsValue(p)) {
-			return true;
-		} else {
-			if(parent == null) {
-				return false;
-			}
-			return parent.containsPiece(p);
-		}
+	public int getY() {
+		return y;
 	}
 
 }

@@ -15,7 +15,7 @@ public class GameGenerator {
 
 		 * -------------------
 		 * |  0  |  0  |  0  |
-		 * | 0 1 | 1 1 | 1 0 |
+		 * | 0 2 | 2 3 | 3 0 |
 		 * |  1  |  1  |  1  |
 		 * ------------------|
 		 * |  1  |  1  |  1  |
@@ -23,17 +23,17 @@ public class GameGenerator {
 		 * |  1  |  1  |  1  |
 		 * ------------------|
 		 * |  1  |  1  |  1  |
-		 * | 0 1 | 1 1 | 1 0 |
+		 * | 0 5 | 5 4 | 4 0 |
 		 * |  0  |  0  |  0  |
 		 * -------------------
 		 */
 
-        xml.nodes.put(new Point(0, 0), new GameXML.GameNode(0, 1, 1, 0));
-        xml.nodes.put(new Point(1, 0), new GameXML.GameNode(0, 1, 1, 1));
-        xml.nodes.put(new Point(2, 0), new GameXML.GameNode(0, 0, 1, 1));
-        xml.nodes.put(new Point(0, 1), new GameXML.GameNode(1, 1, 1, 0));
-        xml.nodes.put(new Point(1, 1), new GameXML.GameNode(1, 1, 1, 1));
-        xml.nodes.put(new Point(2, 1), new GameXML.GameNode(1, 0, 1, 1));
+        xml.nodes.put(new Point(0, 0), new GameXML.GameNode(0, 2, 1, 0));
+        xml.nodes.put(new Point(1, 0), new GameXML.GameNode(0, 3, 1, 2));
+        xml.nodes.put(new Point(2, 0), new GameXML.GameNode(0, 0, 1, 3));
+        xml.nodes.put(new Point(0, 1), new GameXML.GameNode(1, 4, 1, 0));
+        xml.nodes.put(new Point(1, 1), new GameXML.GameNode(1, 5, 1, 4));
+        xml.nodes.put(new Point(2, 1), new GameXML.GameNode(1, 0, 1, 5));
         xml.nodes.put(new Point(0, 2), new GameXML.GameNode(1, 1, 0, 0));
         xml.nodes.put(new Point(1, 2), new GameXML.GameNode(1, 1, 0, 1));
         xml.nodes.put(new Point(2, 2), new GameXML.GameNode(1, 0, 0, 1));

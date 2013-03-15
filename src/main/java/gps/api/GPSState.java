@@ -23,4 +23,8 @@ public interface GPSState {
 	Piece getPieceIn(Point p);
 	
 	boolean containsPiece(Piece p);
+
+	int getX();
+
+	int getY();
 }

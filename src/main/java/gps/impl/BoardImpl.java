@@ -88,7 +88,7 @@ public class BoardImpl implements Board {
 		int count = 0;
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				if(!this.getPieceIn(i, j).isEmtpy()) {
+				if(!this.getPieceIn(i, j).isEmpty()) {
 					count++;
 				}
 			}
@@ -106,7 +106,7 @@ public class BoardImpl implements Board {
 	public void setPieceIn(int y, int x, Piece piece) {
 		checksum = null;
 		board.put(new Point(x, y), piece);
-		if (!piece.isEmtpy()) {
+		if (!piece.isEmpty()) {
 			pieceCount++;
 		}
 	}

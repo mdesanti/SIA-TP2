@@ -18,7 +18,7 @@ public interface Piece {
 	 */
 	Piece rotate();
 	
-	boolean isEmtpy();
+	boolean isEmpty();
 	
 	public int generateChecksum();
 	

@@ -26,13 +26,21 @@ public class GPSRuleImpl implements GPSRule {
 	public String getName() {
 		return "Put " + piece.toString() + " in " + y + " " + x;
 	}
+	
+	private boolean isNextEvalLocation(GPSState state, Board board) {
+		return (state.getX() + 1 == board.getWidth()) ? state.getY() + 1 == y :
+			state.getX() + 1 == x;
+	}
 
     public GPSState evalRule(GPSState state) throws NotAppliableException {
 		Board board = state.getBoard();
 		if(board.containsPiece(piece)) {
 			return null;
 		}
-		if(!board.getPieceIn(y, x).isEmtpy()) {
+//		if (state != null && isNextEvalLocation(state, board)) {
+//			return null;
+//		}
+		if(!board.getPieceIn(y, x).isEmpty()) {
 			return null;
 		}
 		Piece up, right, down, left;

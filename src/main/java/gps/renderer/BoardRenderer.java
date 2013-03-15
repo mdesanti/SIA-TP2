@@ -24,8 +24,6 @@ public class BoardRenderer {
         this.printMap = new char[board.getHeight() * 5 + 1][board.getWidth() * 5 + 1];
     }
 
-    
-    
     public BoardRenderer() {
 		try {
 			this.out = new PrintStream(new File("test.txt"));
@@ -39,28 +37,54 @@ public class BoardRenderer {
 		this.printMap = new char[board.getHeight() * 5 + 1][board.getWidth() * 5 + 1];
 	}
 
-
-
 	public void render() {
 
         clearBoard();
 
-        for (int i = 0; i < board.getWidth(); i++) {
-            for (int j = 0; j < board.getHeight(); j++) {
-                printMap[i * 5 + 2][j * 5 + 1] = Character.forDigit(board.getPieceIn(j, i).getUpColor() == -1? 7:board.getPieceIn(j, i).getUpColor(), 10);
-                printMap[i * 5 + 2][j * 5 + 3] = Character.forDigit(board.getPieceIn(j, i).getDownColor() == -1? 7:board.getPieceIn(j, i).getDownColor(), 10);
-                printMap[i * 5 + 1][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getLeftColor() == -1? 7:board.getPieceIn(j, i).getLeftColor(), 10);
-                printMap[i * 5 + 3][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getRightColor() == -1? 7:board.getPieceIn(j, i).getRightColor(), 10);
+		for (int j = 0; j < board.getHeight(); j++) {
+			for (int i = 0; i < board.getWidth(); i++) {
+                printMap[j * 5 + 1][i * 5 + 2] = Character.forDigit(board.getPieceIn(j,i).getUpColor() == -1? 7:board.getPieceIn(j,i).getUpColor(), 10);
+                printMap[j * 5 + 3][i * 5 + 2] = Character.forDigit(board.getPieceIn(j,i).getDownColor() == -1? 7:board.getPieceIn(j,i).getDownColor(), 10);
+                printMap[j * 5 + 2][i * 5 + 1] = Character.forDigit(board.getPieceIn(j,i).getLeftColor() == -1? 7:board.getPieceIn(j,i).getLeftColor(), 10);
+                printMap[j * 5 + 2][i * 5 + 3] = Character.forDigit(board.getPieceIn(j,i).getRightColor() == -1? 7:board.getPieceIn(j,i).getRightColor(), 10);
             }
         }
         StringBuffer buff = new StringBuffer();
         buff.append("---------------\n");
-        for (int i = 0; i < printMap[0].length; i++) {
-            for (int j = 0; j < printMap.length; j++) {
-                buff.append(printMap[i][j]);
+
+
+		for (int j = 0; j < printMap.length; j++) {
+			for (int i = 0; i < printMap[0].length; i++) {
+				buff.append(printMap[j][i]);
+			}
+			buff.append("\n");
+		}
+        buff.append("---------------\n");
+        out.print(buff.toString());
+    }
+	
+	public void renderInitial() {
+
+        clearBoard();
+
+		for (int j = 0; j < board.getHeight(); j++) {
+			for (int i = 0; i < board.getWidth(); i++) {
+                printMap[j * 5 + 1][i * 5 + 2] = Character.forDigit(board.getPieceIn(i,j).getUpColor() == -1? 7:board.getPieceIn(i,j).getUpColor(), 10);
+                printMap[j * 5 + 3][i * 5 + 2] = Character.forDigit(board.getPieceIn(i,j).getDownColor() == -1? 7:board.getPieceIn(i,j).getDownColor(), 10);
+                printMap[j * 5 + 2][i * 5 + 1] = Character.forDigit(board.getPieceIn(i,j).getLeftColor() == -1? 7:board.getPieceIn(i,j).getLeftColor(), 10);
+                printMap[j * 5 + 2][i * 5 + 3] = Character.forDigit(board.getPieceIn(i,j).getRightColor() == -1? 7:board.getPieceIn(i,j).getRightColor(), 10);
             }
-            buff.append("\n");
         }
+        StringBuffer buff = new StringBuffer();
+        buff.append("---------------\n");
+
+
+		for (int j = 0; j < printMap.length; j++) {
+			for (int i = 0; i < printMap[0].length; i++) {
+				buff.append(printMap[j][i]);
+			}
+			buff.append("\n");
+		}
         buff.append("---------------\n");
         out.print(buff.toString());
     }
