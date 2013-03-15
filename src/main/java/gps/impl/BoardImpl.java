@@ -14,7 +14,8 @@ public class BoardImpl implements Board {
 	private int height;
 	private int width;
 
-    private BoardImpl() {}
+	private BoardImpl() {
+	}
 
 	public BoardImpl(int height, int width) {
 		this.height = height;
@@ -23,14 +24,14 @@ public class BoardImpl implements Board {
 		initBoard();
 		generateCheckSum();
 	}
-	
+
 	public BoardImpl(Piece[][] board) {
 		this.board = board;
 		height = board.length;
 		width = board[0].length;
 		generateCheckSum();
 	}
-	
+
 	private void initBoard() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
@@ -40,26 +41,27 @@ public class BoardImpl implements Board {
 	}
 
 	public Board rotateBoard() {
-		Board rotated = new BoardImpl(new Piece[height][width]);
+		Board rotated = new BoardImpl(height, width);
 		int ii = 0;
-        int jj = 0;
-        for(int i=0; i<width; i++){
-            for(int j=height; j>=0; j--){
-            	rotated.setPieceIn(ii, jj, this.getPieceIn(j, i).rotate());
-                jj++;
-            }
-            ii++;
-        }
+		int jj = 0;
+		for (int i = 0; i < width; i++) {
+			for (int j = height - 1; j >= 0; j--) {
+				rotated.setPieceIn(ii, jj, this.getPieceIn(j, i).rotate());
+				jj++;
+			}
+			ii++;
+			jj = 0;
+		}
 		return rotated;
 	}
-	
+
 	public Piece getPieceIn(int y, int x) {
 		return board[y][x];
 	}
-	
+
 	private void generateCheckSum() {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
 				Piece piece = board[i][j];
 				checksum += piece.getDownColor();
 				checksum += piece.getLeftColor();
@@ -68,25 +70,25 @@ public class BoardImpl implements Board {
 			}
 		}
 	}
-	
+
 	public int getHeight() {
 		return board.length;
 	}
-	
+
 	public int getWidth() {
 		return board[0].length;
 	}
-	
+
 	public int getChecksum() {
 		return checksum;
 	}
-	
+
 	public void setPieceIn(int y, int x, Piece piece) {
 		board[y][x] = piece;
 		checksum = 0;
 		generateCheckSum();
 	}
-	
+
 	@Override
 	public Board clone() {
 		Piece[][] clone = new Piece[height][width];
@@ -97,16 +99,16 @@ public class BoardImpl implements Board {
 		}
 		return new BoardImpl(clone);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		Board board2 = (Board)obj;
-		if(this.getChecksum() != board2.getChecksum()) {
+		Board board2 = (Board) obj;
+		if (this.getChecksum() != board2.getChecksum()) {
 			return false;
 		}
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				if(!this.getPieceIn(i, j).equals(board2.getPieceIn(i, j))) {
+				if (!this.getPieceIn(i, j).equals(board2.getPieceIn(i, j))) {
 					return false;
 				}
 			}
@@ -114,15 +116,16 @@ public class BoardImpl implements Board {
 		return true;
 	}
 
-    public static Board withPieces(int width, int height, Map<Point, GameXML.GameNode> map) {
-        BoardImpl b = new BoardImpl(width, height);
-        b.width = width;
-        b.height = height;
-        b.board = new Piece[height][width];
+	public static Board withPieces(int width, int height,
+			Map<Point, GameXML.GameNode> map) {
+		BoardImpl b = new BoardImpl(width, height);
+		b.width = width;
+		b.height = height;
+		b.board = new Piece[height][width];
 
-        for (Point point : map.keySet()) {
-            b.board[point.y][point.x] = map.get(point).toPiece();
-        }
-        return b;
-    }
+		for (Point point : map.keySet()) {
+			b.board[point.y][point.x] = map.get(point).toPiece();
+		}
+		return b;
+	}
 }

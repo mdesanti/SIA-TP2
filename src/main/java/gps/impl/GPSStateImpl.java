@@ -22,7 +22,7 @@ public class GPSStateImpl implements GPSState {
 			if(rotated.equals(board)) {
 				return true;
 			}
-			rotated = rotated.clone();
+			rotated = rotated.rotateBoard();
 		}
 		return false;
 	}

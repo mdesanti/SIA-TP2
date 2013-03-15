@@ -24,7 +24,6 @@ public class App {
 			GameNode node = map.get(p);
             pieces.add(node.toPiece());
 		}
-//        Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
 		GPSEngine engine = new DFSEngine(problem, null);
 		engine.engine(problem, null);
