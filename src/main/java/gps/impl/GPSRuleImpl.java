@@ -29,8 +29,11 @@ public class GPSRuleImpl implements GPSRule {
 
     public GPSState evalRule(GPSState state) throws NotAppliableException {
 		Board board = state.getBoard();
+		if(board.containsPiece(piece)) {
+			return null;
+		}
 		if(!board.getPieceIn(y, x).isEmtpy()) {
-			throw new NotAppliableException();
+			return null;
 		}
 		Piece up, right, down, left;
 		up = getUpPiece(board);
@@ -40,38 +43,38 @@ public class GPSRuleImpl implements GPSRule {
 		
 		if(up == null) {
 			if(piece.getUpColor() != 0) {
-				throw new NotAppliableException();
+				return null;
 			}
 		} else {
 			if(up.getDownColor() != -1 && piece.getUpColor() != up.getDownColor()) {
-				throw new NotAppliableException();
+				return null;
 			}
 		}
 		if(right == null) {
 			if(piece.getRightColor() != 0) {
-				throw new NotAppliableException();
+				return null;
 			}
 		} else {
 			if(right.getLeftColor() != -1 && piece.getRightColor() != right.getLeftColor()) {
-				throw new NotAppliableException();
+				return null;
 			}
 		}
 		if(left == null) {
 			if(piece.getLeftColor() != 0) {
-				throw new NotAppliableException();
+				return null;
 			}
 		} else {
 			if(left.getRightColor() != -1 && piece.getLeftColor() != left.getRightColor()) {
-				throw new NotAppliableException();
+				return null;
 			}
 		}
 		if(down == null) {
 			if(piece.getDownColor() != 0) {
-				throw new NotAppliableException();
+				return null;
 			}
 		} else {
 			if(down.getUpColor() != -1 && piece.getDownColor() != down.getUpColor()) {
-				throw new NotAppliableException();
+				return null;
 			}
 		}
 		

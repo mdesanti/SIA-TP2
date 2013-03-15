@@ -119,8 +119,12 @@ public class BoardImpl implements Board {
 		b.height = height;
 
 		for (Point point : map.keySet()) {
-			b.board.put(point, map.get(point).toPiece());
+			b.board.put(new Point(point.y, point.x), map.get(point).toPiece());
 		}
 		return b;
+	}
+	
+	public boolean containsPiece(Piece piece) {
+		return board.containsValue(piece);
 	}
 }

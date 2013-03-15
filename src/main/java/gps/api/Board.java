@@ -15,4 +15,6 @@ public interface Board {
 	int getChecksum();
 
     int getPieceCount();
+    
+    public boolean containsPiece(Piece piece);
 }

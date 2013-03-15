@@ -34,14 +34,14 @@ public class GPSStateImpl implements GPSState {
 		// return false;
 		// }
 		// rotate the piece four times
-		Board rotated = state.getBoard();
-		Board myBoard = this.getBoard();
-		if(rotated.getPieceCount() != myBoard.getPieceCount()) {
-			return false;
-		}
-		if (rotated.equals(myBoard)) {
-			return true;
-		}
+//		Board rotated = state.getBoard();
+//		Board myBoard = this.getBoard();
+//		if(rotated.getPieceCount() != myBoard.getPieceCount()) {
+//			return false;
+//		}
+//		if (rotated.equals(myBoard)) {
+//			return true;
+//		}
 		// for(int i = 0; i < 4; i++) {
 		// if(rotated.equals(myBoard)) {
 		// return true;
