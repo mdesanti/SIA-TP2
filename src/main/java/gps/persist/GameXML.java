@@ -17,13 +17,13 @@ public class GameXML {
 	@Root
 	public static class GameNode {
 		@Element
-		public int up;
+		public int up = -1;
 		@Element
-		public int down;
+		public int down = -1;
 		@Element
-		public int left;
+		public int left = -1;
 		@Element
-		public int right;
+		public int right = -1;
 
 		public GameNode(final int up, final int right, final int down,
 				final int left) {

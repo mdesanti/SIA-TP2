@@ -1,27 +1,22 @@
 package gps;
 
+import com.google.common.collect.Lists;
 import gps.api.Board;
 import gps.api.GPSProblem;
 import gps.api.Piece;
-import gps.impl.BFSEngine;
-import gps.impl.BoardImpl;
-import gps.impl.DFSEngine;
-import gps.impl.GPSEngine;
-import gps.impl.GPSProblemImpl;
+import gps.impl.*;
 import gps.persist.GameXML;
 import gps.persist.GameXML.GameNode;
 import gps.renderer.BoardRenderer;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
 
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		GameXML game = GameXML.fromXml("generated.xml");
+		GameXML game = GameXML.fromXml("random.xml");
 		Map<Point, GameNode> map =  game.nodes;
 		List<Piece> pieces = Lists.newArrayList();
 		for(Point p: map.keySet()) {
@@ -33,7 +28,7 @@ public class App {
         System.out.println("Showing the start level...");
         new BoardRenderer(board).renderInitial();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
-		GPSEngine engine = new BFSEngine(problem, null);
+		GPSEngine engine = new DFSEngine(problem, null);
 		engine.engine(problem, null);
 	}
 	
