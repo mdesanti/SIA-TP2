@@ -9,6 +9,8 @@ public interface Piece {
 	int getLeftColor();
 
 	int getRightColor();
+	
+	int getId();
 
 	/**
 	 * Rotates the piece 90 degrees clockwise

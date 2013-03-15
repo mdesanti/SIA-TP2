@@ -29,7 +29,7 @@ public class GPSProblemImpl implements GPSProblem {
 	}
 
 	public GPSState getInitState() {
-		return new GPSStateImpl(new BoardImpl(height, width));
+		return new GPSStateImpl(null, -1, -1, height, width, null);
 	}
 
 	public List<GPSRule> getRules() {

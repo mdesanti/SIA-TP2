@@ -6,7 +6,7 @@ import gps.api.GPSState;
 import gps.api.Piece;
 import gps.exception.NotAppliableException;
 
-public class GPSRuleImpl implements GPSRule{
+public class GPSRuleImpl implements GPSRule {
 	
 	private Piece piece;
 	private int y;
@@ -27,7 +27,6 @@ public class GPSRuleImpl implements GPSRule{
 		return "Put " + piece.toString() + " in " + y + " " + x;
 	}
 
-    @Override
     public GPSState evalRule(GPSState state) throws NotAppliableException {
 		Board board = state.getBoard();
 		if(!board.getPieceIn(y, x).isEmtpy()) {
@@ -76,9 +75,7 @@ public class GPSRuleImpl implements GPSRule{
 			}
 		}
 		
-		Board cloned = board.clone();
-		cloned.setPieceIn(y, x, piece);
-		return new GPSStateImpl(cloned);
+		return new GPSStateImpl(piece,y, x, board.getHeight(), board.getWidth(), state);
 		
 	}
 

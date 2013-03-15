@@ -81,13 +81,10 @@ public class BoardImpl implements Board {
 		return board[0].length;
 	}
 
-<<<<<<< HEAD
-=======
     public int getPieceCount() {
         return pieceCount;
     }
 
->>>>>>> 72aa8486a122cb0f7450f27c1a11109aa24623dc
 	public int getChecksum() {
 		return checksum;
 	}
@@ -128,7 +125,6 @@ public class BoardImpl implements Board {
 		return true;
 	}
 
-<<<<<<< HEAD
 	public static Board withPieces(int width, int height,
 			Map<Point, GameXML.GameNode> map) {
 		BoardImpl b = new BoardImpl(width, height);
@@ -141,17 +137,4 @@ public class BoardImpl implements Board {
 		}
 		return b;
 	}
-=======
-    public static Board withPieces(int width, int height, Map<Point, GameXML.GameNode> map) {
-        BoardImpl b = new BoardImpl();
-        b.width = width;
-        b.height = height;
-        b.board = new Piece[height][width];
-        for (Point point : map.keySet()) {
-            b.board[point.x][point.y] = map.get(point).toPiece();
-        }
-        b.generateCheckSum();
-        return b;
-    }
->>>>>>> 72aa8486a122cb0f7450f27c1a11109aa24623dc
 }
