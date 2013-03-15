@@ -27,9 +27,22 @@ public class GPSRuleImpl implements GPSRule {
 		return "Put " + piece.toString() + " in " + y + " " + x;
 	}
 	
-	private boolean isNextEvalLocation(GPSState state, Board board) {
-		return (state.getX() + 1 == board.getWidth()) ? state.getY() + 1 == y :
-			state.getX() + 1 == x;
+	private boolean isValidEvalLocation(GPSState state, Board board) {
+
+		
+		if (state.getX() == -1 || state.getY() == -1) {
+			return x == 0 && y == 0;
+		}
+		
+		if (state.getX() + 1 == board.getWidth() && state.getY() + 1 == board.getWidth()) {
+			return false;
+		}
+		
+		if (state.getX() + 1 == board.getWidth()) {
+			return state.getY() + 1 == y && x == 0; 
+		} else {
+			return state.getX() + 1 == x && state.getY() == y;
+		}
 	}
 
     public GPSState evalRule(GPSState state) throws NotAppliableException {
@@ -37,9 +50,10 @@ public class GPSRuleImpl implements GPSRule {
 		if(board.containsPiece(piece)) {
 			return null;
 		}
-//		if (state != null && isNextEvalLocation(state, board)) {
-//			return null;
-//		}
+		System.out.println(state.getX() + " " + state.getY() + " ; " + x + " " + y + " => " + isValidEvalLocation(state,  board));
+		if (!isValidEvalLocation(state, board)) {
+			return null;
+		}
 		if(!board.getPieceIn(y, x).isEmpty()) {
 			return null;
 		}
