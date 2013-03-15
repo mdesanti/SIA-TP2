@@ -52,14 +52,14 @@ public class GPSStateImpl implements GPSState {
 	}
 
 	public Board getBoard() {
-		Board b = new BoardImpl(height, width);
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				Point point = new Point(j, i);
-				Piece piece = getPieceIn(point);
-				b.setPieceIn(i, j, piece);
-			}
-		}
+		Board b = new BoardImpl(height, width, this);
+//		for (int i = 0; i < height; i++) {
+//			for (int j = 0; j < width; j++) {
+//				Point point = new Point(j, i);
+//				Piece piece = getPieceIn(point);
+//				b.setPieceIn(i, j, piece);
+//			}
+//		}
 		return b;
 	}
 
@@ -79,6 +79,17 @@ public class GPSStateImpl implements GPSState {
 	public int getChecksum() {
 		// return board.getChecksum();
 		return 0;
+	}
+	
+	public boolean containsPiece(Piece p) {
+		if(cache.containsValue(p)) {
+			return true;
+		} else {
+			if(parent == null) {
+				return false;
+			}
+			return parent.containsPiece(p);
+		}
 	}
 
 }

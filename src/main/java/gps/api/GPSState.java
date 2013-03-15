@@ -21,4 +21,6 @@ public interface GPSState {
 	int getChecksum();
 	
 	Piece getPieceIn(Point p);
+	
+	boolean containsPiece(Piece p);
 }

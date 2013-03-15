@@ -1,10 +1,11 @@
 package gps.impl;
 
 import gps.api.Board;
+import gps.api.GPSState;
 import gps.api.Piece;
 import gps.persist.GameXML;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -15,38 +16,45 @@ public class BoardImpl implements Board {
 	private int checksum = 0;
 	private int height;
 	private int width;
+	private GPSState state;
 
 	private BoardImpl() {
 	}
 
 	private int pieceCount;
 
-	public BoardImpl(int height, int width) {
+	public BoardImpl(int height, int width, GPSState state) {
 		this.height = height;
 		this.width = width;
 		generateCheckSum();
+		this.state = state;
 	}
 
-
 	public Board rotateBoard() {
-		Board rotated = new BoardImpl(height, width);
-		int ii = 0;
-		int jj = 0;
-		for (int i = 0; i < width; i++) {
-			for (int j = height - 1; j >= 0; j--) {
-				rotated.setPieceIn(ii, jj, this.getPieceIn(j, i).rotate());
-				jj++;
-			}
-			ii++;
-			jj = 0;
-		}
-		return rotated;
+		// Board rotated = new BoardImpl(height, width);
+		// int ii = 0;
+		// int jj = 0;
+		// for (int i = 0; i < width; i++) {
+		// for (int j = height - 1; j >= 0; j--) {
+		// rotated.setPieceIn(ii, jj, this.getPieceIn(j, i).rotate());
+		// jj++;
+		// }
+		// ii++;
+		// jj = 0;
+		// }
+		// return rotated;
+		return null;
 	}
 
 	public Piece getPieceIn(int y, int x) {
 		Point p = new Point(x, y);
 		if (board.get(p) == null) {
-			return PieceImpl.empty();
+			if (state == null) {
+				board.put(p, PieceImpl.empty());
+			} else {
+				Piece piece = state.getPieceIn(p);
+				board.put(p, piece);
+			}
 		}
 		return board.get(p);
 	}
@@ -54,8 +62,7 @@ public class BoardImpl implements Board {
 	private void generateCheckSum() {
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				Point p = new Point(j, i);
-				Piece piece = board.get(p);
+				Piece piece = this.getPieceIn(i, j);
 				if (piece == null) {
 					checksum += -4;
 				} else {
@@ -95,7 +102,6 @@ public class BoardImpl implements Board {
 		}
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
 		Board board2 = (Board) obj;
@@ -114,7 +120,7 @@ public class BoardImpl implements Board {
 
 	public static Board withPieces(int width, int height,
 			Map<Point, GameXML.GameNode> map) {
-		BoardImpl b = new BoardImpl(width, height);
+		BoardImpl b = new BoardImpl(width, height, null);
 		b.width = width;
 		b.height = height;
 
@@ -123,8 +129,12 @@ public class BoardImpl implements Board {
 		}
 		return b;
 	}
-	
+
 	public boolean containsPiece(Piece piece) {
-		return board.containsValue(piece);
+		if(!board.containsValue(piece)) {
+			return state.containsPiece(piece);
+		} else {
+			return true;
+		}
 	}
 }
