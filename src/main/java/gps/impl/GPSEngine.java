@@ -4,6 +4,7 @@ import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
 import gps.api.SearchStrategy;
+import gps.api.StatsHolder;
 import gps.exception.NotAppliableException;
 import gps.renderer.BoardRenderer;
 
@@ -21,28 +22,30 @@ public abstract class GPSEngine {
 	
 	private BoardRenderer renderer = new BoardRenderer();
 	
+	private StatsHolder stats;
 	
-
+	// Use this variable in the addNode implementation
+	private SearchStrategy strategy;
+	
 	public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
 		super();
 		this.problem = problem;
 		this.strategy = strategy;
 	}
 
-	// Use this variable in the addNode implementation
-	private SearchStrategy strategy;
 
-	public void engine(GPSProblem myProblem, SearchStrategy myStrategy) {
-
+	public void engine(GPSProblem myProblem, SearchStrategy myStrategy, StatsHolder holder) {
+		this.stats = holder;
 		problem = myProblem;
 		strategy = myStrategy;
 
 		GPSNode rootNode = new GPSNode(problem.getInitState(), 0);
+		stats.addState();
 		boolean finished = false;
 		boolean failed = false;
-		long explosionCounter = 0;
 
 		open.add(rootNode);
+		stats.startSimulation();
 		while (!failed && !finished) {
 			if (open.size() <= 0) {
 				failed = true;
@@ -51,13 +54,13 @@ public abstract class GPSEngine {
 				closed.add(currentNode);
 				open.remove(0);
 				if (isGoal(currentNode)) {
+					stats.stopSimulation();
 					finished = true;
-					new BoardRenderer(currentNode.getState().getBoard()).render();
                     System.out.println("Showing a solution");
 					System.out.println(currentNode.getSolution());
-					System.out.println("Expanded nodes: " + explosionCounter);
+					stats.setSolutionDepth(currentNode.getDepth());
 				} else {
-					explosionCounter++;
+					stats.addExplodedNode();
 					renderer.setBoard(currentNode.getState().getBoard());
 					renderer.render();
 					explode(currentNode);
@@ -83,6 +86,7 @@ public abstract class GPSEngine {
 			return false;
 		}
 		
+		boolean addedChild = false;
 		for (GPSRule rule : problem.getRules()) {
 			GPSState newState = null;
 			try {
@@ -94,12 +98,16 @@ public abstract class GPSEngine {
 					&& !checkBranch(node, newState)
 					&& !checkOpenAndClosed(node.getCost() + rule.getCost(),
 							newState)) {
-
+				addedChild = true;
+				stats.addState();
 				GPSNode newNode = new GPSNode(newState, node.getCost()
 						+ rule.getCost());
 				newNode.setParent(node);
 				addNode(newNode);
 			}
+		}
+		if(!addedChild) {
+			stats.addLeafNode();
 		}
 		return true;
 	}
