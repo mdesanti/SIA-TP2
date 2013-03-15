@@ -14,6 +14,8 @@ public class BoardImpl implements Board {
 	private int height;
 	private int width;
 
+    private int pieceCount;
+
     private BoardImpl() {}
 
 	public BoardImpl(int height, int width) {
@@ -23,14 +25,14 @@ public class BoardImpl implements Board {
 		initBoard();
 		generateCheckSum();
 	}
-	
+
 	public BoardImpl(Piece[][] board) {
 		this.board = board;
 		height = board.length;
 		width = board[0].length;
 		generateCheckSum();
 	}
-	
+
 	private void initBoard() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
@@ -52,11 +54,11 @@ public class BoardImpl implements Board {
         }
 		return rotated;
 	}
-	
+
 	public Piece getPieceIn(int y, int x) {
 		return board[y][x];
 	}
-	
+
 	private void generateCheckSum() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
@@ -68,25 +70,30 @@ public class BoardImpl implements Board {
 			}
 		}
 	}
-	
+
 	public int getHeight() {
 		return board.length;
 	}
-	
+
 	public int getWidth() {
 		return board[0].length;
 	}
-	
+
+    public int getPieceCount() {
+        return pieceCount;
+    }
+
 	public int getChecksum() {
 		return checksum;
 	}
-	
+
 	public void setPieceIn(int y, int x, Piece piece) {
 		board[y][x] = piece;
 		checksum = 0;
+        pieceCount++;
 		generateCheckSum();
 	}
-	
+
 	@Override
 	public Board clone() {
 		Piece[][] clone = new Piece[height][width];
@@ -95,7 +102,9 @@ public class BoardImpl implements Board {
 				clone[i][j] = board[i][j];
 			}
 		}
-		return new BoardImpl(clone);
+		BoardImpl b = new BoardImpl(clone);
+        b.pieceCount = this.pieceCount;
+        return b;
 	}
 	
 	@Override

@@ -51,6 +51,7 @@ public abstract class GPSEngine {
 				if (isGoal(currentNode)) {
 					finished = true;
 					new BoardRenderer(currentNode.getState().getBoard()).render();
+                    System.out.println("Showing a solution");
 					System.out.println(currentNode.getSolution());
 					System.out.println("Expanded nodes: " + explosionCounter);
 				} else {
