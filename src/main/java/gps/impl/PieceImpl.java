@@ -4,7 +4,6 @@ import gps.api.Piece;
 
 public class PieceImpl implements Piece {
 
-	private static int idGenerator = 0;
 	//four colors available on one piece
 	private int up = -1, right = -1, left = -1, down = -1;
 	private static Piece empty;
@@ -15,7 +14,7 @@ public class PieceImpl implements Piece {
 		this.down = down;
 		this.left = left;
 		this.right = right;
-		this.id = generateID();
+		this.id = GPSProblemImpl.nextId();
 	}
 	
 	private PieceImpl(int id, int up, int right, int down, int left) {
@@ -28,6 +27,7 @@ public class PieceImpl implements Piece {
 	
 	
 	private PieceImpl() {
+		this.id = GPSProblemImpl.nextId();
 	}
 	
 	public int getUpColor() {
@@ -84,6 +84,14 @@ public class PieceImpl implements Piece {
 		if (getClass() != obj.getClass())
 			return false;
 		PieceImpl other = (PieceImpl) obj;
+		if (down != other.down)
+			return false;
+		if (left != other.left)
+			return false;
+		if (right != other.right)
+			return false;
+		if (up != other.up)
+			return false;
 		if (id != other.id)
 			return false;
 		return true;
@@ -91,10 +99,6 @@ public class PieceImpl implements Piece {
 
 	public boolean isEmtpy() {
 		return up == -1 && down == -1 && left == -1 && right == -1;
-	}
-	
-	public static int generateID() {
-		return idGenerator++;
 	}
 	
 	public int generateChecksum() {

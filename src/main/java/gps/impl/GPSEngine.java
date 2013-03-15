@@ -19,6 +19,8 @@ public abstract class GPSEngine {
 
 	private GPSProblem problem;
 	
+	private BoardRenderer renderer = new BoardRenderer();
+	
 	
 
 	public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
@@ -90,6 +92,8 @@ public abstract class GPSEngine {
 					&& !checkBranch(node, newState)
 					&& !checkOpenAndClosed(node.getCost() + rule.getCost(),
 							newState)) {
+				renderer.setBoard(newState.getBoard());
+				renderer.render();
 				GPSNode newNode = new GPSNode(newState, node.getCost()
 						+ rule.getCost());
 				newNode.setParent(node);

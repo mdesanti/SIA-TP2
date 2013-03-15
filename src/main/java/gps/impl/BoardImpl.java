@@ -85,7 +85,15 @@ public class BoardImpl implements Board {
 	}
 
 	public int getPieceCount() {
-		return pieceCount;
+		int count = 0;
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if(!this.getPieceIn(i, j).isEmtpy()) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	public int getChecksum() {
@@ -106,9 +114,6 @@ public class BoardImpl implements Board {
 	@Override
 	public boolean equals(Object obj) {
 		Board board2 = (Board) obj;
-		if (this.getChecksum() != board2.getChecksum()) {
-			return false;
-		}
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				if (!this.getPieceIn(i, j).equals(board2.getPieceIn(i, j))) {

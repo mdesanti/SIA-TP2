@@ -26,7 +26,9 @@ public class GPSStateImpl implements GPSState {
 		this.parent = parent;
 		this.height = height;
 		this.width = width;
-		cache.put(new Point(x, y), addedPiece);
+		if (x != -1 && y != -1) {
+			cache.put(new Point(x, y), addedPiece);
+		}
 	}
 
 	public boolean compare(GPSState state) {
@@ -34,14 +36,14 @@ public class GPSStateImpl implements GPSState {
 		// return false;
 		// }
 		// rotate the piece four times
-//		Board rotated = state.getBoard();
-//		Board myBoard = this.getBoard();
+		Board rotated = state.getBoard();
+		Board myBoard = this.getBoard();
 //		if(rotated.getPieceCount() != myBoard.getPieceCount()) {
 //			return false;
 //		}
-//		if (rotated.equals(myBoard)) {
-//			return true;
-//		}
+		if (rotated.equals(myBoard)) {
+			return true;
+		}
 		// for(int i = 0; i < 4; i++) {
 		// if(rotated.equals(myBoard)) {
 		// return true;

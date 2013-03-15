@@ -10,6 +10,7 @@ public class GPSProblemImpl implements GPSProblem {
 	private int height, width;
 	private List<Piece> all = Lists.newArrayList();
 	private List<GPSRule> rules = Lists.newArrayList();
+	private static int id = 0;
 
 	public GPSProblemImpl(int height, int width, List<Piece> allPieces) {
 		this.height = height;
@@ -50,5 +51,9 @@ public class GPSProblemImpl implements GPSProblem {
 		Board board = state.getBoard();
         return board.getPieceCount() == board.getWidth() * board.getHeight();
     }
+	
+	public static int nextId() {
+		return id++;
+	}
 
 }

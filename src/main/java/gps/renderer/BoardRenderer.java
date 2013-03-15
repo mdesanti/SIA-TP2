@@ -2,6 +2,8 @@ package gps.renderer;
 
 import gps.api.Board;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 /**
@@ -13,7 +15,7 @@ import java.io.PrintStream;
 public class BoardRenderer {
 
     private Board board;
-    private final char[][] printMap;
+    private char[][] printMap;
     private PrintStream out;
 
     public BoardRenderer(Board board) {
@@ -22,16 +24,33 @@ public class BoardRenderer {
         this.printMap = new char[board.getHeight() * 5 + 1][board.getWidth() * 5 + 1];
     }
 
-    public void render() {
+    
+    
+    public BoardRenderer() {
+		try {
+			this.out = new PrintStream(new File("test.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+    
+    public void setBoard(Board board) {
+		this.board = board;
+		this.printMap = new char[board.getHeight() * 5 + 1][board.getWidth() * 5 + 1];
+	}
+
+
+
+	public void render() {
 
         clearBoard();
 
         for (int i = 0; i < board.getWidth(); i++) {
             for (int j = 0; j < board.getHeight(); j++) {
-                printMap[i * 5 + 2][j * 5 + 1] = Character.forDigit(board.getPieceIn(j, i).getUpColor(), 10);
-                printMap[i * 5 + 2][j * 5 + 3] = Character.forDigit(board.getPieceIn(j, i).getDownColor(), 10);
-                printMap[i * 5 + 1][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getLeftColor(), 10);
-                printMap[i * 5 + 3][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getRightColor(), 10);
+                printMap[i * 5 + 2][j * 5 + 1] = Character.forDigit(board.getPieceIn(j, i).getUpColor() == -1? 7:board.getPieceIn(j, i).getUpColor(), 10);
+                printMap[i * 5 + 2][j * 5 + 3] = Character.forDigit(board.getPieceIn(j, i).getDownColor() == -1? 7:board.getPieceIn(j, i).getDownColor(), 10);
+                printMap[i * 5 + 1][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getLeftColor() == -1? 7:board.getPieceIn(j, i).getLeftColor(), 10);
+                printMap[i * 5 + 3][j * 5 + 2] = Character.forDigit(board.getPieceIn(j, i).getRightColor() == -1? 7:board.getPieceIn(j, i).getRightColor(), 10);
             }
         }
         StringBuffer buff = new StringBuffer();
