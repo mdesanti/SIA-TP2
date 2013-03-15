@@ -36,8 +36,12 @@ public class BoardRenderer {
 		this.board = board;
 		this.printMap = new char[board.getHeight() * 5 + 1][board.getWidth() * 5 + 1];
 	}
-
-	public void render() {
+    
+    public String renderString() {
+    	return internalRender().toString();
+    }
+    
+    private StringBuffer internalRender() {
 
         clearBoard();
 
@@ -60,7 +64,12 @@ public class BoardRenderer {
 			buff.append("\n");
 		}
         buff.append("---------------\n");
-        out.print(buff.toString());
+        return buff;
+    }
+
+	public void render() {
+
+        out.print(internalRender().toString());
     }
 	
 	public void renderInitial() {

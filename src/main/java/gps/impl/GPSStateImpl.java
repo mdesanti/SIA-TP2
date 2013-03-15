@@ -3,6 +3,7 @@ package gps.impl;
 import gps.api.Board;
 import gps.api.GPSState;
 import gps.api.Piece;
+import gps.renderer.BoardRenderer;
 
 import java.awt.Point;
 import java.util.Map;
@@ -98,6 +99,11 @@ public class GPSStateImpl implements GPSState {
 	
 	public int getY() {
 		return y;
+	}
+	
+	@Override
+	public String toString() {
+		return new BoardRenderer(getBoard()).renderString();
 	}
 
 }
