@@ -5,9 +5,9 @@ import gps.api.GPSProblem;
 import gps.api.Piece;
 import gps.api.StatsHolder;
 import gps.impl.BoardImpl;
-import gps.impl.DFSEngine;
 import gps.impl.GPSEngine;
 import gps.impl.GPSProblemImpl;
+import gps.impl.IDEngine;
 import gps.impl.StatsHolderImpl;
 import gps.persist.GameXML;
 import gps.persist.GameXML.GameNode;
@@ -29,15 +29,15 @@ public class App {
 		for(Point p: map.keySet()) {
 			GameNode node = map.get(p);
             pieces.add(node.toPiece());
-            System.out.println(node.toPiece().toString());
+//            System.out.println(node.toPiece().toString());
 		}
-		sufflePieces(pieces);
+//		sufflePieces(pieces);
 	    Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
         new BoardRenderer(board).renderInitial();
         StatsHolder holder = new StatsHolderImpl();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
-		GPSEngine engine = new DFSEngine(problem, null);
+		GPSEngine engine = new IDEngine(problem, null);
 		engine.engine(problem, null, holder);
 		System.out.println("-------------------------------------------");
 		System.out.println("Simulation time: " + holder.getSimulationTime()/(double)1000 + " seconds");

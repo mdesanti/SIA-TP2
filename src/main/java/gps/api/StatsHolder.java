@@ -62,4 +62,9 @@ public interface StatsHolder {
 	 */
 	long getLeafNodesNumber();
 	
+	/**
+	 * Resets all stats
+	 */
+	void resetStats();
+	
 }

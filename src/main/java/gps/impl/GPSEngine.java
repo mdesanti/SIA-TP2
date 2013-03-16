@@ -20,8 +20,6 @@ public abstract class GPSEngine {
 
 	private GPSProblem problem;
 	
-	private BoardRenderer renderer = new BoardRenderer();
-	
 	private StatsHolder stats;
 	
 	// Use this variable in the addNode implementation
@@ -34,7 +32,7 @@ public abstract class GPSEngine {
 	}
 
 
-	public void engine(GPSProblem myProblem, SearchStrategy myStrategy, StatsHolder holder) {
+	public boolean engine(GPSProblem myProblem, SearchStrategy myStrategy, StatsHolder holder) {
 		this.stats = holder;
 		problem = myProblem;
 		strategy = myStrategy;
@@ -61,8 +59,6 @@ public abstract class GPSEngine {
 					stats.setSolutionDepth(currentNode.getDepth());
 				} else {
 					stats.addExplodedNode();
-					renderer.setBoard(currentNode.getState().getBoard());
-					renderer.render();
 					explode(currentNode);
 				}
 			}
@@ -70,9 +66,12 @@ public abstract class GPSEngine {
 
 		if (finished) {
 			System.out.println("OK! solution found!");
+			return true;
 		} else if (failed) {
 			System.err.println("FAILED! solution not found!");
+			return false;
 		}
+		return false;
 	}
 
 	private  boolean isGoal(GPSNode currentNode) {
@@ -80,7 +79,7 @@ public abstract class GPSEngine {
 				&& problem.checkGoalState(currentNode.getState());
 	}
 
-	private  boolean explode(GPSNode node) {
+	protected boolean explode(GPSNode node) {
 		if(problem.getRules() == null){
 			System.err.println("No rules!");
 			return false;

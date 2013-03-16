@@ -12,7 +12,7 @@ public class GameGenerator {
     private float[] probabilities;
 
     public static void main(final String[] args) throws Exception {
-		GameGenerator generator = new GameGenerator(10, 6);
+		GameGenerator generator = new GameGenerator(4, 3);
         GameXML game = generator.generate();
         game.toFile("random.xml");
 	}

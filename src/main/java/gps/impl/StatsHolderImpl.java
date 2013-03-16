@@ -54,5 +54,14 @@ public class StatsHolderImpl implements StatsHolder {
 	public long getLeafNodesNumber() {
 		return leafNodes;
 	}
+	
+	public void resetStats() {
+		start = 0;
+		end = 0;
+		states = 0;
+		depth = 0;
+		leafNodes = 0;
+		explotions = 0;
+	}
 
 }
