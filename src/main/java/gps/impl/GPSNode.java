@@ -46,7 +46,7 @@ public class GPSNode {
 	
 	public int getDepth() {
 		if(this.parent == null) {
-			return 1;
+			return 0;
 		}
 		return this.parent.getDepth() + 1;
 	}
