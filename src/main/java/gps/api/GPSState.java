@@ -1,6 +1,9 @@
 package gps.api;
 
+import gps.impl.BoardImpl;
+
 import java.awt.Point;
+import java.util.Map;
 
 /**
  * GPSState interface.
@@ -24,7 +27,5 @@ public interface GPSState {
 	
 	boolean containsPiece(Piece p);
 
-	int getX();
-
-	int getY();
+	GPSState getParent();
 }

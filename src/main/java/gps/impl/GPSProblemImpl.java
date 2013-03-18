@@ -6,10 +6,10 @@ import gps.api.*;
 import java.util.List;
 
 public class GPSProblemImpl implements GPSProblem {
-
 	private int height, width;
 	private List<Piece> all = Lists.newArrayList();
 	private List<GPSRule> rules = Lists.newArrayList();
+	private GPSState initState;
 	private static int id = 0;
 
 	public GPSProblemImpl(int height, int width, List<Piece> allPieces) {
@@ -17,6 +17,7 @@ public class GPSProblemImpl implements GPSProblem {
 		this.width = width;
 		all.addAll(allPieces);
 		generateRules();
+		this.initState = GPSStateImpl.initialState(height, width, all);
 	}
 
 	private void generateRules() {
@@ -35,7 +36,7 @@ public class GPSProblemImpl implements GPSProblem {
 	}
 
 	public GPSState getInitState() {
-		return new GPSStateImpl(null, -1, -1, height, width, null);
+		return initState;
 	}
 
 	public List<GPSRule> getRules() {
