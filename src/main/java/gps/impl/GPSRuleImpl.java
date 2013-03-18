@@ -11,7 +11,7 @@ public class GPSRuleImpl implements GPSRule {
 	private Piece piece;
 	private int y;
 	private int x;
-	
+
 
 	public GPSRuleImpl(Piece piece, int y, int x) {
 		this.piece = piece;
@@ -56,62 +56,67 @@ public class GPSRuleImpl implements GPSRule {
 		if(!board.getPieceIn(y, x).isEmpty()) {
 			return null;
 		}
-		Piece up, right, down, left;
-		up = getUpPiece(board);
-		right = getRightPiece(board);
-		down = getDownPiece(board);
-		left = getLeftPiece(board);
-		
-		if(up == null) {
-			if(piece.getUpColor() != 0) {
-				return null;
-			}
-		} else {
-			if(up.getDownColor() != -1 && piece.getUpColor() != up.getDownColor()) {
-				return null;
-			} else if(up.getDownColor() == -1 && piece.getUpColor() == 0) {
-				return null;
-			}
-		}
-		if(right == null) {
-			if(piece.getRightColor() != 0) {
-				return null;
-			}
-		} else {
-			if(right.getLeftColor() != -1 && piece.getRightColor() != right.getLeftColor()) {
-				return null;
-			} else if(right.getLeftColor() == -1 && piece.getRightColor() == 0) {
-				return null;
-			}
-		}
-		if(left == null) {
-			if(piece.getLeftColor() != 0) {
-				return null;
-			}
-		} else {
-			if(left.getRightColor() != -1 && piece.getLeftColor() != left.getRightColor()) {
-				return null;
-			} else if(left.getRightColor() == -1 && piece.getLeftColor() == 0) {
-				return null;
-			}
-		}
-		if(down == null) {
-			if(piece.getDownColor() != 0) {
-				return null;
-			}
-		} else {
-			if(down.getUpColor() != -1 && piece.getDownColor() != down.getUpColor()) {
-				return null;
-			} else if(down.getUpColor() == -1 && piece.getDownColor() == 0) {
-				return null;
-			}
-		}
-		
-		return new GPSStateImpl(piece,y, x, board.getHeight(), board.getWidth(), state);
+        if (cannotPutPieceOnBoard(board)) { return null; }
+
+        return new GPSStateImpl(piece,y, x, board.getHeight(), board.getWidth(), state);
 		
 	}
 
-	private Piece getUpPiece(Board board) {
+    private boolean cannotPutPieceOnBoard(Board board) {
+        Piece up, right, down, left;
+        up = getUpPiece(board);
+        right = getRightPiece(board);
+        down = getDownPiece(board);
+        left = getLeftPiece(board);
+
+        if(up == null) {
+            if(piece.getUpColor() != 0) {
+                return true;
+            }
+        } else {
+            if(up.getDownColor() != -1 && piece.getUpColor() != up.getDownColor()) {
+                return true;
+            } else if(up.getDownColor() == -1 && piece.getUpColor() == 0) {
+                return true;
+            }
+        }
+        if(right == null) {
+            if(piece.getRightColor() != 0) {
+                return true;
+            }
+        } else {
+            if(right.getLeftColor() != -1 && piece.getRightColor() != right.getLeftColor()) {
+                return true;
+            } else if(right.getLeftColor() == -1 && piece.getRightColor() == 0) {
+                return true;
+            }
+        }
+        if(left == null) {
+            if(piece.getLeftColor() != 0) {
+                return true;
+            }
+        } else {
+            if(left.getRightColor() != -1 && piece.getLeftColor() != left.getRightColor()) {
+                return true;
+            } else if(left.getRightColor() == -1 && piece.getLeftColor() == 0) {
+                return true;
+            }
+        }
+        if(down == null) {
+            if(piece.getDownColor() != 0) {
+                return true;
+            }
+        } else {
+            if(down.getUpColor() != -1 && piece.getDownColor() != down.getUpColor()) {
+                return true;
+            } else if(down.getUpColor() == -1 && piece.getDownColor() == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Piece getUpPiece(Board board) {
 		if(y-1 < 0) {
 			return null;
 		}

@@ -1,12 +1,7 @@
 package gps.impl;
 
-import gps.api.GPSProblem;
-import gps.api.GPSRule;
-import gps.api.GPSState;
-import gps.api.SearchStrategy;
-import gps.api.StatsHolder;
+import gps.api.*;
 import gps.exception.NotAppliableException;
-import gps.renderer.BoardRenderer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,8 +19,8 @@ public abstract class GPSEngine {
 	
 	// Use this variable in the addNode implementation
 	private SearchStrategy strategy;
-	
-	public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
+
+    public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
 		super();
 		this.problem = problem;
 		this.strategy = strategy;
