@@ -1,24 +1,22 @@
 package gps.impl;
 
+import com.google.common.collect.Maps;
 import gps.api.Board;
 import gps.api.GPSState;
 import gps.api.Piece;
 import gps.persist.GameXML;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 public class BoardImpl implements Board {
 
 	private Map<Point, Piece> board = Maps.newHashMap();
-	private Set<Piece> pieces = Sets.newHashSet();
-	private Map<Piece, Boolean> hasPieceCache = Maps.newHashMap();
-	
+    private Map<Piece, Boolean> pieceCache = Maps.newHashMap();
+
+    private static double cacheFactor = 0.33;
+
 	private int height;
 	private int width;
 	private GPSState state;
@@ -27,7 +25,8 @@ public class BoardImpl implements Board {
     private Map<BoardImpl.Direction, short[]> availableColors = Maps.newHashMapWithExpectedSize(4);
 	private Point pieceLocation;
 	private Piece piece;
-    
+    private int depth;
+
     private BoardImpl() {}
     
     public static Board initialBoard(int height, int width, GPSState state, Collection<Piece> piecesInProblem) {
@@ -36,6 +35,7 @@ public class BoardImpl implements Board {
     	board.width = width;
     	board.state = state;    	
     	board.buildColorCountMap(piecesInProblem);
+        board.depth = 0;
     	return board;
     }
     
@@ -47,7 +47,10 @@ public class BoardImpl implements Board {
     	board.state = state;
     	board.pieceLocation = pieceLocation;
     	board.piece = toAdd;
+        board.depth = state.getParent().getBoard().getDepth() + 1;
+        board.parent = state.getParent().getBoard();
     	board.decrementColorCount(toAdd, state.getParent().getBoard());
+        board.setPieceIn(pieceLocation.x, pieceLocation.y, toAdd);
 		return board;
 	}
     
@@ -118,37 +121,6 @@ public class BoardImpl implements Board {
 		return null;
 	}
 
-	public Piece getPieceIn(int y, int x) {
-		Point p = new Point(x, y);
-		if (board.get(p) == null) {
-			if (state == null) {
-				board.put(p, PieceImpl.empty());
-			} else {
-				Piece piece = state.getPieceIn(p);
-				board.put(p, piece);
-			}
-		}
-		return board.get(p);
-	}
-
-	private int generateCheckSum() {
-		Integer checksum = 0;
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				Piece piece = this.getPieceIn(i, j);
-				if (piece == null) {
-					checksum += -4;
-				} else {
-					checksum += piece.getDownColor();
-					checksum += piece.getLeftColor();
-					checksum += piece.getRightColor();
-					checksum += piece.getUpColor();
-				}
-			}
-		}
-		return checksum;
-	}
-
 	public int getHeight() {
 		return height;
 	}
@@ -158,34 +130,23 @@ public class BoardImpl implements Board {
 	}
 
 	public int getPieceCount() {
-		int count = 0;
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				if(!this.getPieceIn(i, j).isEmpty()) {
-					count++;
-				}
-			}
-		}
-		return count;
+        return depth;
 	}
 
 
 
-	public void setPieceIn(int y, int x, Piece piece) {
+	public void setPieceIn(int x, int y, Piece piece) {
 		board.put(new Point(x, y), piece);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		Board board2 = (Board) obj;
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				if (!this.getPieceIn(i, j).equalsNoId(board2.getPieceIn(i, j))) {
-					return false;
-				}
-			}
-		}
-		return true;
+		BoardImpl board2 = (BoardImpl) obj;
+		if (board2.depth == this.depth) {
+            return board2.board.equals(this.board);
+        }  else {
+            return false;
+        }
 	}
 
 	public static Board withPieces(int width, int height,
@@ -194,30 +155,43 @@ public class BoardImpl implements Board {
 		b.width = width;
 		b.height = height;
 		for (Point point : map.keySet()) {
-			b.board.put(new Point(point.y, point.x), map.get(point).toPiece());
+			b.board.put(new Point(point.x, point.y), map.get(point).toPiece());
 		}
 		return b;
 	}
 
+    private boolean cacheableBoard() {
+        return depth < height * width * cacheFactor;
+
+    }
+
 	public boolean containsPiece(Piece piece) {
-		if (hasPieceCache.containsKey(piece)) {
-			return hasPieceCache.get(piece);
-		}
-		boolean result;
-		if (pieces.contains(piece)) {
-			result = true;			
+        boolean result;
+        if (piece != null && cacheableBoard() && (pieceCache.containsKey(piece))) {
+            return pieceCache.get(piece);
+        }
+
+		if (this.piece != null && this.piece.equals(piece)) {
+            result = true;
 		} else {
 			if (parent == null) {
 				result = false;
 			} else {
 				result = parent.containsPiece(piece);
 			}
+            if (cacheableBoard()) {
+                pieceCache.put(piece, result);
+            }
 		}
-		hasPieceCache.put(piece, result);
-		return result;
+        return result;
 	}
 
-	@Override
+    @Override
+    public int getDepth() {
+        return depth;
+    }
+
+    @Override
 	public int getChecksum() {
 		return 0;
 	}
@@ -231,14 +205,18 @@ public class BoardImpl implements Board {
 			} else {
 				p = PieceImpl.empty();
 			}
-			board.put(point, p);
+            if (cacheableBoard()) {
+			    board.put(point, p);
+            }
 		}
 		return p;
 	}
 
-	public Set<Piece> getPieces() {
-		return pieces;
-	}
+    public Piece getPieceIn(int x, int y) {
+        return getPieceIn(new Point(x, y));
+    }
+
+
 
 	public Map<BoardImpl.Direction, short[]> getAvailableColors() {
 		return availableColors;

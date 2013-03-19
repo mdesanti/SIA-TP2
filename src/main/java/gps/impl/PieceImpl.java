@@ -62,53 +62,34 @@ public class PieceImpl implements Piece {
 		return id;
 	}
 
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + down;
-		result = prime * result + id;
-		result = prime * result + left;
-		result = prime * result + right;
-		result = prime * result + up;
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PieceImpl other = (PieceImpl) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-	
-	public boolean equalsNoId(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PieceImpl other = (PieceImpl) obj;
-		if (down != other.down)
-			return false;
-		if (left != other.left)
-			return false;
-		if (right != other.right)
-			return false;
-		if (up != other.up)
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-	public boolean isEmpty() {
+        PieceImpl piece = (PieceImpl) o;
+
+        if (down != piece.down) return false;
+        if (id != piece.id) return false;
+        if (left != piece.left) return false;
+        if (right != piece.right) return false;
+        if (up != piece.up) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = up;
+        result = 31 * result + right;
+        result = 31 * result + left;
+        result = 31 * result + down;
+        result = 31 * result + id;
+        return result;
+    }
+
+    public boolean isEmpty() {
 		return up == -1 && down == -1 && left == -1 && right == -1;
 	}
 	
@@ -116,7 +97,12 @@ public class PieceImpl implements Piece {
 		return up + down + left + right;
 	}
 
-	@Override
+    @Override
+    public boolean equalsNoId(Object obj) {
+        return equals(obj);
+    }
+
+    @Override
 	public String toString() {
 		return "PieceImpl [up=" + up + ", right=" + right + ", left=" + left
 				+ ", down=" + down + ", id=" + id + "]";

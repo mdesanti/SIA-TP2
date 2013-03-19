@@ -30,9 +30,10 @@ public class App {
             pieces.add(node.toPiece());
 		}
 
+		System.in.read();
 	    Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
-        new BoardRenderer(board).renderInitial();
+        new BoardRenderer(board).render();
         StatsHolder holder = new StatsHolderImpl();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces);
 		GPSEngine engine = new DFSEngine(problem, null);

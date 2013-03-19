@@ -42,15 +42,14 @@ public class BoardRenderer {
     }
     
     private StringBuffer internalRender() {
-
         clearBoard();
 
 		for (int j = 0; j < board.getHeight(); j++) {
 			for (int i = 0; i < board.getWidth(); i++) {
-                printMap[j * 5 + 1][i * 5 + 2] = Character.forDigit(board.getPieceIn(j,i).getUpColor() == -1? 7:board.getPieceIn(j,i).getUpColor(), 10);
-                printMap[j * 5 + 3][i * 5 + 2] = Character.forDigit(board.getPieceIn(j,i).getDownColor() == -1? 7:board.getPieceIn(j,i).getDownColor(), 10);
-                printMap[j * 5 + 2][i * 5 + 1] = Character.forDigit(board.getPieceIn(j,i).getLeftColor() == -1? 7:board.getPieceIn(j,i).getLeftColor(), 10);
-                printMap[j * 5 + 2][i * 5 + 3] = Character.forDigit(board.getPieceIn(j,i).getRightColor() == -1? 7:board.getPieceIn(j,i).getRightColor(), 10);
+                printMap[j * 5 + 1][i * 5 + 2] = Character.forDigit(board.getPieceIn(i,j).getUpColor() == -1? 7:board.getPieceIn(i,j).getUpColor(), 10);
+                printMap[j * 5 + 3][i * 5 + 2] = Character.forDigit(board.getPieceIn(i,j).getDownColor() == -1? 7:board.getPieceIn(i,j).getDownColor(), 10);
+                printMap[j * 5 + 2][i * 5 + 1] = Character.forDigit(board.getPieceIn(i,j).getLeftColor() == -1? 7:board.getPieceIn(i,j).getLeftColor(), 10);
+                printMap[j * 5 + 2][i * 5 + 3] = Character.forDigit(board.getPieceIn(i,j).getRightColor() == -1? 7:board.getPieceIn(i,j).getRightColor(), 10);
             }
         }
         StringBuffer buff = new StringBuffer();
@@ -68,7 +67,6 @@ public class BoardRenderer {
     }
 
 	public void render() {
-
         out.print(internalRender().toString());
     }
 	

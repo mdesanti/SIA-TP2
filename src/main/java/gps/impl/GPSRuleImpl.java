@@ -6,7 +6,7 @@ import gps.api.GPSState;
 import gps.api.Piece;
 import gps.exception.NotAppliableException;
 
-import java.awt.Point;
+import java.awt.*;
 
 public class GPSRuleImpl implements GPSRule {
 
@@ -38,11 +38,11 @@ public class GPSRuleImpl implements GPSRule {
         }
 
         if (pieceLocation.x + 1 == board.getWidth() 
-        		&& pieceLocation.y + 1 == board.getWidth()) {
+        		&& pieceLocation.y + 1 == board.getHeight()) {
             return false;
         }
 
-        if (pieceLocation.y + 1 == board.getWidth()) {
+        if (pieceLocation.x + 1 == board.getWidth()) {
             return pieceLocation.y + 1 == y && x == 0;
         } else {
             return pieceLocation.x + 1 == x && pieceLocation.y == y;
@@ -52,16 +52,19 @@ public class GPSRuleImpl implements GPSRule {
     public GPSState evalRule(GPSState state) throws NotAppliableException {
         Board board = state.getBoard();
 
-        if (board.containsPiece(piece)) {
-            return null;
-        }
         if (!isValidEvalLocation(state, board)) {
             return null;
         }
-        if (!board.getPieceIn(y, x).isEmpty()) {
+
+        if (cannotPutPieceOnBoard(board)) {
             return null;
         }
-        if (cannotPutPieceOnBoard(board)) {
+
+        if (board.containsPiece(piece)) {
+            return null;
+        }
+
+        if (!board.getPieceIn(x, y).isEmpty()) {
             return null;
         }
 
@@ -126,28 +129,28 @@ public class GPSRuleImpl implements GPSRule {
         if (y - 1 < 0) {
             return null;
         }
-        return board.getPieceIn(y - 1, x);
+        return board.getPieceIn(x, y - 1);
     }
 
     private Piece getLeftPiece(Board board) {
         if (x - 1 < 0) {
             return null;
         }
-        return board.getPieceIn(y, x - 1);
+        return board.getPieceIn(x - 1, y);
     }
 
     private Piece getRightPiece(Board board) {
         if (x + 1 >= board.getWidth()) {
             return null;
         }
-        return board.getPieceIn(y, x + 1);
+        return board.getPieceIn(x + 1, y);
     }
 
     private Piece getDownPiece(Board board) {
         if (y + 1 >= board.getHeight()) {
             return null;
         }
-        return board.getPieceIn(y + 1, x);
+        return board.getPieceIn(x, y + 1);
     }
 
 }

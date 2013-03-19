@@ -1,10 +1,7 @@
 package gps.api;
 
-import gps.api.Board.Direction;
-
-import java.awt.Point;
+import java.awt.*;
 import java.util.Map;
-import java.util.Set;
 
 public interface Board {
 
@@ -23,6 +20,8 @@ public interface Board {
     int getPieceCount();
     
     public boolean containsPiece(Piece piece);
+
+    int getDepth();
 
 
     public enum Direction {
@@ -48,8 +47,6 @@ public interface Board {
 
 
 	Piece getPieceIn(Point point);
-
-	Set<Piece> getPieces();
 
 	Map<Direction, short[]> getAvailableColors();
 

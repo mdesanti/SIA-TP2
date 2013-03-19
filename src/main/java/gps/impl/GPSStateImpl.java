@@ -1,6 +1,5 @@
 package gps.impl;
 
-import com.google.common.collect.Maps;
 import gps.api.Board;
 import gps.api.GPSState;
 import gps.api.Piece;
@@ -8,7 +7,6 @@ import gps.renderer.BoardRenderer;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
 
 public class GPSStateImpl implements GPSState {
 
@@ -16,24 +14,12 @@ public class GPSStateImpl implements GPSState {
 	private Board board;
 
 	private GPSStateImpl() { }
-    
 
     public boolean compare(GPSState state) {
-//		 if(state.getChecksum() != this.getChecksum()) {
-//		 return false;
-//		 }
 		Board rotated = state.getBoard();
 		Board myBoard = this.getBoard();
-		
-		
-		if (rotated.equals(myBoard)) {
-			return true;
-		}
-		return false;
-	}
 
-	public boolean containsPiece(Piece p) {
-		return board.containsPiece(p);
+		return false;
 	}
 
 	public Board getBoard() {
@@ -42,10 +28,6 @@ public class GPSStateImpl implements GPSState {
 
 	public int getChecksum() {
 		return 0;
-	}
-
-	public Piece getPieceIn(Point point) {
-		return board.getPieceIn(point);
 	}
 	
 	@Override
