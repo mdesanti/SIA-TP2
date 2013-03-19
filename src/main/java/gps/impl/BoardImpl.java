@@ -161,7 +161,7 @@ public class BoardImpl implements Board {
 	}
 
     private boolean cacheableBoard() {
-        return depth < height * width * cacheFactor;
+        return depth <= 12;
 
     }
 
