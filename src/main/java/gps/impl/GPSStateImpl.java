@@ -5,100 +5,29 @@ import gps.api.GPSState;
 import gps.api.Piece;
 import gps.renderer.BoardRenderer;
 
-import java.awt.Point;
-import java.util.Map;
-
-import com.google.common.collect.Maps;
+import java.awt.*;
+import java.util.List;
 
 public class GPSStateImpl implements GPSState {
 
 	private GPSState parent;
-	private int y;
-	private int x;
-	private int height;
-	private int width;
-	private Map<Point, Piece> cache = Maps.newHashMap();
-	public GPSStateImpl(Piece addedPiece, int y, int x, int height, int width,
-			GPSState parent) {
-		super();
-		this.y = y;
-		this.x = x;
-		this.parent = parent;
-		this.height = height;
-		this.width = width;
-		if (x != -1 && y != -1) {
-			cache.put(new Point(x, y), addedPiece);
-		}
-	}
-	public boolean compare(GPSState state) {
-		// if(state.getChecksum() != this.getChecksum()) {
-		// return false;
-		// }
-		// rotate the piece four times
+	private Board board;
+
+	private GPSStateImpl() { }
+
+    public boolean compare(GPSState state) {
 		Board rotated = state.getBoard();
 		Board myBoard = this.getBoard();
-//		if(rotated.getPieceCount() != myBoard.getPieceCount()) {
-//			return false;
-//		}
-		if (rotated.equals(myBoard)) {
-			return true;
-		}
-		// for(int i = 0; i < 4; i++) {
-		// if(rotated.equals(myBoard)) {
-		// return true;
-		// }
-		// rotated = rotated.rotateBoard();
-		// }
+
 		return false;
 	}
 
-	public boolean containsPiece(Piece p) {
-		if(cache.containsValue(p)) {
-			return true;
-		} else {
-			if(parent == null) {
-				return false;
-			}
-			return parent.containsPiece(p);
-		}
-	}
-
 	public Board getBoard() {
-		Board b = new BoardImpl(height, width, this);
-//		for (int i = 0; i < height; i++) {
-//			for (int j = 0; j < width; j++) {
-//				Point point = new Point(j, i);
-//				Piece piece = getPieceIn(point);
-//				b.setPieceIn(i, j, piece);
-//			}
-//		}
-		return b;
+		return board;
 	}
 
 	public int getChecksum() {
-		// return board.getChecksum();
 		return 0;
-	}
-
-	public Piece getPieceIn(Point point) {
-		Piece p = cache.get(point);
-		if (p == null) {
-			if (parent == null) {
-				return PieceImpl.empty();
-			} else {
-				p = parent.getPieceIn(point);
-				cache.put(point, p);
-			}
-		}
-		return p;
-	}
-
-	public int getX() {
-		return x;
-	}
-	
-	public int getY() {
-		return y;
 	}
 	
 	@Override
@@ -106,4 +35,22 @@ public class GPSStateImpl implements GPSState {
 		return new BoardRenderer(getBoard()).renderString();
 	}
 
+	@Override
+	public GPSState getParent() {
+		return parent;
+	}
+
+	public static GPSState initialState(int height, int width, List<Piece> all) {
+		GPSStateImpl state = new GPSStateImpl();
+		state.board = BoardImpl.initialBoard(height, width, state, all);
+		return state;
+	}
+	
+	public static GPSState fromParent(GPSState parent, Point pieceLocation, Piece toAdd) {
+		GPSStateImpl state = new GPSStateImpl();
+		state.parent = parent;
+		state.board = BoardImpl.fromParent(state, pieceLocation, toAdd);
+		return state;
+	}
+ 
 }

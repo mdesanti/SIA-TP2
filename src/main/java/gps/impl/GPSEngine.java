@@ -1,12 +1,7 @@
 package gps.impl;
 
-import gps.api.GPSProblem;
-import gps.api.GPSRule;
-import gps.api.GPSState;
-import gps.api.SearchStrategy;
-import gps.api.StatsHolder;
+import gps.api.*;
 import gps.exception.NotAppliableException;
-import gps.renderer.BoardRenderer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,8 +19,8 @@ public abstract class GPSEngine {
 	
 	// Use this variable in the addNode implementation
 	private SearchStrategy strategy;
-	
-	public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
+
+    public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
 		super();
 		this.problem = problem;
 		this.strategy = strategy;
@@ -46,8 +41,8 @@ public abstract class GPSEngine {
 		stats.startSimulation();
 		while (!failed && !finished) {
 			if (open.size() <= 0) {
-				failed = true;
-			} else {
+                failed = true;
+            } else {
 				GPSNode currentNode = open.get(0);
 				closed.add(currentNode);
 				open.remove(0);
@@ -81,7 +76,6 @@ public abstract class GPSEngine {
 
 	protected boolean explode(GPSNode node) {
 		if(problem.getRules() == null){
-			System.err.println("No rules!");
 			return false;
 		}
 		
@@ -114,7 +108,7 @@ public abstract class GPSEngine {
 	private  boolean checkOpenAndClosed(Integer cost, GPSState state) {
 		for (GPSNode openNode : open) {
 			if (openNode.getState().compare(state) && openNode.getCost() < cost) {
-				return true;
+                return true;
 			}
 		}
 		for (GPSNode closedNode : closed) {
