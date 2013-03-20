@@ -19,4 +19,6 @@ public interface GPSState {
 	int getChecksum();
 
 	GPSState getParent();
+
+
 }
