@@ -44,7 +44,7 @@ public class App {
 		System.out.println("Leaf nodes: " + holder.getLeafNodesNumber());
 		System.out.println("Solution depth: " + holder.getSolutionDepth());
 		System.out.println("Generated states: " + holder.getStatesNumber());
-	}
+    }
 
 	private static void sufflePieces(List<Piece> pieces) {
 		Random random = new Random();

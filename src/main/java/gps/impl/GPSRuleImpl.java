@@ -49,6 +49,26 @@ public class GPSRuleImpl implements GPSRule {
         }
     }
 
+    private boolean isValidColorCount(Board board) {
+            if (piece.getDownColor() != 0 &&
+                    board.getColorCountFor(Board.Direction.UP, piece.getDownColor()) < 0) {
+                return false;
+            }
+            if (piece.getUpColor() != 0 &&
+                    board.getColorCountFor(Board.Direction.DOWN, piece.getUpColor()) < 0) {
+                return false;
+            }
+            if (piece.getRightColor() != 0 &&
+                    board.getColorCountFor(Board.Direction.LEFT, piece.getRightColor()) < 0) {
+                return false;
+            }
+            if (piece.getLeftColor() != 0 &&
+                    board.getColorCountFor(Board.Direction.RIGHT, piece.getLeftColor()) < 0) {
+                return false;
+            }
+        return true;
+    }
+
     public GPSState evalRule(GPSState state) throws NotAppliableException {
         Board board = state.getBoard();
 
@@ -57,6 +77,10 @@ public class GPSRuleImpl implements GPSRule {
         }
 
         if (cannotPutPieceOnBoard(board)) {
+            return null;
+        }
+
+        if (!isValidColorCount(board)) {
             return null;
         }
 

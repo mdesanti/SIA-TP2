@@ -60,10 +60,10 @@ public class BoardImpl implements Board {
 
 
 	private void buildColorCountMap(Collection<Piece> pieces) {
-        getAvailableColors().put(Board.Direction.UP, new short[this.colorCount + 1]);
-        getAvailableColors().put(Board.Direction.DOWN, new short[this.colorCount + 1]);
-        getAvailableColors().put(Board.Direction.LEFT, new short[this.colorCount + 1]);
-        getAvailableColors().put(Board.Direction.RIGHT, new short[this.colorCount + 1]);
+        getAvailableColors().put(Board.Direction.UP, new short[this.colorCount]);
+        getAvailableColors().put(Board.Direction.DOWN, new short[this.colorCount]);
+        getAvailableColors().put(Board.Direction.LEFT, new short[this.colorCount]);
+        getAvailableColors().put(Board.Direction.RIGHT, new short[this.colorCount]);
         short[] up, down, left, right;
         up    = getAvailableColors().get(Board.Direction.UP);
         down  = getAvailableColors().get(Board.Direction.DOWN);
@@ -107,6 +107,8 @@ public class BoardImpl implements Board {
             rightCount[addedPiece.getRightColor() - 1]--;
         }
     }
+
+
 
 	public Board rotateBoard() {
 		// Board rotated = new BoardImpl(height, width);
@@ -197,6 +199,16 @@ public class BoardImpl implements Board {
     @Override
     public int getColorCount() {
         return colorCount;
+    }
+
+    @Override
+    public int getColorCountFor(Direction up, int color) {
+        return availableColors.get(up)[color - 1];
+    }
+
+    @Override
+    public Piece getPiece() {
+        return piece;
     }
 
     @Override
