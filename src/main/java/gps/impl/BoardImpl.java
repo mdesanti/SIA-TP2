@@ -26,17 +26,19 @@ public class BoardImpl implements Board {
 	private Point pieceLocation;
 	private Piece piece;
     private int depth;
+    private int colorCount;
 
     private BoardImpl() {}
     
-    public static Board initialBoard(int height, int width, GPSState state, Collection<Piece> piecesInProblem) {
+    public static Board initialBoard(int height, int width, GPSState state, Collection<Piece> piecesInProblem, int colorCount) {
     	BoardImpl board = new BoardImpl();
     	board.height = height;
     	board.width = width;
     	board.state = state;    	
-    	board.buildColorCountMap(piecesInProblem);
-        board.depth = 0;
-    	return board;
+    	board.depth = 0;
+        board.colorCount = colorCount;
+        board.buildColorCountMap(piecesInProblem);
+        return board;
     }
     
     public static Board fromParent(GPSState state,
@@ -45,6 +47,7 @@ public class BoardImpl implements Board {
     	board.height = state.getParent().getBoard().getHeight();
     	board.width = state.getParent().getBoard().getWidth();
     	board.state = state;
+        board.colorCount = state.getParent().getBoard().getColorCount();
     	board.pieceLocation = pieceLocation;
     	board.piece = toAdd;
         board.depth = state.getParent().getBoard().getDepth() + 1;
@@ -57,10 +60,10 @@ public class BoardImpl implements Board {
 
 
 	private void buildColorCountMap(Collection<Piece> pieces) {
-        getAvailableColors().put(Board.Direction.UP, new short[this.width]);
-        getAvailableColors().put(Board.Direction.DOWN, new short[this.width]);
-        getAvailableColors().put(Board.Direction.LEFT, new short[this.width]);
-        getAvailableColors().put(Board.Direction.RIGHT, new short[this.width]);
+        getAvailableColors().put(Board.Direction.UP, new short[this.colorCount + 1]);
+        getAvailableColors().put(Board.Direction.DOWN, new short[this.colorCount + 1]);
+        getAvailableColors().put(Board.Direction.LEFT, new short[this.colorCount + 1]);
+        getAvailableColors().put(Board.Direction.RIGHT, new short[this.colorCount + 1]);
         short[] up, down, left, right;
         up    = getAvailableColors().get(Board.Direction.UP);
         down  = getAvailableColors().get(Board.Direction.DOWN);
@@ -171,7 +174,7 @@ public class BoardImpl implements Board {
             return pieceCache.get(piece);
         }
 
-		if (this.piece != null && this.piece.equals(piece)) {
+		if (this.piece != null && this.piece.hasSameIdWith(piece)) {
             result = true;
 		} else {
 			if (parent == null) {
@@ -189,6 +192,11 @@ public class BoardImpl implements Board {
     @Override
     public int getDepth() {
         return depth;
+    }
+
+    @Override
+    public int getColorCount() {
+        return colorCount;
     }
 
     @Override

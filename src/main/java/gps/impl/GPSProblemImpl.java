@@ -12,12 +12,12 @@ public class GPSProblemImpl implements GPSProblem {
 	private GPSState initState;
 	private static int id = 0;
 
-	public GPSProblemImpl(int height, int width, List<Piece> allPieces) {
+	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount) {
 		this.height = height;
 		this.width = width;
 		all.addAll(allPieces);
 		generateRules();
-		this.initState = GPSStateImpl.initialState(height, width, all);
+		this.initState = GPSStateImpl.initialState(height, width, all, colorCount);
 	}
 
 	private void generateRules() {
@@ -25,11 +25,12 @@ public class GPSProblemImpl implements GPSProblem {
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
 					rules.add(new GPSRuleImpl(piece, j, i));
-					Piece rotated = piece.rotate();
-					for (int k = 0; k < 3; k++) {
-						rules.add(new GPSRuleImpl(rotated, j ,i));
-						rotated = rotated.rotate();
-					}
+
+                    Piece rotated = piece.rotate();
+                    for (int k = 0; k < 3; k++) {
+                        rules.add(new GPSRuleImpl(rotated, j ,i));
+                        rotated = rotated.rotate();
+                    }
 				}
 			}
 		}

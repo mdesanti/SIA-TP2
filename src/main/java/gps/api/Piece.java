@@ -20,8 +20,9 @@ public interface Piece {
 	
 	boolean isEmpty();
 	
-	public int generateChecksum();
-	
-	public boolean equalsNoId(Object obj);
+	int generateChecksum();
 
+    boolean hasSameColors(Piece piece);
+
+    boolean hasSameIdWith(Piece piece);
 }

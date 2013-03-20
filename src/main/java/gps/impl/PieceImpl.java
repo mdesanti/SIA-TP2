@@ -48,7 +48,6 @@ public class PieceImpl implements Piece {
 	
 	public PieceImpl rotate() {
 		return new PieceImpl(id, left, up, right, down);
-		
 	}
 	
 	public static Piece empty() {
@@ -98,9 +97,20 @@ public class PieceImpl implements Piece {
 	}
 
     @Override
-    public boolean equalsNoId(Object obj) {
-        return equals(obj);
+    public boolean hasSameColors(Piece base) {
+        PieceImpl piece = (PieceImpl) base;
+        if (down != piece.down) return false;
+        if (left != piece.left) return false;
+        if (right != piece.right) return false;
+        if (up != piece.up) return false;
+        return true;
     }
+
+    @Override
+    public boolean hasSameIdWith(Piece piece) {
+        return this.getId() == piece.getId();
+    }
+
 
     @Override
 	public String toString() {

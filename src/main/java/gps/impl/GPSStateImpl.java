@@ -40,9 +40,9 @@ public class GPSStateImpl implements GPSState {
 		return parent;
 	}
 
-	public static GPSState initialState(int height, int width, List<Piece> all) {
+	public static GPSState initialState(int height, int width, List<Piece> all, int colorCount) {
 		GPSStateImpl state = new GPSStateImpl();
-		state.board = BoardImpl.initialBoard(height, width, state, all);
+		state.board = BoardImpl.initialBoard(height, width, state, all, colorCount);
 		return state;
 	}
 	
