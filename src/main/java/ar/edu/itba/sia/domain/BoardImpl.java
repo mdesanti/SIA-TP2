@@ -2,7 +2,7 @@ package ar.edu.itba.sia.domain;
 
 import com.google.common.collect.Maps;
 import ar.edu.itba.sia.gps.api.GPSState;
-import ar.edu.itba.sia.gps.persist.GameXML;
+import ar.edu.itba.sia.domain.persist.GameXML;
 
 import java.awt.*;
 import java.util.Collection;
@@ -215,6 +215,18 @@ public class BoardImpl implements Board {
     @Override
     public Piece getPiece() {
         return piece;
+    }
+
+    @Override
+    public boolean isValid() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (!Util.canPutPieceOnBoard(getPieceIn(x, y), this, x, y)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

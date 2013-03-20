@@ -8,8 +8,8 @@ import ar.edu.itba.sia.gps.api.GPSProblem;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.gps.api.StatsHolder;
 import ar.edu.itba.sia.gps.impl.*;
-import ar.edu.itba.sia.gps.persist.GameXML;
-import ar.edu.itba.sia.gps.persist.GameXML.GameNode;
+import ar.edu.itba.sia.domain.persist.GameXML;
+import ar.edu.itba.sia.domain.persist.GameXML.GameNode;
 import ar.edu.itba.sia.domain.renderer.BoardRenderer;
 
 import java.awt.*;
@@ -38,7 +38,7 @@ public class App {
         new BoardRenderer(board).render();
         StatsHolder holder = new StatsHolderImpl();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors);
-		GPSEngine engine = new DFSEngine(problem, null);
+		GPSEngine engine = new IDEngine(problem, null);
 		engine.engine(problem, null, holder);
 		System.out.println("-------------------------------------------");
 		System.out.println("Simulation time: " + holder.getSimulationTime()/(double)1000 + " seconds");

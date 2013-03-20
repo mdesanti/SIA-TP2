@@ -28,10 +28,10 @@ public class GPSProblemImpl implements GPSProblem {
 				for (int j = 0; j < width; j++) {
 					rules.add(new GPSRuleImpl(piece, j, i));
 
-                    Piece rotated = piece.rotate();
+                    Piece rotated = piece.rotate(1);
                     for (int k = 0; k < 3; k++) {
                         rules.add(new GPSRuleImpl(rotated, j ,i));
-                        rotated = rotated.rotate();
+                        rotated = rotated.rotate(1);
                     }
 				}
 			}
@@ -53,7 +53,7 @@ public class GPSProblemImpl implements GPSProblem {
 
 	public boolean checkGoalState(GPSState state) {
 		Board board = state.getBoard();
-        return board.getPieceCount() == board.getWidth() * board.getHeight();
+        return board.getPieceCount() == board.getWidth() * board.getHeight() && state.getBoard().isValid();
     }
 	
 	public static int nextId() {
