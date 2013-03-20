@@ -1,6 +1,6 @@
-package ar.edu.itba.sia.gps.persist.generate;
+package ar.edu.itba.sia.domain.persist.generate;
 
-import ar.edu.itba.sia.gps.persist.GameXML;
+import ar.edu.itba.sia.domain.persist.GameXML;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -12,9 +12,9 @@ public class GameGenerator {
     private float[] probabilities;
 
     public static void main(final String[] args) throws Exception {
-		GameGenerator generator = new GameGenerator(6, 6);
+		GameGenerator generator = new GameGenerator(2, 6);
         GameXML game = generator.generate();
-        game.toFile("random.xml");
+        game.toFile("test.xml");
 	}
 
     public GameGenerator(int size, int colorCount) {

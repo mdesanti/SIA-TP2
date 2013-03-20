@@ -53,7 +53,7 @@ public class GPSProblemImpl implements GPSProblem {
 
 	public boolean checkGoalState(GPSState state) {
 		Board board = state.getBoard();
-        return board.getPieceCount() == board.getWidth() * board.getHeight();
+        return board.getPieceCount() == board.getWidth() * board.getHeight() && state.getBoard().isValid();
     }
 	
 	public static int nextId() {

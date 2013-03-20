@@ -3,7 +3,7 @@ package ar.edu.itba.sia.gps.impl;
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.BoardImpl;
 import ar.edu.itba.sia.domain.Piece;
-import ar.edu.itba.sia.gps.persist.GameXML;
+import ar.edu.itba.sia.domain.persist.GameXML;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
