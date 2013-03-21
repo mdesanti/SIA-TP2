@@ -23,55 +23,61 @@ public class GPSStateImpl implements GPSState {
 	public static int errorHit = 0;
 
 	public boolean compare(GPSState state) {
-//		Board other = state.getBoard();
+//        Board other = state.getBoard();
 //
-//		checkSumCheck++;
-//		if (other.getDepth() == board.getDepth()) {
 //
-//			if (board.likelyToBeEqual(other)) {
-//				checkSumHit++;
-//			}
-//				
-//				boolean eq = other.equals(board);
+//        checkSumCheck++;
+//        if (other.getDepth() == board.getDepth()) {
 //
-//				if (!eq) {
-//					for (int i = 1; i <= 3; i++) {
-//						other = other.rotateBoard();
-//						eq = other.equals(board);
-//						if (eq) {
-//							break;
-//						}
-//					}
-//				}
+//            if (board.likelyToBeEqual(other)) {
+//                checkSumHit++;
+//            }
 //
-//				if (eq) {
-//					equalsHit++;
-//				}
+//            boolean eq = other.equals(board);
 //
-//				if (eq && !board.likelyToBeEqual(other)) {
-//					errorHit++;
-//				}
-//				return eq;
+//            if (!eq) {
+//                for (int i = 1; i <= 3; i++) {
+//                    try {
+//                        other = other.rotateBoard();
+//                        eq = other.equals(board);
+//                        if (eq) {
+//                            break;
+//                        }
+//                    } catch (Exception e) {
+//
+//                    }
+//                }
+//            }
+//
+//            if (eq) {
+//                equalsHit++;
+//            }
+//
+//            if (eq && !board.likelyToBeEqual(other)) {
+//                errorHit++;
+//            }
+//
+//            return eq;
+//        }
+//
+//        if (checkSumCheck % 1000000 == 0) {
+//            System.out.println("=== Checksum Checks: " + checkSumCheck
+//                    + " checksum hits: " + checkSumHit + " ratio:"
+//                    + (checkSumHit / (float) (checkSumCheck)));
+//
+//            System.out.println("===== Equals Checks: " + checkSumHit
+//                    + " equals hits: " + equalsHit + " ratio:"
+//                    + (equalsHit / (float) (checkSumHit)));
+//            System.out.println("===== Error chances: " + equalsHit
+//                    + " errors: " + errorHit + " ratio:"
+//                    + (errorHit / (float) (equalsHit)));
+//        }
 
-//		}
-//
-//		if (checkSumCheck % 1000000 == 0) {
-//			System.out.println("=== Checksum Checks: " + checkSumCheck
-//					+ " checksum hits: " + checkSumHit + " ratio:"
-//					+ (checkSumHit / (float) (checkSumCheck)));
 
-//			System.out.println("===== Equals Checks: " + checkSumHit
-//					+ " equals hits: " + equalsHit + " ratio:"
-//					+ (equalsHit / (float) (checkSumHit)));
-//			System.out.println("===== Error chances: " + equalsHit
-//					+ " errors: " + errorHit + " ratio:"
-//					+ (errorHit / (float) (equalsHit)));
-//		}
+        return false;
+    }
 
-		return false;
-	}
-
-	public Board getBoard() {
+    public Board getBoard() {
 		return board;
 	}
 

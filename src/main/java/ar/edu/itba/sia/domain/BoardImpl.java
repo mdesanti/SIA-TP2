@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
+import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 public class BoardImpl implements Board {
@@ -30,9 +31,9 @@ public class BoardImpl implements Board {
 	private int depth;
 	private int colorCount;
 	private int rotationLevel;
-//	private long[] checkSums;
+    private long[] checkSums;
 
-	private BoardImpl() {
+    private BoardImpl() {
 	}
 
 	public static Board initialBoard(int height, int width, GPSState state,
@@ -157,15 +158,17 @@ public class BoardImpl implements Board {
 	public boolean equals(Object obj) {
 		BoardImpl board2 = (BoardImpl) obj;
 		if (board2.depth == this.depth) {
-			for (Point p : board.keySet()) {
-				Point myPoint = Util.rotate(p, this.rotationLevel, this.width);
-				Point point = Util.rotate(p, board2.rotationLevel, this.width);
-				if (!board2.getPieceIn(point).rotate(board2.rotationLevel)
-						.equals(getPieceIn(myPoint).rotate(this.rotationLevel))) {
-					return false;
-				}
-			}
-			return true;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    int rot = ((board2.rotationLevel - this.rotationLevel) + 4) % 4;
+                    Point myPoint = Util.rotate(new Point(x, y), rot, this.width);
+                    Point point = new Point(x, y);
+                    if (!board2.getPieceIn(point).equals(getPieceIn(myPoint).rotate(rot))) {
+                        return false;
+                    }
+                }
+            }
+            return true;
 		} else {
 			return false;
 		}
@@ -246,11 +249,8 @@ public class BoardImpl implements Board {
 
 	@Override
 	public boolean likelyToBeEqual(Board other) {
-
 		long[] myChecks = this.getChecksums();
 		long[] otherChecks = other.getChecksums();
-		boolean isValid = false;
-
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				if (myChecks[i] == otherChecks[j]) {
@@ -261,65 +261,45 @@ public class BoardImpl implements Board {
 		return false;
 	}
 
+
 	private static Checksum[] summers = null;
 
 	@Override
 	public long[] getChecksums() {
+        if (summers == null) {
+            summers = new CRC32[4];
+            for (int i = 0; i < 4; i++) {
+                summers[i] = new CRC32();
+            }
+        }
+        if (checkSums == null) {
+            long[] sum = new long[4];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
 
-		return null;
-//		if (summers == null) {
-//			summers = new Adler32[4];
-//			for (int i = 0; i < 4; i++) {
-//				summers[i] = new Adler32();
-//			}
-//		}
-//		if (checkSums == null) {
-//			long[] sum = new long[4];
-//			if (piece != null) {
-//				for (int i = 0; i < 4; i++) {
-//					long s = piece.rotate(i).generateChecksum();
-//					summers[i].update(depth);
-//					summers[i].update(i);
-
-////					summers[i].update(pieceLocation.x);
-////					summers[i].update(pieceLocation.y);
-//					summers[i].update((int) s);
-//					summers[i].update((int) (s >> 32));
-//				}
-//			}
-//
-////			for (Point p : board.keySet()) {
-////				Piece piece = board.get(p);
-////				for (int i = 0; i < 4; i++) {
-////					long s = piece.rotate(i).generateChecksum();
-////					summers[i].update(depth);
-////					summers[i].update(i);
-////					summers[i].update((int) s);
-////					summers[i].update((int) (s >> 32));
-////				}
-////			}
-////			
-//
-//			long[] sumParent = new long[4];
-//			if (parent != null) {
-//				long[] parentSum = parent.getChecksums();
-//				for (int i = 0; i < 4; i++) {
-//					long s = parentSum[i];
-//					summers[i].update((int) s);
-//					summers[i].update((int) (s >> 32));
-//				}
-//			}
-//			
-
-//			for (int i = 0; i < 4; i++) {
-//				sum[i] = summers[i].getValue();
-//				summers[i].reset();
-//			}
-//			checkSums = sum;
-//			return sum;
-//		} else {
-//			return checkSums;
-//		}
+                    int rot = (4 - this.rotationLevel) % 4;
+                    Point pieceLocation = Util.rotate(x, y, rot, this.width);
+                    piece = getPieceIn(pieceLocation).rotate(rot);
+                    for (int i = 0; i < 4; i++) {
+                        Piece p = piece.rotate(i);
+                        summers[i].update(p.getRightColor());
+                        summers[i].update(p.getLeftColor());
+                        summers[i].update(p.getUpColor());
+                        summers[i].update(p.getDownColor());
+//                        summers[i].update(i);
+                    }
+                }
+            }
+            for (int i = 0; i < 4; i++) {
+//                summers[i].update(depth);
+                sum[i] = summers[i].getValue();
+                summers[i].reset();
+            }
+            checkSums = sum;
+            return sum;
+        } else {
+            return checkSums;
+        }
 
     }
 
