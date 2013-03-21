@@ -1,27 +1,31 @@
 package ar.edu.itba.sia.gps.impl;
 
+import java.awt.Point;
+
 import ar.edu.itba.sia.domain.Board;
+import ar.edu.itba.sia.domain.Piece;
+import ar.edu.itba.sia.domain.costFunctions.DummyCostFunction;
+import ar.edu.itba.sia.gps.api.CostFunction;
 import ar.edu.itba.sia.gps.api.GPSRule;
 import ar.edu.itba.sia.gps.api.GPSState;
-import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.gps.exception.NotAppliableException;
-
-import java.awt.*;
 
 public class GPSRuleImpl implements GPSRule {
 
     private Piece piece;
     private int y;
     private int x;
+    private CostFunction function;
 
     public GPSRuleImpl(Piece piece, int y, int x) {
         this.piece = piece;
         this.y = y;
         this.x = x;
+        this.function = new DummyCostFunction();
     }
 
     public Integer getCost() {
-        return 0;
+        return function.getCost(piece);
     }
 
     public String getName() {

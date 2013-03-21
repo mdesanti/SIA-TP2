@@ -22,8 +22,8 @@ public class Util {
     }
 
     public static boolean canPutPieceOnBoard(Piece piece, Board board, int x, int y) {
-    	
-    	
+    	if(piece.isEmpty())
+    		return true;
         Piece up, right, down, left;
         up = getUpPiece(board, x, y);
         right = getRightPiece(board, x, y);
