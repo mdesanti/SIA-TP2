@@ -25,6 +25,7 @@ public class BoardImpl implements Board {
 	private Piece piece;
     private int depth;
     private int colorCount;
+    private int checkSum = -1;
 
     private BoardImpl() {}
     
@@ -231,7 +232,19 @@ public class BoardImpl implements Board {
 
     @Override
 	public int getChecksum() {
-		return 0;
+        int sum = 0;
+		if (checkSum == -1) {
+            if (piece != null) {
+                sum += piece.generateChecksum();
+            }
+            if (parent != null) {
+                sum += parent.getChecksum();
+            }
+            return sum;
+        } else {
+            return checkSum;
+        }
+
 	}
 
 	@Override

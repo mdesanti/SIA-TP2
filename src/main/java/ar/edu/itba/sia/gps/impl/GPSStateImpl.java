@@ -22,7 +22,7 @@ public class GPSStateImpl implements GPSState {
 //		Board board = this.getBoard();
 //
 //        if (rotated.getDepth() == board.getDepth() &&
-//                rotated.getChecksum() == board.getDepth()) {
+//                rotated.getChecksum() == board.getChecksum()) {
 //            return rotated.equals(board);
 //        }
 
