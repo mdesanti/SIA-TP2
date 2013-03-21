@@ -1,14 +1,10 @@
 package ar.edu.itba.sia.gps.impl;
 
+import ar.edu.itba.sia.gps.api.*;
+import ar.edu.itba.sia.gps.exception.NotAppliableException;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import ar.edu.itba.sia.gps.api.GPSProblem;
-import ar.edu.itba.sia.gps.api.GPSRule;
-import ar.edu.itba.sia.gps.api.GPSState;
-import ar.edu.itba.sia.gps.api.SearchStrategy;
-import ar.edu.itba.sia.gps.api.StatsHolder;
-import ar.edu.itba.sia.gps.exception.NotAppliableException;
 
 public abstract class GPSEngine {
 
@@ -109,18 +105,19 @@ public abstract class GPSEngine {
 	}
 
 	private  boolean checkOpenAndClosed(Integer cost, GPSState state) {
-		for (GPSNode openNode : getOpenNodes()) {
-			if (openNode.getState().compare(state) && openNode.getCost() < cost) {
-                return true;
-			}
-		}
-		for (GPSNode closedNode : closed) {
-			if (closedNode.getState().compare(state)
-					&& closedNode.getCost() < cost) {
-				return true;
-			}
-		}
-		return false;
+//		for (GPSNode openNode : getOpenNodes()) {
+//		f	if (openNode.getState().compare(state) && openNode.getCost() < cost) {
+//                return true;
+//			}
+//		}
+//		for (GPSNode closedNode : closed) {
+//			if (closedNode.getState().compare(state)
+//					&& closedNode.getCost() < cost) {
+//				return true;
+//			}
+//		}
+//		return false;
+        return false;
 	}
 
 	private  boolean checkBranch(GPSNode parent, GPSState state) {

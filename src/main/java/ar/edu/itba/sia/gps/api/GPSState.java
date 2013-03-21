@@ -17,10 +17,6 @@ public interface GPSState {
 	boolean compare(GPSState state);
 	
 	Board getBoard();
-	
-	int getChecksum();
 
 	GPSState getParent();
-
-
 }

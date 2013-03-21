@@ -32,7 +32,7 @@ public class App {
             pieces.add(node.toPiece());
 		}
 
-//		System.in.read();
+		System.in.read();
 	    Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
         new BoardRenderer(board).render();
@@ -46,6 +46,8 @@ public class App {
 		System.out.println("Leaf nodes: " + holder.getLeafNodesNumber());
 		System.out.println("Solution depth: " + holder.getSolutionDepth());
 		System.out.println("Generated states: " + holder.getStatesNumber());
+        System.out.println(GPSStateImpl.checkSumHit);
+        System.out.println(GPSStateImpl.equalsHit);
     }
 
 	private static void sufflePieces(List<Piece> pieces) {
