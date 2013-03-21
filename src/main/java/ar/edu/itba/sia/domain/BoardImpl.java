@@ -1,11 +1,13 @@
 package ar.edu.itba.sia.domain;
 
+
 import java.awt.Point;
 import java.util.Collection;
 import java.util.Map;
 
-import ar.edu.itba.sia.gps.api.GPSState;
 import ar.edu.itba.sia.domain.persist.GameXML;
+import ar.edu.itba.sia.domain.renderer.BoardRenderer;
+import ar.edu.itba.sia.gps.api.GPSState;
 
 import com.google.common.collect.Maps;
 
@@ -20,12 +22,15 @@ public class BoardImpl implements Board {
 	private int width;
 	private GPSState state;
 	private Board parent;
-	
+
+    // TODO: Fix this for rotations
     private Map<BoardImpl.Direction, short[]> availableColors = Maps.newHashMapWithExpectedSize(4);
 	private Point pieceLocation;
 	private Piece piece;
     private int depth;
     private int colorCount;
+    private int checkSum = -1;
+    private int rotationLevel;
 
     private BoardImpl() {}
     
@@ -110,28 +115,21 @@ public class BoardImpl implements Board {
 
 
 	public Board rotateBoard() {
-//		BoardImpl board = new BoardImpl();
-//        board.height = this.height;
-//        board.width = this.width;
-//        board.state = this.state;
-//        board.colorCount = this.colorCount;
-//        board.pieceLocation = this.pieceLocation;
-//        board.piece = this.piece;
-//        board.depth = state.getParent().getBoard().getDepth() + 1;
-//        board.parent = state.getParent().getBoard();
-//		int ii = 0;
-//		int jj = 0;
-//		for (int i = 0; i < width; i++) {
-//            for (int j = height - 1; j >= 0; j--) {
-//                rotated.setPieceIn(ii, jj, this.getPieceIn(j, i).rotate());
-//                jj++;
-//            }
-//            ii++;
-//            jj = 0;
-//        }
-//        return rotated;
-        return null;
-	}
+        BoardImpl board = new BoardImpl();
+        board.height = this.height;
+        board.width = this.width;
+        board.state = this.state;
+        board.colorCount = this.colorCount;
+        board.pieceLocation = this.pieceLocation;
+        board.piece = this.piece;
+        if (state != null) {
+            board.depth = state.getParent().getBoard().getDepth() + 1;
+            board.parent = state.getParent().getBoard();
+        }
+        board.rotationLevel = this.rotationLevel + 1;
+        board.board = this.board;
+        return board;
+    }
 
 	public int getHeight() {
 		return height;
@@ -155,7 +153,16 @@ public class BoardImpl implements Board {
 	public boolean equals(Object obj) {
 		BoardImpl board2 = (BoardImpl) obj;
 		if (board2.depth == this.depth) {
-            return board2.board.equals(this.board);
+            for (Point p : board.keySet()) {
+                Point myPoint = Util.rotate(p, this.rotationLevel, this.width);
+                Point point = Util.rotate(p, board2.rotationLevel, this.width);
+                if (!board2.getPieceIn(point)
+                        .rotate(board2.rotationLevel)
+                        .equals(getPieceIn(myPoint).rotate(this.rotationLevel))) {
+                    return false;
+                }
+            }
+            return true;
         }  else {
             return false;
         }
@@ -232,24 +239,37 @@ public class BoardImpl implements Board {
 
     @Override
 	public int getChecksum() {
-		return 0;
+        int sum = 0;
+		if (checkSum == -1) {
+            if (piece != null) {
+                sum += piece.generateChecksum();
+            }
+            if (parent != null) {
+                sum += parent.getChecksum();
+            }
+            return sum;
+        } else {
+            return checkSum;
+        }
+
 	}
 
 	@Override
 	public Piece getPieceIn(Point point) {
-		Piece p = board.get(point);
-		if (p == null) {
+        Point rotated = Util.rotate(point, this.rotationLevel, this.width);
+        Piece p = board.get(rotated);
+        if (p == null) {
 			if (parent != null) {
-				p = parent.getPieceIn(point);
-			} else {
+                p = parent.getPieceIn(rotated);
+            } else {
 				p = PieceImpl.empty();
 			}
             if (cacheableBoard()) {
-			    board.put(point, p);
+                board.put(rotated, p);
             }
 		}
-		return p;
-	}
+        return p.rotate(this.rotationLevel);
+    }
 
     public Piece getPieceIn(int x, int y) {
         return getPieceIn(new Point(x, y));
@@ -266,5 +286,9 @@ public class BoardImpl implements Board {
 		return pieceLocation;
 	}
 
-	
+    @Override
+    public String toString() {
+        return new BoardRenderer(this).renderString();
+    }
+
 }
