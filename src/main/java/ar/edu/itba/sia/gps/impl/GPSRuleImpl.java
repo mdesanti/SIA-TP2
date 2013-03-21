@@ -74,18 +74,6 @@ public class GPSRuleImpl implements GPSRule {
     public GPSState evalRule(GPSState state) throws NotAppliableException {
         Board board = state.getBoard();
 
-//        if (!isValidEvalLocation(state, board)) {
-//            return null;
-//        }
-//
-//        if (cannotPutPieceOnBoard(board)) {
-//            return null;
-//        }
-//
-//        if (!isValidColorCount(board)) {
-//            return null;
-//        }
-
         if (board.containsPiece(piece)) {
             return null;
         }

@@ -1,15 +1,21 @@
 package ar.edu.itba.sia.gps.impl;
 
 import ar.edu.itba.sia.domain.Board;
-import ar.edu.itba.sia.domain.BoardImpl;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.domain.persist.GameXML;
-import com.google.common.collect.Lists;
 import org.junit.Test;
 
 import java.awt.*;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+
+import static ar.edu.itba.sia.domain.BoardImpl.withPieces;
+import static ar.edu.itba.sia.domain.persist.GameXML.GameNode;
+import static ar.edu.itba.sia.domain.persist.GameXML.fromXml;
+import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.System.out;
+import static java.util.Collections.reverse;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,18 +26,24 @@ import java.util.Map;
 public class BoardTest {
     @Test
     public void testRotation() throws Exception {
-        GameXML game = GameXML.fromXml("test.xml");
-        Map<Point, GameXML.GameNode> map =  game.nodes;
-        java.util.List<Piece> pieces = Lists.newArrayList();
-        java.util.List<Point> points = Lists.newArrayList();
+        GameXML game = fromXml("test.xml");
+        Map<Point, GameNode> map =  game.nodes;
+        List<Piece> pieces = newArrayList();
+        List<Point> points = newArrayList();
         points.addAll(map.keySet());
-        Collections.reverse(points);
+        reverse(points);
         for(Point p: points) {
-            GameXML.GameNode node = map.get(p);
+            GameNode node = map.get(p);
             pieces.add(node.toPiece());
         }
 
-        Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
-        board.rotateBoard();
+        Board board = withPieces(game.gameSize, game.gameSize, map);
+
+        out.println(board.toString());
+        out.println(board.rotateBoard().toString());
+
+        assertEquals(board.rotateBoard(), board.rotateBoard());
+        assertEquals(board.rotateBoard().getChecksums(),
+                board.rotateBoard().rotateBoard().getChecksums());
     }
 }

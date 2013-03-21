@@ -14,7 +14,7 @@ public class GameGenerator {
     public static void main(final String[] args) throws Exception {
 		GameGenerator generator = new GameGenerator(4, 6);
         GameXML game = generator.generate();
-        game.toFile("random.4.xml");
+        game.toFile("random.xml");
 	}
 
     public GameGenerator(int size, int colorCount) {

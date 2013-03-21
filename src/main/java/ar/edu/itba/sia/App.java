@@ -21,7 +21,7 @@ import java.util.Random;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		GameXML game = GameXML.fromXml("random.3.xml");
+		GameXML game = GameXML.fromXml("random.xml");
 		Map<Point, GameNode> map =  game.nodes;
 		List<Piece> pieces = Lists.newArrayList();
         List<Point> points = Lists.newArrayList();
@@ -32,7 +32,7 @@ public class App {
             pieces.add(node.toPiece());
 		}
 
-//		System.in.read();
+		System.in.read();
 	    Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
         new BoardRenderer(board).render();
@@ -46,6 +46,8 @@ public class App {
 		System.out.println("Leaf nodes: " + holder.getLeafNodesNumber());
 		System.out.println("Solution depth: " + holder.getSolutionDepth());
 		System.out.println("Generated states: " + holder.getStatesNumber());
+        System.out.println(GPSStateImpl.checkSumHit);
+        System.out.println(GPSStateImpl.equalsHit);
     }
 
 	private static void sufflePieces(List<Piece> pieces) {

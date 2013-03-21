@@ -1,5 +1,7 @@
 package ar.edu.itba.sia.domain;
 
+import java.awt.*;
+
 public interface Piece {
 	
 	int getUpColor();
@@ -20,9 +22,10 @@ public interface Piece {
 	
 	boolean isEmpty();
 
-	int generateChecksum();
 
     boolean hasSameColors(Piece piece);
 
     boolean hasSameIdWith(Piece piece);
+
+	long generateChecksum();
 }
