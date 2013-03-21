@@ -12,9 +12,9 @@ public class GameGenerator {
     private float[] probabilities;
 
     public static void main(final String[] args) throws Exception {
-		GameGenerator generator = new GameGenerator(2, 6);
+		GameGenerator generator = new GameGenerator(4, 6);
         GameXML game = generator.generate();
-        game.toFile("test.xml");
+        game.toFile("random.4.xml");
 	}
 
     public GameGenerator(int size, int colorCount) {

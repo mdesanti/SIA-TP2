@@ -11,7 +11,7 @@
             <up>0</up>
             <down>2</down>
             <left>0</left>
-            <right>2</right>
+            <right>6</right>
          </gameNode>
       </entry>
       <entry>
@@ -22,7 +22,7 @@
          <gameNode>
             <up>0</up>
             <down>3</down>
-            <left>2</left>
+            <left>1</left>
             <right>0</right>
          </gameNode>
       </entry>
@@ -35,7 +35,7 @@
             <up>0</up>
             <down>3</down>
             <left>6</left>
-            <right>2</right>
+            <right>1</right>
          </gameNode>
       </entry>
       <entry>
@@ -45,8 +45,8 @@
          </point>
          <gameNode>
             <up>0</up>
-            <down>1</down>
-            <left>2</left>
+            <down>3</down>
+            <left>6</left>
             <right>6</right>
          </gameNode>
       </entry>
@@ -56,10 +56,10 @@
             <y>3</y>
          </point>
          <gameNode>
-            <up>1</up>
+            <up>2</up>
             <down>0</down>
             <left>0</left>
-            <right>2</right>
+            <right>6</right>
          </gameNode>
       </entry>
       <entry>
@@ -68,9 +68,9 @@
             <y>2</y>
          </point>
          <gameNode>
-            <up>4</up>
-            <down>1</down>
-            <left>1</left>
+            <up>5</up>
+            <down>3</down>
+            <left>6</left>
             <right>1</right>
          </gameNode>
       </entry>
@@ -82,7 +82,7 @@
          <gameNode>
             <up>2</up>
             <down>0</down>
-            <left>3</left>
+            <left>2</left>
             <right>0</right>
          </gameNode>
       </entry>
@@ -92,10 +92,10 @@
             <y>2</y>
          </point>
          <gameNode>
-            <up>6</up>
-            <down>5</down>
-            <left>2</left>
-            <right>1</right>
+            <up>5</up>
+            <down>6</down>
+            <left>6</left>
+            <right>6</right>
          </gameNode>
       </entry>
       <entry>
@@ -105,9 +105,9 @@
          </point>
          <gameNode>
             <up>3</up>
-            <down>4</down>
-            <left>4</left>
-            <right>2</right>
+            <down>5</down>
+            <left>2</left>
+            <right>6</right>
          </gameNode>
       </entry>
       <entry>
@@ -116,10 +116,10 @@
             <y>1</y>
          </point>
          <gameNode>
-            <up>1</up>
-            <down>6</down>
-            <left>1</left>
-            <right>4</right>
+            <up>3</up>
+            <down>5</down>
+            <left>6</left>
+            <right>2</right>
          </gameNode>
       </entry>
       <entry>
@@ -128,10 +128,10 @@
             <y>2</y>
          </point>
          <gameNode>
-            <up>4</up>
-            <down>1</down>
+            <up>3</up>
+            <down>2</down>
             <left>0</left>
-            <right>2</right>
+            <right>6</right>
          </gameNode>
       </entry>
       <entry>
@@ -140,10 +140,10 @@
             <y>3</y>
          </point>
          <gameNode>
-            <up>1</up>
+            <up>3</up>
             <down>0</down>
-            <left>3</left>
-            <right>3</right>
+            <left>1</left>
+            <right>2</right>
          </gameNode>
       </entry>
       <entry>
@@ -164,10 +164,10 @@
             <y>3</y>
          </point>
          <gameNode>
-            <up>5</up>
+            <up>6</up>
             <down>0</down>
-            <left>2</left>
-            <right>3</right>
+            <left>6</left>
+            <right>1</right>
          </gameNode>
       </entry>
       <entry>
@@ -177,9 +177,9 @@
          </point>
          <gameNode>
             <up>2</up>
-            <down>4</down>
+            <down>3</down>
             <left>0</left>
-            <right>1</right>
+            <right>6</right>
          </gameNode>
       </entry>
       <entry>
@@ -190,7 +190,7 @@
          <gameNode>
             <up>3</up>
             <down>1</down>
-            <left>2</left>
+            <left>6</left>
             <right>0</right>
          </gameNode>
       </entry>

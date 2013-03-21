@@ -12,8 +12,6 @@ import ar.edu.itba.sia.gps.exception.NotAppliableException;
 
 public abstract class GPSEngine {
 
-//	private List<GPSNode> open = new LinkedList<GPSNode>();
-//
 	private List<GPSNode> closed = new ArrayList<GPSNode>();
 
 	private GPSProblem problem;
