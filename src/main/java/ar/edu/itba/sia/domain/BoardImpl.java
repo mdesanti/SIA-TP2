@@ -1,12 +1,13 @@
 package ar.edu.itba.sia.domain;
 
-import com.google.common.collect.Maps;
+import java.awt.Point;
+import java.util.Collection;
+import java.util.Map;
+
 import ar.edu.itba.sia.gps.api.GPSState;
 import ar.edu.itba.sia.gps.persist.GameXML;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.Map;
+import com.google.common.collect.Maps;
 
 public class BoardImpl implements Board {
 
