@@ -46,8 +46,18 @@ public class PieceImpl implements Piece {
 		return right;
 	}
 	
-	public PieceImpl rotate() {
-		return new PieceImpl(id, left, up, right, down);
+	public PieceImpl rotate(int n) {
+        n %= 4;
+        switch(n) {
+            case 1:
+		        return new PieceImpl(id, left, up, right, down);
+            case 2:
+                return new PieceImpl(id, down, left, up, right);
+            case 3:
+                return new PieceImpl(id, right, down, left, up);
+            default:
+                return this;
+        }
 	}
 	
 	public static Piece empty() {

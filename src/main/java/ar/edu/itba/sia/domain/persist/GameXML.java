@@ -1,4 +1,4 @@
-package ar.edu.itba.sia.gps.persist;
+package ar.edu.itba.sia.domain.persist;
 
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.domain.PieceImpl;
