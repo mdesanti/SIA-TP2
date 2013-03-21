@@ -29,8 +29,6 @@ public class Util {
         right = getRightPiece(board, x, y);
         down = getDownPiece(board, x, y);
         left = getLeftPiece(board, x, y);
-        
-        
 
         if (up == null) {
             if (piece.getUpColor() != 0) {
