@@ -1,16 +1,19 @@
 package ar.edu.itba.sia.gps.impl;
 
-import ar.edu.itba.sia.gps.api.*;
-import ar.edu.itba.sia.gps.exception.NotAppliableException;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+
+import ar.edu.itba.sia.gps.api.GPSProblem;
+import ar.edu.itba.sia.gps.api.GPSRule;
+import ar.edu.itba.sia.gps.api.GPSState;
+import ar.edu.itba.sia.gps.api.SearchStrategy;
+import ar.edu.itba.sia.gps.api.StatsHolder;
+import ar.edu.itba.sia.gps.exception.NotAppliableException;
 
 public abstract class GPSEngine {
 
-	private List<GPSNode> open = new LinkedList<GPSNode>();
-
+//	private List<GPSNode> open = new LinkedList<GPSNode>();
+//
 	private List<GPSNode> closed = new ArrayList<GPSNode>();
 
 	private GPSProblem problem;
@@ -37,15 +40,15 @@ public abstract class GPSEngine {
 		boolean finished = false;
 		boolean failed = false;
 
-		open.add(rootNode);
+		addNode(rootNode);
 		stats.startSimulation();
 		while (!failed && !finished) {
-			if (open.size() <= 0) {
+			if (getOpenSize() <= 0) {
                 failed = true;
             } else {
-				GPSNode currentNode = open.get(0);
+				GPSNode currentNode = getNext();
 				closed.add(currentNode);
-				open.remove(0);
+				removeNode(currentNode);
 				if (isGoal(currentNode)) {
 					stats.stopSimulation();
 					finished = true;
@@ -106,7 +109,7 @@ public abstract class GPSEngine {
 	}
 
 	private  boolean checkOpenAndClosed(Integer cost, GPSState state) {
-		for (GPSNode openNode : open) {
+		for (GPSNode openNode : getOpenNodes()) {
 			if (openNode.getState().compare(state) && openNode.getCost() < cost) {
                 return true;
 			}
@@ -128,10 +131,18 @@ public abstract class GPSEngine {
 				|| state.compare(parent.getState());
 	}
 
-	public abstract  void addNode(GPSNode node);
+	public abstract void addNode(GPSNode node);
 	
-	public List<GPSNode> getOpen() {
-		return open;
+	protected abstract Iterable<GPSNode> getOpenNodes();
+	
+	protected abstract GPSNode getNext();
+	
+	protected abstract void removeNode(GPSNode node);
+	
+	protected abstract int getOpenSize();
+	
+	public GPSProblem getProblem() {
+		return problem;
 	}
 	
 }
