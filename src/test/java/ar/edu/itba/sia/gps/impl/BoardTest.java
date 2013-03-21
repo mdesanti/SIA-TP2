@@ -11,6 +11,8 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.Map;
 
+import static junit.framework.Assert.assertEquals;
+
 /**
  * Created with IntelliJ IDEA.
  * User: cris
@@ -32,6 +34,12 @@ public class BoardTest {
         }
 
         Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
-        board.rotateBoard();
+
+        System.out.println(board.toString());
+        System.out.println(board.rotateBoard().toString());
+
+        assertEquals(board.rotateBoard(), board.rotateBoard());
+        assertEquals(board.rotateBoard().getChecksum(),
+                board.rotateBoard().rotateBoard().getChecksum());
     }
 }
