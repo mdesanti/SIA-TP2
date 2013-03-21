@@ -5,6 +5,7 @@ import ar.edu.itba.sia.gps.exception.NotAppliableException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class GPSEngine {
 
@@ -26,6 +27,8 @@ public abstract class GPSEngine {
 	}
 
 
+    private Random r = new Random();
+    
 	public boolean engine(GPSProblem myProblem, SearchStrategy myStrategy, StatsHolder holder) {
 		this.stats = holder;
 		problem = myProblem;
@@ -45,6 +48,11 @@ public abstract class GPSEngine {
 				GPSNode currentNode = getNext();
 				closed.add(currentNode);
 				removeNode(currentNode);
+	            if (r.nextDouble() < 0.005) {
+	            	System.out.println("=======");
+	                System.out.println(currentNode.getState());
+	                System.out.println("=======");
+	            }
 				if (isGoal(currentNode)) {
 					stats.stopSimulation();
 					finished = true;
@@ -106,18 +114,16 @@ public abstract class GPSEngine {
 
 	private  boolean checkOpenAndClosed(Integer cost, GPSState state) {
 //		for (GPSNode openNode : getOpenNodes()) {
-//		f	if (openNode.getState().compare(state) && openNode.getCost() < cost) {
+//			if (openNode.getCost() < cost && openNode.getState().compare(state)) {
 //                return true;
 //			}
 //		}
 //		for (GPSNode closedNode : closed) {
-//			if (closedNode.getState().compare(state)
-//					&& closedNode.getCost() < cost) {
+//			if (closedNode.getCost() < cost && closedNode.getState().compare(state)) {
 //				return true;
 //			}
 //		}
-//		return false;
-        return false;
+		return false;
 	}
 
 	private  boolean checkBranch(GPSNode parent, GPSState state) {

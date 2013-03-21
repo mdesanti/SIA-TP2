@@ -31,7 +31,7 @@ public class GPSStateImpl implements GPSState {
 //			if (board.likelyToBeEqual(other)) {
 //				checkSumHit++;
 //			}
-//
+//				
 //				boolean eq = other.equals(board);
 //
 //				if (!eq) {
@@ -52,14 +52,14 @@ public class GPSStateImpl implements GPSState {
 //					errorHit++;
 //				}
 //				return eq;
-//
+
 //		}
 //
 //		if (checkSumCheck % 1000000 == 0) {
 //			System.out.println("=== Checksum Checks: " + checkSumCheck
 //					+ " checksum hits: " + checkSumHit + " ratio:"
 //					+ (checkSumHit / (float) (checkSumCheck)));
-//
+
 //			System.out.println("===== Equals Checks: " + checkSumHit
 //					+ " equals hits: " + equalsHit + " ratio:"
 //					+ (equalsHit / (float) (checkSumHit)));

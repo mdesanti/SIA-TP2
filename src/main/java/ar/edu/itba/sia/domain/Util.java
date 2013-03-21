@@ -22,11 +22,15 @@ public class Util {
     }
 
     public static boolean canPutPieceOnBoard(Piece piece, Board board, int x, int y) {
+    	
+    	
         Piece up, right, down, left;
         up = getUpPiece(board, x, y);
         right = getRightPiece(board, x, y);
         down = getDownPiece(board, x, y);
         left = getLeftPiece(board, x, y);
+        
+        
 
         if (up == null) {
             if (piece.getUpColor() != 0) {

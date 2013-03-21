@@ -21,7 +21,7 @@ import java.util.Random;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		GameXML game = GameXML.fromXml("random.3.xml");
+		GameXML game = GameXML.fromXml("random.xml");
 		Map<Point, GameNode> map =  game.nodes;
 		List<Piece> pieces = Lists.newArrayList();
         List<Point> points = Lists.newArrayList();
