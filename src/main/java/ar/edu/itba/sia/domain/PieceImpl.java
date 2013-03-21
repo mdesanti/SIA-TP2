@@ -107,18 +107,10 @@ public class PieceImpl implements Piece {
 		return up == -1 && down == -1 && left == -1 && right == -1;
 	}
 
-    private static Checksum sum = new Adler32();
-	
+
 	@Override
     public long generateChecksum() {
-        sum.update(up);
-        sum.update(right);
-        sum.update(left);
-        sum.update(down);
-        sum.update(rotationLevel);
-        long answer = sum.getValue();
-        sum.reset();
-        return answer;
+		return 0;
 	}
 
     @Override

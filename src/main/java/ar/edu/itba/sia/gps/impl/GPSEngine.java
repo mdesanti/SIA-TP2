@@ -48,6 +48,10 @@ public abstract class GPSEngine {
 				GPSNode currentNode = getNext();
 				closed.add(currentNode);
 				removeNode(currentNode);
+			
+				
+				
+				
 				if (isGoal(currentNode)) {
 					stats.stopSimulation();
 					finished = true;

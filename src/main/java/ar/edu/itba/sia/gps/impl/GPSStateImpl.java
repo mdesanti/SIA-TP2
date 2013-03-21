@@ -23,9 +23,9 @@ public class GPSStateImpl implements GPSState {
 	public static int errorHit = 0;
 
 	public boolean compare(GPSState state) {
-//        Board other = state.getBoard();
-//
-//
+        Board other = state.getBoard();
+
+
 //        checkSumCheck++;
 //        if (other.getDepth() == board.getDepth()) {
 //
@@ -72,7 +72,7 @@ public class GPSStateImpl implements GPSState {
 //                    + " errors: " + errorHit + " ratio:"
 //                    + (errorHit / (float) (equalsHit)));
 //        }
-
+//
 
         return false;
     }

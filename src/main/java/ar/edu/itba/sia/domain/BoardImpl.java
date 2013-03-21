@@ -279,7 +279,7 @@ public class BoardImpl implements Board {
 
                     int rot = (4 - this.rotationLevel) % 4;
                     Point pieceLocation = Util.rotate(x, y, rot, this.width);
-                    piece = getPieceIn(pieceLocation).rotate(rot);
+                    Piece piece = getPieceIn(pieceLocation).rotate(rot);
                     for (int i = 0; i < 4; i++) {
                         Piece p = piece.rotate(i);
                         summers[i].update(p.getRightColor());
