@@ -4,13 +4,12 @@ import ar.edu.itba.sia.gps.api.*;
 import ar.edu.itba.sia.gps.exception.NotAppliableException;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class GPSEngine {
 
-	private List<GPSNode> open = new LinkedList<GPSNode>();
-
+//	private List<GPSNode> open = new LinkedList<GPSNode>();
+//
 	private List<GPSNode> closed = new ArrayList<GPSNode>();
 
 	private GPSProblem problem;
@@ -37,15 +36,15 @@ public abstract class GPSEngine {
 		boolean finished = false;
 		boolean failed = false;
 
-		open.add(rootNode);
+		addNode(rootNode);
 		stats.startSimulation();
 		while (!failed && !finished) {
-			if (open.size() <= 0) {
+			if (getOpenSize() <= 0) {
                 failed = true;
             } else {
-				GPSNode currentNode = open.get(0);
+				GPSNode currentNode = getNext();
 				closed.add(currentNode);
-				open.remove(0);
+				removeNode(currentNode);
 				if (isGoal(currentNode)) {
 					stats.stopSimulation();
 					finished = true;
@@ -106,18 +105,19 @@ public abstract class GPSEngine {
 	}
 
 	private  boolean checkOpenAndClosed(Integer cost, GPSState state) {
-		for (GPSNode openNode : open) {
-			if (openNode.getState().compare(state) && openNode.getCost() < cost) {
-                return true;
-			}
-		}
-		for (GPSNode closedNode : closed) {
-			if (closedNode.getState().compare(state)
-					&& closedNode.getCost() < cost) {
-				return true;
-			}
-		}
-		return false;
+//		for (GPSNode openNode : getOpenNodes()) {
+//		f	if (openNode.getState().compare(state) && openNode.getCost() < cost) {
+//                return true;
+//			}
+//		}
+//		for (GPSNode closedNode : closed) {
+//			if (closedNode.getState().compare(state)
+//					&& closedNode.getCost() < cost) {
+//				return true;
+//			}
+//		}
+//		return false;
+        return false;
 	}
 
 	private  boolean checkBranch(GPSNode parent, GPSState state) {
@@ -128,10 +128,18 @@ public abstract class GPSEngine {
 				|| state.compare(parent.getState());
 	}
 
-	public abstract  void addNode(GPSNode node);
+	public abstract void addNode(GPSNode node);
 	
-	public List<GPSNode> getOpen() {
-		return open;
+	protected abstract Iterable<GPSNode> getOpenNodes();
+	
+	protected abstract GPSNode getNext();
+	
+	protected abstract void removeNode(GPSNode node);
+	
+	protected abstract int getOpenSize();
+	
+	public GPSProblem getProblem() {
+		return problem;
 	}
 	
 }

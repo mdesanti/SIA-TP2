@@ -129,7 +129,7 @@ public class BoardImpl implements Board {
         return board;
     }
 
-	public int getHeight() {
+    public int getHeight() {
 		return height;
 	}
 
@@ -238,7 +238,7 @@ public class BoardImpl implements Board {
     @Override
 	public int getChecksum() {
         int sum = 0;
-		if (checkSum == -1) {
+        if (checkSum == -1) {
             if (piece != null) {
                 sum += piece.generateChecksum();
             }
@@ -250,17 +250,17 @@ public class BoardImpl implements Board {
             return checkSum;
         }
 
-	}
+    }
 
 	@Override
 	public Piece getPieceIn(Point point) {
         Point rotated = Util.rotate(point, this.rotationLevel, this.width);
         Piece p = board.get(rotated);
         if (p == null) {
-			if (parent != null) {
+            if (parent != null) {
                 p = parent.getPieceIn(rotated);
             } else {
-				p = PieceImpl.empty();
+                p = PieceImpl.empty();
 			}
             if (cacheableBoard()) {
                 board.put(rotated, p);
