@@ -21,7 +21,7 @@ public class GPSRuleImpl implements GPSRule {
     }
 
     public Integer getCost() {
-        return 0;
+        return 1;
     }
 
     public String getName() {

@@ -15,7 +15,7 @@ public interface Board {
 	
 	int getWidth();
 	
-	int getChecksum();
+	long[] getChecksums();
 
     int getPieceCount();
     
@@ -30,6 +30,8 @@ public interface Board {
     Piece getPiece();
 
     boolean isValid();
+
+    boolean likelyToBeEqual(Board other);
 
 
     public enum Direction {
