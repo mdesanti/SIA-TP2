@@ -16,7 +16,7 @@ public interface Piece {
 	 * Rotates the piece 90 degrees clockwise
 	 * @return
 	 */
-	Piece rotate();
+	Piece rotate(int times);
 	
 	boolean isEmpty();
 
