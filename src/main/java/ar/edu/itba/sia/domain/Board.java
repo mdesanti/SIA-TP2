@@ -15,7 +15,6 @@ public interface Board {
 	
 	int getWidth();
 	
-	long[] getChecksums();
 
     int getPieceCount();
     
@@ -52,4 +51,6 @@ public interface Board {
 	Map<Direction, short[]> getAvailableColors();
 
 	Point getPieceLocation();
+
+	long getChecksum();
 }
