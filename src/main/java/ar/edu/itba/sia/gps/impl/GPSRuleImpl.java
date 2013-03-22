@@ -33,25 +33,6 @@ public class GPSRuleImpl implements GPSRule {
         return "Put " + piece.toString() + " in " + y + " " + x;
     }
 
-    private boolean isValidEvalLocation(GPSState state, Board board) {
-    	Point pieceLocation = state.getBoard().getPieceLocation();
-    	
-        if (pieceLocation == null) {
-            return x == 0 && y == 0;
-        }
-
-        if (pieceLocation.x + 1 == board.getWidth() 
-        		&& pieceLocation.y + 1 == board.getHeight()) {
-            return false;
-        }
-
-        if (pieceLocation.x + 1 == board.getWidth()) {
-            return pieceLocation.y + 1 == y && x == 0;
-        } else {
-            return pieceLocation.x + 1 == x && pieceLocation.y == y;
-        }
-    }
-
     private boolean isValidColorCount(Board board) {
         if (piece.getDownColor() != 0 &&
                 board.getColorCountFor(Board.Direction.UP, piece.getDownColor()) < 0) {

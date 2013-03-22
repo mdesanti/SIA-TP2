@@ -2,6 +2,8 @@ package ar.edu.itba.sia.domain;
 
 import java.awt.*;
 
+import ar.edu.itba.sia.gps.api.GPSState;
+
 /**
  * Created with IntelliJ IDEA.
  * User: cris
@@ -116,5 +118,28 @@ public class Util {
 
     public static int primeForRotation(int rotation) {
         return primes[(rotation + 1) * mag1cnumb3r % primes.length] * mag1cnumb3r;
+    }
+    
+    public static boolean isValidEvalLocation(GPSState state) {
+    	Board board = state.getBoard();
+    	Point pieceLocation = board.getPieceLocation();
+    	int depth = board.getDepth();
+    	int x = depth % board.getWidth();
+    	int y = depth / board.getHeight();
+    	
+        if (pieceLocation == null) {
+            return x == 0 && y == 0;
+        }
+
+        if (pieceLocation.x + 1 == board.getWidth() 
+        		&& pieceLocation.y + 1 == board.getHeight()) {
+            return false;
+        }
+
+        if (pieceLocation.x + 1 == board.getWidth()) {
+            return pieceLocation.y + 1 == y && x == 0;
+        } else {
+            return pieceLocation.x + 1 == x && pieceLocation.y == y;
+        }
     }
 }

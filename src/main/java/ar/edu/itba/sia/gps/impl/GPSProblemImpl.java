@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.domain.heuristics.BorderHeuristic;
+import ar.edu.itba.sia.domain.heuristics.OrderHeuristic;
 import ar.edu.itba.sia.gps.api.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class GPSProblemImpl implements GPSProblem {
 	private List<GPSRule> rules = Lists.newArrayList();
 	private GPSState initState;
 	private static int id = 0;
-	private Heuristic manhattan = new BorderHeuristic();
+	private Heuristic manhattan = new OrderHeuristic();
 
 	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount) {
 		this.height = height;

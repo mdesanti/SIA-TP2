@@ -67,4 +67,6 @@ public interface StatsHolder {
 	 */
 	void resetStats();
 	
+	void setLeafNodes(long leafNodes);
+	
 }

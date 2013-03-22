@@ -63,5 +63,10 @@ public class StatsHolderImpl implements StatsHolder {
 		leafNodes = 0;
 		explotions = 0;
 	}
+	
+	@Override
+	public void setLeafNodes(long leafNodes) {
+		this.leafNodes = leafNodes;
+	}
 
 }

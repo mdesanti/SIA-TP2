@@ -1,12 +1,12 @@
 package ar.edu.itba.sia.gps.impl;
 
+import java.awt.Point;
+import java.util.List;
+
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.BoardImpl;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.gps.api.GPSState;
-
-import java.awt.*;
-import java.util.List;
 
 public class GPSStateImpl implements GPSState {
 

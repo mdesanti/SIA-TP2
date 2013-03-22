@@ -17,7 +17,7 @@ import com.google.common.collect.Sets;
 
 public abstract class GPSEngine {
 
-	private List<GPSNode> closed = new ArrayList<GPSNode>();
+//	private List<GPSNode> closed = new ArrayList<GPSNode>();
 
 	private GPSProblem problem;
 
@@ -36,6 +36,7 @@ public abstract class GPSEngine {
 
 	public boolean engine(GPSProblem myProblem, SearchStrategy myStrategy,
 			StatsHolder holder) {
+		visitedBoards.clear();
 		this.stats = holder;
 		problem = myProblem;
 		strategy = myStrategy;
@@ -52,7 +53,7 @@ public abstract class GPSEngine {
 				failed = true;
 			} else {
 				GPSNode currentNode = getNext();
-				closed.add(currentNode);
+//				closed.add(currentNode);
 				removeNode(currentNode);
 
 				if (isGoal(currentNode)) {
@@ -70,6 +71,7 @@ public abstract class GPSEngine {
 
 		if (finished) {
 			System.out.println("OK! solution found!");
+			stats.setLeafNodes(getOpenSize());
 			return true;
 		} else if (failed) {
 			System.err.println("FAILED! solution not found!");
@@ -88,7 +90,6 @@ public abstract class GPSEngine {
 			return false;
 		}
 
-		boolean addedChild = false;
 		for (GPSRule rule : problem.getRules()) {
 			GPSState newState = null;
 			try {
@@ -100,16 +101,12 @@ public abstract class GPSEngine {
 					&& !checkBranch(node, newState)
 					&& !checkOpenAndClosed(node.getCost() + rule.getCost(),
 							newState)) {
-				addedChild = true;
 				stats.addState();
 				GPSNode newNode = new GPSNode(newState, node.getCost()
 						+ rule.getCost());
 				newNode.setParent(node);
 				addNode(newNode);
 			}
-		}
-		if (!addedChild) {
-			stats.addLeafNode();
 		}
 		return true;
 	}
