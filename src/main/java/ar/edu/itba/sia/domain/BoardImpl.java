@@ -31,7 +31,7 @@ public class BoardImpl implements Board {
 	private int depth;
 	private int colorCount;
 	private int rotationLevel;
-    private long[] checkSums;
+    private Long checkSum;
 
     private BoardImpl() {
 	}
@@ -45,7 +45,7 @@ public class BoardImpl implements Board {
 		board.depth = 0;
 		board.colorCount = colorCount;
 		board.buildColorCountMap(piecesInProblem);
-		board.getChecksums();
+		board.getChecksum();
 		return board;
 	}
 
@@ -62,7 +62,7 @@ public class BoardImpl implements Board {
 		board.parent = state.getParent().getBoard();
 		board.decrementColorCount(toAdd, state.getParent().getBoard());
 		board.setPieceIn(pieceLocation.x, pieceLocation.y, toAdd);
-		board.getChecksums();
+		board.getChecksum();
 		return board;
 	}
 
@@ -249,56 +249,38 @@ public class BoardImpl implements Board {
 
 	@Override
 	public boolean likelyToBeEqual(Board other) {
-		long[] myChecks = this.getChecksums();
-		long[] otherChecks = other.getChecksums();
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (myChecks[i] == otherChecks[j]) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return other.hashCode() == this.hashCode();
 	}
 
 
-	private static Checksum[] summers = null;
+	private static Checksum summer = new CRC32();
+	
+	@Override
+	public int hashCode() {
+		return (int) getChecksum();
+	}
 
 	@Override
-	public long[] getChecksums() {
-        if (summers == null) {
-            summers = new CRC32[4];
-            for (int i = 0; i < 4; i++) {
-                summers[i] = new CRC32();
-            }
-        }
-        if (checkSums == null) {
-            long[] sum = new long[4];
+	public long getChecksum() {
+        if (checkSum == null) {
+            long sum;
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-
                     int rot = (4 - this.rotationLevel) % 4;
                     Point pieceLocation = Util.rotate(x, y, rot, this.width);
-                    Piece piece = getPieceIn(pieceLocation).rotate(rot);
-                    for (int i = 0; i < 4; i++) {
-                        Piece p = piece.rotate(i);
-                        summers[i].update(p.getRightColor());
-                        summers[i].update(p.getLeftColor());
-                        summers[i].update(p.getUpColor());
-                        summers[i].update(p.getDownColor());
-//                        summers[i].update(i);
-                    }
+                    Piece p = getPieceIn(pieceLocation).rotate(rot);
+                    summer.update(p.getRightColor());
+                    summer.update(p.getLeftColor());
+                    summer.update(p.getUpColor());
+                    summer.update(p.getDownColor());
                 }
             }
-            for (int i = 0; i < 4; i++) {
-//                summers[i].update(depth);
-                sum[i] = summers[i].getValue();
-                summers[i].reset();
-            }
-            checkSums = sum;
+            sum = summer.getValue();
+            summer.reset();
+            checkSum = sum;
             return sum;
         } else {
-            return checkSums;
+            return checkSum;
         }
 
     }

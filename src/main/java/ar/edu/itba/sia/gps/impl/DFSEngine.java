@@ -17,6 +17,7 @@ public class DFSEngine extends GPSEngine {
 
 	@Override
 	public void addNode(GPSNode node) {
+		super.addNode(node);
 		open.add(0, node);
 	}
 

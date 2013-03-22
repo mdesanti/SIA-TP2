@@ -24,6 +24,7 @@ public class GreedyEngine extends GPSEngine {
 
 	@Override
 	public void addNode(GPSNode node) {
+		super.addNode(node);
 		open.add(node);
 	}
 

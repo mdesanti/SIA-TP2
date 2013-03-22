@@ -26,53 +26,41 @@ public class GPSStateImpl implements GPSState {
         Board other = state.getBoard();
 
 
-//        checkSumCheck++;
-//        if (other.getDepth() == board.getDepth()) {
-//
-//            if (board.likelyToBeEqual(other)) {
-//                checkSumHit++;
-//            }
-//
-//            boolean eq = other.equals(board);
-//
-//            if (!eq) {
-//                for (int i = 1; i <= 3; i++) {
-//                    try {
-//                        other = other.rotateBoard();
-//                        eq = other.equals(board);
-//                        if (eq) {
-//                            break;
-//                        }
-//                    } catch (Exception e) {
-//
-//                    }
-//                }
-//            }
-//
-//            if (eq) {
-//                equalsHit++;
-//            }
-//
-//            if (eq && !board.likelyToBeEqual(other)) {
-//                errorHit++;
-//            }
-//
-//            return eq;
-//        }
-//
-//        if (checkSumCheck % 1000000 == 0) {
-//            System.out.println("=== Checksum Checks: " + checkSumCheck
-//                    + " checksum hits: " + checkSumHit + " ratio:"
-//                    + (checkSumHit / (float) (checkSumCheck)));
-//
-//            System.out.println("===== Equals Checks: " + checkSumHit
-//                    + " equals hits: " + equalsHit + " ratio:"
-//                    + (equalsHit / (float) (checkSumHit)));
-//            System.out.println("===== Error chances: " + equalsHit
-//                    + " errors: " + errorHit + " ratio:"
-//                    + (errorHit / (float) (equalsHit)));
-//        }
-//
+        checkSumCheck++;
+        if (other.getDepth() == board.getDepth()) {
+
+            if (board.likelyToBeEqual(other)) {
+                checkSumHit++;
+            }
+
+            boolean eq = other.equals(board);
+
+            if (!eq) {
+                for (int i = 1; i <= 3; i++) {
+                    try {
+                        other = other.rotateBoard();
+                        eq = other.equals(board);
+                        if (eq) {
+                            break;
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+
+            if (eq) {
+                equalsHit++;
+            }
+
+            if (eq && !board.likelyToBeEqual(other)) {
+                errorHit++;
+            }
+
+            return eq;
+        }
+
+
 
         return false;
     }
@@ -90,7 +78,7 @@ public class GPSStateImpl implements GPSState {
 	public GPSState getParent() {
 		return parent;
 	}
-
+	
 	public static GPSState initialState(int height, int width, List<Piece> all,
 			int colorCount) {
 		GPSStateImpl state = new GPSStateImpl();
