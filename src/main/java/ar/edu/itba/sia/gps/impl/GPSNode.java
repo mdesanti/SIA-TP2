@@ -51,4 +51,14 @@ public class GPSNode {
 		return this.parent.getDepth() + 1;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return state.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return state.hashCode();
+	}
+	
 }

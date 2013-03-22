@@ -31,7 +31,7 @@ public class BoardImpl implements Board {
 	private int depth;
 	private int colorCount;
 	private int rotationLevel;
-    private Long checkSums;
+    private Long checkSum;
 
     private BoardImpl() {
 	}
@@ -249,15 +249,20 @@ public class BoardImpl implements Board {
 
 	@Override
 	public boolean likelyToBeEqual(Board other) {
-		return other.getChecksum() == this.getChecksum();
+		return other.hashCode() == this.hashCode();
 	}
 
 
 	private static Checksum summer = new CRC32();
+	
+	@Override
+	public int hashCode() {
+		return (int) getChecksum();
+	}
 
 	@Override
 	public long getChecksum() {
-        if (checkSums == null) {
+        if (checkSum == null) {
             long sum;
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -272,10 +277,10 @@ public class BoardImpl implements Board {
             }
             sum = summer.getValue();
             summer.reset();
-            checkSums = sum;
+            checkSum = sum;
             return sum;
         } else {
-            return checkSums;
+            return checkSum;
         }
 
     }

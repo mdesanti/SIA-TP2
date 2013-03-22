@@ -60,18 +60,6 @@ public class GPSStateImpl implements GPSState {
             return eq;
         }
 
-        if (checkSumCheck % 1000000 == 0) {
-            System.out.println("=== Checksum Checks: " + checkSumCheck
-                    + " checksum hits: " + checkSumHit + " ratio:"
-                    + (checkSumHit / (float) (checkSumCheck)));
-
-            System.out.println("===== Equals Checks: " + checkSumHit
-                    + " equals hits: " + equalsHit + " ratio:"
-                    + (equalsHit / (float) (checkSumHit)));
-            System.out.println("===== Error chances: " + equalsHit
-                    + " errors: " + errorHit + " ratio:"
-                    + (errorHit / (float) (equalsHit)));
-        }
 
 
         return false;
@@ -90,7 +78,7 @@ public class GPSStateImpl implements GPSState {
 	public GPSState getParent() {
 		return parent;
 	}
-
+	
 	public static GPSState initialState(int height, int width, List<Piece> all,
 			int colorCount) {
 		GPSStateImpl state = new GPSStateImpl();
