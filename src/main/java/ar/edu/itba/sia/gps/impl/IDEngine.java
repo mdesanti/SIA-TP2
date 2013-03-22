@@ -17,7 +17,7 @@ public class IDEngine extends DFSEngine {
 			StatsHolder holder) {
 		boolean solutionFound = false;
 		while (!solutionFound) {
-			holder.resetStats();
+//			holder.resetStats();
 			System.out.println(depth);
 			solutionFound = super.engine(myProblem, myStrategy, holder);
 			depth++;

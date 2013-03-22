@@ -40,5 +40,9 @@ public class BFSEngine extends GPSEngine {
 		return open.size();
 	}
 	
+	@Override
+	protected void resetOpen() {
+		open.clear();
+	}
 	
 }

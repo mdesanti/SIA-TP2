@@ -47,5 +47,10 @@ public class AStarEngine extends GPSEngine {
 	protected int getOpenSize() {
 		return open.size();
 	}
+	
+	@Override
+	protected void resetOpen() {
+		open.clear();
+	}
 
 }

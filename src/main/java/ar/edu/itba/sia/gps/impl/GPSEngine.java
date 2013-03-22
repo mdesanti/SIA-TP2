@@ -17,7 +17,7 @@ import com.google.common.collect.Sets;
 
 public abstract class GPSEngine {
 
-//	private List<GPSNode> closed = new ArrayList<GPSNode>();
+	private List<GPSNode> closed = new ArrayList<GPSNode>();
 
 	private GPSProblem problem;
 
@@ -37,6 +37,8 @@ public abstract class GPSEngine {
 	public boolean engine(GPSProblem myProblem, SearchStrategy myStrategy,
 			StatsHolder holder) {
 		visitedBoards.clear();
+		closed.clear();
+		resetOpen();
 		this.stats = holder;
 		problem = myProblem;
 		strategy = myStrategy;
@@ -53,7 +55,7 @@ public abstract class GPSEngine {
 				failed = true;
 			} else {
 				GPSNode currentNode = getNext();
-//				closed.add(currentNode);
+				closed.add(currentNode);
 				removeNode(currentNode);
 
 				if (isGoal(currentNode)) {
@@ -153,5 +155,7 @@ public abstract class GPSEngine {
 	public GPSProblem getProblem() {
 		return problem;
 	}
+	
+	protected abstract void resetOpen();
 
 }

@@ -40,8 +40,9 @@ public class DFSEngine extends GPSEngine {
 	protected int getOpenSize() {
 		return open.size();
 	}
-	
-	protected void clearOpen() {
+
+	@Override
+	protected void resetOpen() {
 		open.clear();
 	}
 
