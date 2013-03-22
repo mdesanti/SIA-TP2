@@ -21,24 +21,24 @@ import java.util.Random;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		GameXML game = GameXML.fromXml("random.xml");
+		GameXML game = GameXML.fromXml("random.3.xml");
 		Map<Point, GameNode> map =  game.nodes;
 		List<Piece> pieces = Lists.newArrayList();
         List<Point> points = Lists.newArrayList();
         points.addAll(map.keySet());
-        Collections.reverse(points);
+//        Collections.reverse(points);
 		for(Point p: points) {
 			GameNode node = map.get(p);
             pieces.add(node.toPiece());
 		}
-
+		sufflePieces(pieces);
 		System.in.read();
 	    Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
         new BoardRenderer(board).render();
         StatsHolder holder = new StatsHolderImpl();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors);
-		GPSEngine engine = new DFSEngine(problem, null);
+		GPSEngine engine = new AStarEngine(problem, null);
 		engine.engine(problem, null, holder);
 		System.out.println("-------------------------------------------");
 		System.out.println("Simulation time: " + holder.getSimulationTime()/(double)1000 + " seconds");

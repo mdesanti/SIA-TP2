@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Piece;
+import ar.edu.itba.sia.domain.costFunctions.ColorBasedCostFunction;
 import ar.edu.itba.sia.domain.costFunctions.DummyCostFunction;
 import ar.edu.itba.sia.gps.api.CostFunction;
 import ar.edu.itba.sia.gps.api.GPSRule;
