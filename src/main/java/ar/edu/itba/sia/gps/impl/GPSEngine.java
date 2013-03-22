@@ -49,7 +49,7 @@ public abstract class GPSEngine {
 		boolean failed = false;
 
 		addNode(rootNode);
-		stats.startSimulation();
+		startSim(holder);
 		while (!failed && !finished) {
 			if (getOpenSize() <= 0) {
 				failed = true;
@@ -59,11 +59,11 @@ public abstract class GPSEngine {
 				removeNode(currentNode);
 
 				if (isGoal(currentNode)) {
-					stats.stopSimulation();
 					finished = true;
+					stopSim(holder);
+					holder.setSolutionDepth(currentNode.getDepth());
 					System.out.println("Showing a solution");
 					System.out.println(currentNode.getSolution());
-					stats.setSolutionDepth(currentNode.getDepth());
 				} else {
 					stats.addExplodedNode();
 					explode(currentNode);
@@ -157,5 +157,13 @@ public abstract class GPSEngine {
 	}
 	
 	protected abstract void resetOpen();
+	
+	protected void startSim(StatsHolder holder) {
+		holder.startSimulation();
+	}
+	
+	protected void stopSim(StatsHolder holder) {
+		holder.stopSimulation();
+	}
 
 }
