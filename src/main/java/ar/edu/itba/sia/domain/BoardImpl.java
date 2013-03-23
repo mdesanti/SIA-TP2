@@ -24,8 +24,8 @@ public class BoardImpl implements Board {
 	private Board parent;
 
     // TODO: Fix this for rotations
-//	private Map<BoardImpl.Direction, short[]> availableColors = Maps
-//			.newHashMapWithExpectedSize(4);
+	private Map<BoardImpl.Direction, short[]> availableColors = Maps
+			.newHashMapWithExpectedSize(4);
 	private Point pieceLocation;
 	private Piece piece;
 	private int depth;
@@ -67,58 +67,58 @@ public class BoardImpl implements Board {
 	}
 
 	private void buildColorCountMap(Collection<Piece> pieces) {
-//		getAvailableColors()
-//				.put(Board.Direction.UP, new short[this.colorCount]);
-//		getAvailableColors().put(Board.Direction.DOWN,
-//				new short[this.colorCount]);
-//		getAvailableColors().put(Board.Direction.LEFT,
-//				new short[this.colorCount]);
-//		getAvailableColors().put(Board.Direction.RIGHT,
-//				new short[this.colorCount]);
-//		short[] up, down, left, right;
-//		up = getAvailableColors().get(Board.Direction.UP);
-//		down = getAvailableColors().get(Board.Direction.DOWN);
-//		left = getAvailableColors().get(Board.Direction.LEFT);
-//		right = getAvailableColors().get(Board.Direction.RIGHT);
-//		for (Piece p : pieces) {
-//			if (p.getUpColor() > 0) {
-//				up[p.getUpColor() - 1]++;
-//			}
-//			if (p.getDownColor() > 0) {
-//				down[p.getDownColor() - 1]++;
-//			}
-//			if (p.getLeftColor() > 0) {
-//				left[p.getLeftColor() - 1]++;
-//			}
-//			if (p.getRightColor() > 0) {
-//				right[p.getRightColor() - 1]++;
-//			}
-//		}
+		getAvailableColors()
+				.put(Board.Direction.UP, new short[this.colorCount]);
+		getAvailableColors().put(Board.Direction.DOWN,
+				new short[this.colorCount]);
+		getAvailableColors().put(Board.Direction.LEFT,
+				new short[this.colorCount]);
+		getAvailableColors().put(Board.Direction.RIGHT,
+				new short[this.colorCount]);
+		short[] up, down, left, right;
+		up = getAvailableColors().get(Board.Direction.UP);
+		down = getAvailableColors().get(Board.Direction.DOWN);
+		left = getAvailableColors().get(Board.Direction.LEFT);
+		right = getAvailableColors().get(Board.Direction.RIGHT);
+		for (Piece p : pieces) {
+			if (p.getUpColor() > 0) {
+				up[p.getUpColor() - 1]++;
+			}
+			if (p.getDownColor() > 0) {
+				down[p.getDownColor() - 1]++;
+			}
+			if (p.getLeftColor() > 0) {
+				left[p.getLeftColor() - 1]++;
+			}
+			if (p.getRightColor() > 0) {
+				right[p.getRightColor() - 1]++;
+			}
+		}
 	}
 
 	private void decrementColorCount(Piece addedPiece, Board parent) {
-//		for (Board.Direction d : parent.getAvailableColors().keySet()) {
-//			getAvailableColors().put(d,
-//					parent.getAvailableColors().get(d).clone());
-//		}
-//
-//		if (addedPiece.getDownColor() > 0) {
-//			short[] downCount = getAvailableColors().get(Board.Direction.DOWN);
-//			downCount[addedPiece.getDownColor() - 1]--;
-//		}
-//		if (addedPiece.getUpColor() > 0) {
-//			short[] upCount = getAvailableColors().get(Board.Direction.UP);
-//			upCount[addedPiece.getUpColor() - 1]--;
-//		}
-//		if (addedPiece.getLeftColor() > 0) {
-//			short[] leftCount = getAvailableColors().get(Board.Direction.LEFT);
-//			leftCount[addedPiece.getLeftColor() - 1]--;
-//		}
-//		if (addedPiece.getRightColor() > 0) {
-//			short[] rightCount = getAvailableColors()
-//					.get(Board.Direction.RIGHT);
-//			rightCount[addedPiece.getRightColor() - 1]--;
-//		}
+		for (Board.Direction d : parent.getAvailableColors().keySet()) {
+			getAvailableColors().put(d,
+					parent.getAvailableColors().get(d).clone());
+		}
+
+		if (addedPiece.getDownColor() > 0) {
+			short[] downCount = getAvailableColors().get(Board.Direction.DOWN);
+			downCount[addedPiece.getDownColor() - 1]--;
+		}
+		if (addedPiece.getUpColor() > 0) {
+			short[] upCount = getAvailableColors().get(Board.Direction.UP);
+			upCount[addedPiece.getUpColor() - 1]--;
+		}
+		if (addedPiece.getLeftColor() > 0) {
+			short[] leftCount = getAvailableColors().get(Board.Direction.LEFT);
+			leftCount[addedPiece.getLeftColor() - 1]--;
+		}
+		if (addedPiece.getRightColor() > 0) {
+			short[] rightCount = getAvailableColors()
+					.get(Board.Direction.RIGHT);
+			rightCount[addedPiece.getRightColor() - 1]--;
+		}
 	}
 
 	public Board rotateBoard() {
@@ -186,7 +186,7 @@ public class BoardImpl implements Board {
 	}
 
 	private boolean cacheableBoard() {
-		return depth <= 12;
+		return depth <= 25; // TODO: Parametrize this
 
 	}
 
@@ -225,8 +225,7 @@ public class BoardImpl implements Board {
 
 	@Override
 	public int getColorCountFor(Direction up, int color) {
-//		return availableColors.get(up)[color - 1];
-		return 1;
+		return availableColors.get(up)[color - 1];
 	}
 
 	@Override
@@ -252,10 +251,17 @@ public class BoardImpl implements Board {
 		return other.hashCode() == this.hashCode();
 	}
 
+    @Override
+    public void clean() {
+        this.pieceCache.clear();
+        this.board.clear();
+        this.board.put(this.pieceLocation, this.piece);
+    }
 
-	private static Checksum summer = new CRC32();
-	
-	@Override
+
+    private static Checksum summer = new CRC32();
+
+    @Override
 	public int hashCode() {
 		return (int) getChecksum();
 	}
@@ -308,7 +314,7 @@ public class BoardImpl implements Board {
 	}
 
 	public Map<BoardImpl.Direction, short[]> getAvailableColors() {
-		return null;
+		return availableColors;
 	}
 
 	@Override

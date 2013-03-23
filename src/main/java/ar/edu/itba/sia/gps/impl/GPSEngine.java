@@ -1,23 +1,17 @@
 package ar.edu.itba.sia.gps.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
+import ar.edu.itba.sia.App;
 import ar.edu.itba.sia.domain.Board;
-import ar.edu.itba.sia.gps.api.GPSProblem;
-import ar.edu.itba.sia.gps.api.GPSRule;
-import ar.edu.itba.sia.gps.api.GPSState;
-import ar.edu.itba.sia.gps.api.SearchStrategy;
-import ar.edu.itba.sia.gps.api.StatsHolder;
+import ar.edu.itba.sia.gps.api.*;
 import ar.edu.itba.sia.gps.exception.NotAppliableException;
-
 import com.google.common.collect.Sets;
+
+import java.util.HashSet;
+import java.util.Random;
 
 public abstract class GPSEngine {
 
-	private List<GPSNode> closed = new ArrayList<GPSNode>();
+	private HashSet<Board> closedBoards = Sets.newHashSet();
 
 	private GPSProblem problem;
 
@@ -37,7 +31,7 @@ public abstract class GPSEngine {
 	public boolean engine(GPSProblem myProblem, SearchStrategy myStrategy,
 			StatsHolder holder) {
 		visitedBoards.clear();
-		closed.clear();
+        closedBoards.clear();
 		resetOpen();
 		this.stats = holder;
 		problem = myProblem;
@@ -55,15 +49,16 @@ public abstract class GPSEngine {
 				failed = true;
 			} else {
 				GPSNode currentNode = getNext();
-				closed.add(currentNode);
+                closedBoards.add(currentNode.getState().getBoard());
 				removeNode(currentNode);
 
-				if (isGoal(currentNode)) {
+				if (isGoal(currentNode) || App.isOver.get()) {
 					finished = true;
 					stopSim(holder);
 					holder.setSolutionDepth(currentNode.getDepth());
 					System.out.println("Showing a solution");
 					System.out.println(currentNode.getSolution());
+                    App.isOver.set(false);
 				} else {
 					stats.addExplodedNode();
 					explode(currentNode);
@@ -127,6 +122,19 @@ public abstract class GPSEngine {
 
 		}
 
+        if (closedBoards.contains(state.getBoard())) {
+            return true;
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            Board b = state.getBoard().rotateBoard();
+            boolean eq = closedBoards.contains(b);
+            if (eq) {
+                return true;
+            }
+
+        }
+
 		return false;
 	}
 
@@ -141,10 +149,9 @@ public abstract class GPSEngine {
 	private HashSet<Board> visitedBoards = Sets.newHashSet();
 
 	public void addNode(GPSNode node) {
+        node.getState().getBoard().clean();
 		visitedBoards.add(node.getState().getBoard());
 	}
-
-	protected abstract Iterable<GPSNode> getOpenNodes();
 
 	protected abstract GPSNode getNext();
 

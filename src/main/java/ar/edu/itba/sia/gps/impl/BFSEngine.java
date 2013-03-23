@@ -1,10 +1,10 @@
 package ar.edu.itba.sia.gps.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import ar.edu.itba.sia.gps.api.GPSProblem;
 import ar.edu.itba.sia.gps.api.SearchStrategy;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class BFSEngine extends GPSEngine {
 
@@ -18,11 +18,6 @@ public class BFSEngine extends GPSEngine {
 	public void addNode(GPSNode node) {
 		super.addNode(node);
 		open.add(node);
-	}
-
-	@Override
-	protected Iterable<GPSNode> getOpenNodes() {
-		return open;
 	}
 
 	@Override

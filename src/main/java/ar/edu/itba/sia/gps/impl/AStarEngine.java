@@ -1,10 +1,10 @@
 package ar.edu.itba.sia.gps.impl;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
-
 import ar.edu.itba.sia.gps.api.GPSProblem;
 import ar.edu.itba.sia.gps.api.SearchStrategy;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class AStarEngine extends GPSEngine {
 
@@ -26,11 +26,6 @@ public class AStarEngine extends GPSEngine {
 	public void addNode(GPSNode node) {
 		super.addNode(node);
 		open.add(node);
-	}
-
-	@Override
-	protected Iterable<GPSNode> getOpenNodes() {
-		return open;
 	}
 
 	@Override

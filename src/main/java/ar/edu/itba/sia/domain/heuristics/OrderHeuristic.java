@@ -4,23 +4,48 @@ import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Util;
 import ar.edu.itba.sia.gps.api.GPSState;
 import ar.edu.itba.sia.gps.api.Heuristic;
+import com.google.common.collect.Maps;
+
+import java.util.Map;
 
 public class OrderHeuristic implements Heuristic {
 
-	@Override
+    private static Map<GPSState,Integer> cache = Maps.newHashMap();
+
+    @Override
 	public Integer apply(GPSState state) {
-		if(!state.getBoard().isValid()) {
-			return Integer.MAX_VALUE;
+
+        if (cache.containsKey(state)) {
+            return cache.get(state);
+        }
+
+        int result = -1;
+
+        if (result == -1
+                && !Util.canPutPieceOnBoard(state.getBoard().getPiece(), state.getBoard(),
+                state.getBoard().getPieceLocation().x, state.getBoard().getPieceLocation().y)) {
+            result = Integer.MAX_VALUE;
+        }
+        if (result == -1 && !state.getBoard().isValid()) {
+            result = Integer.MAX_VALUE;
+        }
+
+        if(result == -1 && !state.getBoard().isValid()) {
+            result = Integer.MAX_VALUE;
 		}
-		if(Util.isValidEvalLocation(state)) {
+		if(result == -1 && Util.isValidEvalLocation(state)) {
 			Board board = state.getBoard();
 			int max = state.getBoard().getHeight() * state.getBoard().getWidth();
 			int depth = board.getDepth();
 			int x = depth % board.getWidth();
 	    	int y = depth / board.getHeight();
-	    	return max - y*board.getWidth() + x;
+	    	result = max - y*board.getWidth() + x;
 		} else {
-			return Integer.MAX_VALUE;
+            result = Integer.MAX_VALUE;
 		}
+
+
+        cache.put(state, result);
+        return result;
 	}
 }

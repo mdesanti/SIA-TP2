@@ -1,11 +1,10 @@
 package ar.edu.itba.sia.gps.impl;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
-
-import ar.edu.itba.sia.domain.heuristics.BorderHeuristic;
 import ar.edu.itba.sia.gps.api.GPSProblem;
 import ar.edu.itba.sia.gps.api.SearchStrategy;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class GreedyEngine extends GPSEngine {
 
@@ -28,10 +27,6 @@ public class GreedyEngine extends GPSEngine {
 		open.add(node);
 	}
 
-	@Override
-	protected Iterable<GPSNode> getOpenNodes() {
-		return open;
-	}
 
 	@Override
 	protected GPSNode getNext() {
