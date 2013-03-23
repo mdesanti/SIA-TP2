@@ -38,7 +38,7 @@ public class App {
         new BoardRenderer(board).render();
         final StatsHolder holder = new StatsHolderImpl();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors);
-		GPSEngine engine = new GreedyEngine(problem, null);
+		GPSEngine engine = new AStarEngine(problem, null);
 		engine.engine(problem, null, holder);
 		System.out.println("-------------------------------------------");
 		System.out.println("Simulation time: " + holder.getSimulationTime()/(double)1000 + " seconds");
