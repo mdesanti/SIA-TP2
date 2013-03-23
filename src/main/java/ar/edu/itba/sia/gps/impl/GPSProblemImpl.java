@@ -1,5 +1,6 @@
 package ar.edu.itba.sia.gps.impl;
 
+import ar.edu.itba.sia.domain.heuristics.ColorHeuristic;
 import com.google.common.collect.Lists;
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Piece;
@@ -14,7 +15,7 @@ public class GPSProblemImpl implements GPSProblem {
 	private List<GPSRule> rules = Lists.newArrayList();
 	private GPSState initState;
 	private static int id = 0;
-	private Heuristic manhattan = new OrderHeuristic();
+	private Heuristic manhattan = new ColorHeuristic();
 
 	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount) {
 		this.height = height;

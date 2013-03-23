@@ -45,6 +45,7 @@ public interface Board {
         }
     }
 
+    public void clean();
 
 	Piece getPieceIn(Point point);
 

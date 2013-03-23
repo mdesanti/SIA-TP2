@@ -149,6 +149,7 @@ public abstract class GPSEngine {
 	private HashSet<Board> visitedBoards = Sets.newHashSet();
 
 	public void addNode(GPSNode node) {
+        node.getState().getBoard().clean();
 		visitedBoards.add(node.getState().getBoard());
 	}
 
