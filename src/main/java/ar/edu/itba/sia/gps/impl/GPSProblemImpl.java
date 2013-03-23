@@ -3,7 +3,6 @@ package ar.edu.itba.sia.gps.impl;
 import com.google.common.collect.Lists;
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Piece;
-import ar.edu.itba.sia.domain.heuristics.BorderHeuristic;
 import ar.edu.itba.sia.domain.heuristics.OrderHeuristic;
 import ar.edu.itba.sia.gps.api.*;
 

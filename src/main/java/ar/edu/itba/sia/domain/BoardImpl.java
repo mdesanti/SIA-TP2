@@ -186,7 +186,7 @@ public class BoardImpl implements Board {
 	}
 
 	private boolean cacheableBoard() {
-		return depth <= 12; // TODO: Parametrize this
+		return depth <= 25; // TODO: Parametrize this
 
 	}
 
