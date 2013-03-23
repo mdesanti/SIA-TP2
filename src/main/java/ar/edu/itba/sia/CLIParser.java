@@ -67,12 +67,20 @@ public class CLIParser {
                         "Cost function to use: color, dummy, rotation, default is dummy")
                 .create("costfunction");
 
+       
         final Option timeoutseconds = OptionBuilder
                 .withLongOpt("timeoutseconds")
                 .hasArg()
                 .withDescription(
                         "The time it takes to cut the simulation, in seconds.")
                 .create("timeoutseconds");
+        
+        final Option checksymmetry = OptionBuilder
+                .withLongOpt("checksymmetry")
+                .hasArg()
+                .withDescription(
+                        "Disable or enable symmetry check")
+                .create("checksymmetry");
 
         opts.addOption(help);
         opts.addOption(method);
@@ -83,6 +91,7 @@ public class CLIParser {
         opts.addOption(boardsize);
         opts.addOption(costfunction);
         opts.addOption(timeoutseconds);
+        opts.addOption(checksymmetry);
 
         return opts;
     }
@@ -118,6 +127,13 @@ public class CLIParser {
 
             try {
                 config.setTimeoutSeconds(Integer.parseInt(line.getOptionValue("timeoutseconds", "-1")));
+            } catch (NumberFormatException e) {
+                return null;
+            }
+
+
+            try {
+                config.setCheckSymmetry(Boolean.parseBoolean(line.getOptionValue("checksymmetry", "true")));
             } catch (NumberFormatException e) {
                 return null;
             }

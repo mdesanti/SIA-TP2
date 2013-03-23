@@ -24,6 +24,7 @@ public class AppConfig {
     private int cachedepth;
     private CostFunction costfunction;
     private int timeoutSeconds;
+	private boolean checkSymmetry;
 
 
     public void setFilePath(String filePath) {
@@ -130,4 +131,12 @@ public class AppConfig {
     public int getTimeoutSeconds() {
         return timeoutSeconds;
     }
+
+	public boolean getCheckSymmetry() {
+		return this.checkSymmetry;
+	}
+
+	public void setCheckSymmetry(boolean checkSymmetry) {
+		this.checkSymmetry = checkSymmetry;
+	}
 }
