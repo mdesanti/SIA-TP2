@@ -1,28 +1,35 @@
 package ar.edu.itba.sia;
 
-import ar.edu.itba.sia.domain.Board;
-import ar.edu.itba.sia.domain.BoardImpl;
-import ar.edu.itba.sia.domain.Piece;
-import ar.edu.itba.sia.domain.StatsHolderImpl;
-import ar.edu.itba.sia.domain.persist.GameXML;
-import ar.edu.itba.sia.domain.persist.GameXML.GameNode;
-import ar.edu.itba.sia.domain.renderer.BoardRenderer;
-import ar.edu.itba.sia.gps.api.GPSProblem;
-import ar.edu.itba.sia.gps.api.StatsHolder;
-import ar.edu.itba.sia.gps.impl.AStarEngine;
-import ar.edu.itba.sia.gps.impl.GPSEngine;
-import ar.edu.itba.sia.gps.impl.GPSProblemImpl;
-import com.google.common.collect.Lists;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-
-import java.awt.*;
+import java.awt.Point;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+
+import ar.edu.itba.sia.domain.Board;
+import ar.edu.itba.sia.domain.BoardImpl;
+import ar.edu.itba.sia.domain.Piece;
+import ar.edu.itba.sia.domain.StatsHolderImpl;
+import ar.edu.itba.sia.domain.costFunctions.DummyCostFunction;
+import ar.edu.itba.sia.domain.heuristics.CenterHeuristic;
+import ar.edu.itba.sia.domain.heuristics.ColorHeuristic;
+import ar.edu.itba.sia.domain.heuristics.OrderHeuristic;
+import ar.edu.itba.sia.domain.persist.GameXML;
+import ar.edu.itba.sia.domain.persist.GameXML.GameNode;
+import ar.edu.itba.sia.domain.renderer.BoardRenderer;
+import ar.edu.itba.sia.gps.api.GPSProblem;
+import ar.edu.itba.sia.gps.api.Heuristic;
+import ar.edu.itba.sia.gps.api.StatsHolder;
+import ar.edu.itba.sia.gps.impl.GPSEngine;
+import ar.edu.itba.sia.gps.impl.GPSProblemImpl;
+import ar.edu.itba.sia.gps.impl.GreedyEngine;
+
+import com.google.common.collect.Lists;
 
 public class App {
 
@@ -92,24 +99,28 @@ public class App {
     public static void main(String[] args) throws Exception {
         shutDownHook();
 
-        GameXML game = GameXML.fromXml("random.xml");
+        GameXML game = GameXML.fromXml("random.4.xml");
         Map<Point, GameNode> map =  game.nodes;
 		List<Piece> pieces = Lists.newArrayList();
         List<Point> points = Lists.newArrayList();
+        List<Heuristic> heuristics = Lists.newArrayList();
+        heuristics.add(new CenterHeuristic());
+        heuristics.add(new OrderHeuristic());
+//        heuristics.add(new ColorHeuristic());
         points.addAll(map.keySet());
         Collections.reverse(points);
 		for(Point p: points) {
 			GameNode node = map.get(p);
             pieces.add(node.toPiece());
 		}
-        sufflePieces(pieces);
+//        sufflePieces(pieces);
         System.in.read();
         Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
         new BoardRenderer(board).render();
         final StatsHolder holder = new StatsHolderImpl();
-		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors);
-		GPSEngine engine = new AStarEngine(problem, null);
+		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors, heuristics, new DummyCostFunction());
+		GPSEngine engine = new GreedyEngine(problem, null);
 		engine.engine(problem, null, holder);
 		System.out.println("-------------------------------------------");
 		System.out.println("Simulation time: " + holder.getSimulationTime()/(double)1000 + " seconds");
