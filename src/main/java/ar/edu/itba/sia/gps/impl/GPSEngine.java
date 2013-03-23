@@ -25,12 +25,11 @@ public abstract class GPSEngine {
 		this.problem = problem;
 	}
 
-    private Random r = new Random();
+	private Random r = new Random();
 
-	public boolean engine(GPSProblem myProblem,
-			StatsHolder holder) {
+	public boolean engine(GPSProblem myProblem, StatsHolder holder) {
 		visitedBoards.clear();
-        closedBoards.clear();
+		closedBoards.clear();
 		resetOpen();
 		this.stats = holder;
 		problem = myProblem;
@@ -39,6 +38,7 @@ public abstract class GPSEngine {
 		stats.addState();
 		boolean finished = false;
 		boolean failed = false;
+		boolean valid = false;
 
 		addNode(rootNode);
 		startSim(holder);
@@ -47,25 +47,27 @@ public abstract class GPSEngine {
 				failed = true;
 			} else {
 				GPSNode currentNode = getNext();
-                closedBoards.add(currentNode.getState().getBoard());
+				closedBoards.add(currentNode.getState().getBoard());
 				removeNode(currentNode);
 
-                if (problem.getPrintInterval() <= r.nextDouble())  {
-                    System.out.println("Currently exploring...");
-                    System.out.println(currentNode.getState());
-                }
+				if (problem.getPrintInterval() <= r.nextDouble()) {
+					System.out.println("Currently exploring...");
+					System.out.println("HValue: " + problem.getHValue(currentNode.getState()));
+					System.out.println(currentNode.getState());
+				}
 
 				if (isGoal(currentNode) || App.isOver.get()) {
 					finished = true;
 					stopSim(holder);
 					holder.setSolutionDepth(currentNode.getDepth());
-                    if (isGoal(currentNode)) {
-					    System.out.println("Showing a solution");
-                    }  else {
-                        System.out.println("Task has been cut!");
-                    }
+					if (isGoal(currentNode)) {
+						valid = true;
+						System.out.println("Showing a solution");
+					} else {
+						System.out.println("Task has been cut!");
+					}
 					System.out.println(currentNode.getSolution());
-                    App.isOver.set(false);
+					App.isOver.set(false);
 				} else {
 					stats.addExplodedNode();
 					explode(currentNode);
@@ -74,7 +76,9 @@ public abstract class GPSEngine {
 		}
 
 		if (finished) {
-			System.out.println("OK! solution found!");
+			if (valid) {
+				System.out.println("OK! solution found!");
+			}
 			stats.setLeafNodes(getOpenSize());
 			return true;
 		} else if (failed) {
@@ -116,6 +120,11 @@ public abstract class GPSEngine {
 	}
 
 	private boolean checkOpenAndClosed(Integer cost, GPSState state) {
+
+		if (!GPSProblemImpl.checkSymmetry()) {
+			return false;
+		}
+
 		if (visitedBoards.contains(state.getBoard())) {
 			return true;
 		}
@@ -129,18 +138,18 @@ public abstract class GPSEngine {
 
 		}
 
-        if (closedBoards.contains(state.getBoard())) {
-            return true;
-        }
+		if (closedBoards.contains(state.getBoard())) {
+			return true;
+		}
 
-        for (int i = 1; i <= 3; i++) {
-            Board b = state.getBoard().rotateBoard();
-            boolean eq = closedBoards.contains(b);
-            if (eq) {
-                return true;
-            }
+		for (int i = 1; i <= 3; i++) {
+			Board b = state.getBoard().rotateBoard();
+			boolean eq = closedBoards.contains(b);
+			if (eq) {
+				return true;
+			}
 
-        }
+		}
 
 		return false;
 	}
@@ -156,7 +165,7 @@ public abstract class GPSEngine {
 	private HashSet<Board> visitedBoards = Sets.newHashSet();
 
 	public void addNode(GPSNode node) {
-        node.getState().getBoard().clean();
+		node.getState().getBoard().clean();
 		visitedBoards.add(node.getState().getBoard());
 	}
 
@@ -169,13 +178,13 @@ public abstract class GPSEngine {
 	public GPSProblem getProblem() {
 		return problem;
 	}
-	
+
 	protected abstract void resetOpen();
-	
+
 	protected void startSim(StatsHolder holder) {
 		holder.startSimulation();
 	}
-	
+
 	protected void stopSim(StatsHolder holder) {
 		holder.stopSimulation();
 	}

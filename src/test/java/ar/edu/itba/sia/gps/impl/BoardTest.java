@@ -62,8 +62,8 @@ public class BoardTest {
         Board board = withPieces(game.gameSize, game.gameSize, map);
 
 
-       System.out.println(board.getChecksum());
-       System.out.println(board.rotateBoard().getChecksum());
+        System.out.println(board.getChecksum());
+        System.out.println(board.rotateBoard().getChecksum());
 
         assertEquals(board.equals(board.rotateBoard()), board.likelyToBeEqual(board.rotateBoard()));
         assertEquals(true, board.likelyToBeEqual(board.rotateBoard().rotateBoard()));

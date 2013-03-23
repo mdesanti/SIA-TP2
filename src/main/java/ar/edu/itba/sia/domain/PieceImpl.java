@@ -2,26 +2,54 @@ package ar.edu.itba.sia.domain;
 
 import ar.edu.itba.sia.gps.impl.GPSProblemImpl;
 
+import java.util.Map;
 import java.util.zip.Adler32;
 import java.util.zip.Checksum;
 
+import com.google.common.collect.Maps;
+
 public class PieceImpl implements Piece {
 
+	public static int getMaxPieceSize() {
+		return Factory.getInstance().nextId;
+	}
+	
+	private static class Factory {
+		private static Factory instance;
+		
+		private int nextId = 0;
+		
+		private Map<Integer, PieceImpl> pieceFromId = Maps.newHashMap(); 
+		
+		public static Factory getInstance() {
+			if (instance == null) {
+				instance = new Factory();
+			}
+			return instance;
+		}
+		
+		public PieceImpl getNew(int up, int right, int down, int left) {
+			PieceImpl piece = new PieceImpl(up, right, down, left, nextId++);
+			pieceFromId.put(piece.id, piece);
+			return piece;
+		}
+	}
+	
 	//four colors available on one piece
 	private int up = -1, right = -1, left = -1, down = -1;
 	private static Piece empty;
 	private int id;
 	private int rotationLevel = 0;
 	
-	public PieceImpl(int up, int right, int down, int left) {
-		this.up = up;
-		this.down = down;
-		this.left = left;
-		this.right = right;
-		this.id = GPSProblemImpl.nextId();
+	private PieceImpl(int up, int right, int down, int left, int id) {
+		this(id, up, right, down, left, 0);
 	}
 	
-	private PieceImpl(int id, int up, int right, int down, int left, int rotationLevel) {
+	public static PieceImpl create(int up, int right, int down, int left) {
+		return Factory.getInstance().getNew(up, right, down, left);
+	}
+	
+ 	private PieceImpl(int id, int up, int right, int down, int left, int rotationLevel) {
 		this.up = up;
 		this.down = down;
 		this.left = left;
@@ -30,10 +58,7 @@ public class PieceImpl implements Piece {
 		this.rotationLevel = rotationLevel;
 	}
 	
-	
-	private PieceImpl() {
-		this.id = GPSProblemImpl.nextId();
-	}
+
 	
 	public int getUpColor() {
 		return up;
@@ -67,7 +92,7 @@ public class PieceImpl implements Piece {
 	
 	public static Piece empty() {
 		if(empty == null) {
-			empty = new PieceImpl();
+			empty = new PieceImpl(-1, -1, -1, -1, -1);
 		}
 		return empty;
 	}

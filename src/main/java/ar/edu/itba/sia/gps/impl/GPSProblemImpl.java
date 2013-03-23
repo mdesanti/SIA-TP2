@@ -16,6 +16,7 @@ public class GPSProblemImpl implements GPSProblem {
 	private static int id = 0;
 	private List<Heuristic> heuristics = Lists.newArrayList();
     private double printInterval;
+	private static boolean checkSymmetry;
 
     public static int depthSize = 12;
 
@@ -27,6 +28,7 @@ public class GPSProblemImpl implements GPSProblem {
 		this.initState = GPSStateImpl.initialState(height, width, all, colorCount);
 		this.heuristics.addAll(config.getHeuristics());
         this.printInterval = config.getNodePrintFactor();
+        checkSymmetry = config.getCheckSymmetry();
         depthSize = config.cacheDepthSize();
 	}
 
@@ -35,22 +37,26 @@ public class GPSProblemImpl implements GPSProblem {
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
 					rules.add(new GPSRuleImpl(piece, j, i, costFunction));
-
-				}
-			}
-		}
-		for(Piece piece: all) {
-			for (int i = 0; i < height; i++) {
-				for (int j = 0; j < width; j++) {
 					Piece rotated = piece.rotate(1);
 					for (int k = 0; k < 3; k++) {
 						rules.add(new GPSRuleImpl(rotated, j ,i, costFunction));
 						rotated = rotated.rotate(1);
 					}
-
 				}
 			}
 		}
+//		for(Piece piece: all) {
+//			for (int i = 0; i < height; i++) {
+//				for (int j = 0; j < width; j++) {
+//					Piece rotated = piece.rotate(1);
+//					for (int k = 0; k < 3; k++) {
+//						rules.add(new GPSRuleImpl(rotated, j ,i, costFunction));
+//						rotated = rotated.rotate(1);
+//					}
+//
+//				}
+//			}
+//		}
 	}
 
 	public GPSState getInitState() {
@@ -84,6 +90,10 @@ public class GPSProblemImpl implements GPSProblem {
 	
 	public static int nextId() {
 		return id++;
+	}
+
+	public static boolean checkSymmetry() {
+		return checkSymmetry;
 	}
 
 }

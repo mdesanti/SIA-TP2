@@ -79,28 +79,28 @@ public class Util {
         return true;
     }
 
-    private static Piece getUpPiece(Board board, int x, int y) {
+    public static Piece getUpPiece(Board board, int x, int y) {
         if (y - 1 < 0) {
             return null;
         }
         return board.getPieceIn(x, y - 1);
     }
 
-    private static Piece getLeftPiece(Board board, int x, int y) {
+    public static Piece getLeftPiece(Board board, int x, int y) {
         if (x - 1 < 0) {
             return null;
         }
         return board.getPieceIn(x - 1, y);
     }
 
-    private static Piece getRightPiece(Board board, int x, int y) {
+    public static Piece getRightPiece(Board board, int x, int y) {
         if (x + 1 >= board.getWidth()) {
             return null;
         }
         return board.getPieceIn(x + 1, y);
     }
 
-    private static Piece getDownPiece(Board board, int x, int y) {
+    public static Piece getDownPiece(Board board, int x, int y) {
         if (y + 1 >= board.getHeight()) {
             return null;
         }

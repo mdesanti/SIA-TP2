@@ -7,6 +7,7 @@ import ar.edu.itba.sia.gps.impl.GPSProblemImpl;
 import com.google.common.collect.Maps;
 
 import java.awt.*;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Map;
 import java.util.zip.CRC32;
@@ -15,16 +16,17 @@ import java.util.zip.Checksum;
 public class BoardImpl implements Board {
 
 	private Map<Point, Piece> board = Maps.newHashMap();
-    private Map<Piece, Boolean> pieceCache = Maps.newHashMap();
+	private Map<Piece, Boolean> pieceCache = Maps.newHashMap();
+	private BitSet pieceExistsCache;
 
-    private static double cacheFactor = 0.33;
+	private static double cacheFactor = 0.33;
 
 	private int height;
 	private int width;
 	private GPSState state;
 	private Board parent;
 
-    // TODO: Fix this for rotations
+	// TODO: Fix this for rotations
 	private Map<BoardImpl.Direction, short[]> availableColors = Maps
 			.newHashMapWithExpectedSize(4);
 	private Point pieceLocation;
@@ -32,9 +34,9 @@ public class BoardImpl implements Board {
 	private int depth;
 	private int colorCount;
 	private int rotationLevel;
-    private Long checkSum;
+	private Long checkSum;
 
-    private BoardImpl() {
+	private BoardImpl() {
 	}
 
 	public static Board initialBoard(int height, int width, GPSState state,
@@ -45,8 +47,9 @@ public class BoardImpl implements Board {
 		board.state = state;
 		board.depth = 0;
 		board.colorCount = colorCount;
-//		board.buildColorCountMap(piecesInProblem);
+		board.buildColorCountMap(piecesInProblem);
 		board.getChecksum();
+		board.pieceExistsCache = new BitSet(PieceImpl.getMaxPieceSize() + 1);
 		return board;
 	}
 
@@ -61,9 +64,10 @@ public class BoardImpl implements Board {
 		board.piece = toAdd;
 		board.depth = state.getParent().getBoard().getDepth() + 1;
 		board.parent = state.getParent().getBoard();
-//		board.decrementColorCount(toAdd, state.getParent().getBoard());
+		board.decrementColorCount(toAdd, state.getParent().getBoard());
 		board.setPieceIn(pieceLocation.x, pieceLocation.y, toAdd);
 		board.getChecksum();
+		board.pieceExistsCache = new BitSet(PieceImpl.getMaxPieceSize() + 1);
 		return board;
 	}
 
@@ -138,7 +142,8 @@ public class BoardImpl implements Board {
 		board.board = this.board;
 		return board;
 	}
-    public int getHeight() {
+
+	public int getHeight() {
 		return height;
 	}
 
@@ -150,7 +155,6 @@ public class BoardImpl implements Board {
 		return depth;
 	}
 
-
 	public void setPieceIn(int x, int y, Piece piece) {
 		board.put(new Point(x, y), piece);
 	}
@@ -159,17 +163,19 @@ public class BoardImpl implements Board {
 	public boolean equals(Object obj) {
 		BoardImpl board2 = (BoardImpl) obj;
 		if (board2.depth == this.depth) {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    int rot = ((board2.rotationLevel - this.rotationLevel) + 4) % 4;
-                    Point myPoint = Util.rotate(new Point(x, y), rot, this.width);
-                    Point point = new Point(x, y);
-                    if (!board2.getPieceIn(point).equals(getPieceIn(myPoint).rotate(rot))) {
-                        return false;
-                    }
-                }
-            }
-            return true;
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					int rot = ((board2.rotationLevel - this.rotationLevel) + 4) % 4;
+					Point myPoint = Util.rotate(new Point(x, y), rot,
+							this.width);
+					Point point = new Point(x, y);
+					if (!board2.getPieceIn(point).equals(
+							getPieceIn(myPoint).rotate(rot))) {
+						return false;
+					}
+				}
+			}
+			return true;
 		} else {
 			return false;
 		}
@@ -192,9 +198,8 @@ public class BoardImpl implements Board {
 
 	public boolean containsPiece(Piece piece) {
 		boolean result;
-		if (piece != null && cacheableBoard()
-				&& (pieceCache.containsKey(piece))) {
-			return pieceCache.get(piece);
+		if (piece != null && pieceExistsCache.get(piece.getId())) {
+			return pieceExistsCache.get(piece.getId());
 		}
 
 		if (this.piece != null && this.piece.hasSameIdWith(piece)) {
@@ -205,10 +210,8 @@ public class BoardImpl implements Board {
 			} else {
 				result = parent.containsPiece(piece);
 			}
-			if (cacheableBoard()) {
-				pieceCache.put(piece, result);
-			}
 		}
+		pieceExistsCache.set(piece.getId(), result);
 		return result;
 	}
 
@@ -237,7 +240,8 @@ public class BoardImpl implements Board {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Piece piece = getPieceIn(x, y);
-				if (piece != PieceImpl.empty() && !Util.canPutPieceOnBoard(piece, this, x, y)) {
+				if (piece != PieceImpl.empty()
+						&& !Util.canPutPieceOnBoard(piece, this, x, y)) {
 					return false;
 				}
 			}
@@ -250,44 +254,43 @@ public class BoardImpl implements Board {
 		return other.hashCode() == this.hashCode();
 	}
 
-    @Override
-    public void clean() {
-        this.pieceCache.clear();
-        this.board.clear();
-        this.board.put(this.pieceLocation, this.piece);
-    }
+	@Override
+	public void clean() {
+		this.pieceCache.clear();
+		this.board.clear();
+		this.board.put(this.pieceLocation, this.piece);
+	}
 
+	private static Checksum summer = new CRC32();
 
-    private static Checksum summer = new CRC32();
-
-    @Override
+	@Override
 	public int hashCode() {
 		return (int) getChecksum();
 	}
 
 	@Override
 	public long getChecksum() {
-        if (checkSum == null) {
-            long sum;
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    int rot = (4 - this.rotationLevel) % 4;
-                    Point pieceLocation = Util.rotate(x, y, rot, this.width);
-                    Piece p = getPieceIn(pieceLocation).rotate(rot);
-                    summer.update(p.getRightColor());
-                    summer.update(p.getLeftColor());
-                    summer.update(p.getUpColor());
-                    summer.update(p.getDownColor());
-                }
-            }
-            sum = summer.getValue();
-            summer.reset();
-            checkSum = sum;
-            return sum;
-        } else {
-            return checkSum;
-        }
-    }
+		if (checkSum == null) {
+			long sum;
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					int rot = (4 - this.rotationLevel) % 4;
+					Point pieceLocation = Util.rotate(x, y, rot, this.width);
+					Piece p = getPieceIn(pieceLocation).rotate(rot);
+					summer.update(p.getRightColor());
+					summer.update(p.getLeftColor());
+					summer.update(p.getUpColor());
+					summer.update(p.getDownColor());
+				}
+			}
+			sum = summer.getValue();
+			summer.reset();
+			checkSum = sum;
+			return sum;
+		} else {
+			return checkSum;
+		}
+	}
 
 	@Override
 	public Piece getPieceIn(Point point) {
