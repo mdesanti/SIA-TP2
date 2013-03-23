@@ -5,7 +5,6 @@ import ar.edu.itba.sia.domain.BoardImpl;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.domain.StatsHolderImpl;
 import ar.edu.itba.sia.domain.persist.GameXML;
-import ar.edu.itba.sia.domain.persist.GameXML.GameNode;
 import ar.edu.itba.sia.domain.persist.generate.GameGenerator;
 import ar.edu.itba.sia.domain.renderer.BoardRenderer;
 import ar.edu.itba.sia.gps.api.GPSProblem;
@@ -18,10 +17,10 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ar.edu.itba.sia.CLIParser.getAppConfig;
+
 
 public class App {
 
@@ -38,7 +37,6 @@ public class App {
 
         shutDownHook();
 
-
         GameXML game;
 
         if (config.getFilePath() != null) {
@@ -47,21 +45,22 @@ public class App {
             game = new GameGenerator(config.getBoardSize(), 6).generate();
         }
 
-        Map<Point, GameNode> map =  game.nodes;
+        Map<Point, GameXML.GameNode> map =  game.nodes;
 		List<Piece> pieces = Lists.newArrayList();
         List<Point> points = Lists.newArrayList();
         points.addAll(map.keySet());
         Collections.reverse(points);
 		for(Point p: points) {
-			GameNode node = map.get(p);
+			GameXML.GameNode node = map.get(p);
             pieces.add(node.toPiece());
 		}
-//        sufflePieces(pieces);
+
         System.in.read();
         Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
         new BoardRenderer(board).render();
         final StatsHolder holder = new StatsHolderImpl();
+
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors, config);
         GPSEngine engine = config.getEngine(problem);
 
@@ -109,16 +108,4 @@ public class App {
             }
         });
     }
-
-    private static void sufflePieces(List<Piece> pieces) {
-        Random random = new Random();
-		for (int i = 0; i < 50000; i++) {
-			Piece auxA = null;
-			int a = random.nextInt(pieces.size());
-			auxA = pieces.get(a);
-			pieces.remove(a);
-			pieces.add(0, auxA);
-		}
-	}
-	
 }

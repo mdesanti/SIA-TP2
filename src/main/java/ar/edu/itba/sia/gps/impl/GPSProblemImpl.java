@@ -36,11 +36,18 @@ public class GPSProblemImpl implements GPSProblem {
 				for (int j = 0; j < width; j++) {
 					rules.add(new GPSRuleImpl(piece, j, i, costFunction));
 
-                    Piece rotated = piece.rotate(1);
-                    for (int k = 0; k < 3; k++) {
-                        rules.add(new GPSRuleImpl(rotated, j ,i, costFunction));
-                        rotated = rotated.rotate(1);
-                    }
+				}
+			}
+		}
+		for(Piece piece: all) {
+			for (int i = 0; i < height; i++) {
+				for (int j = 0; j < width; j++) {
+					Piece rotated = piece.rotate(1);
+					for (int k = 0; k < 3; k++) {
+						rules.add(new GPSRuleImpl(rotated, j ,i, costFunction));
+						rotated = rotated.rotate(1);
+					}
+
 				}
 			}
 		}
