@@ -53,7 +53,7 @@ public class GPSNode {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return state.equals(obj);
+		return state.equals(((GPSNode)obj).getState());
 	}
 	
 	@Override

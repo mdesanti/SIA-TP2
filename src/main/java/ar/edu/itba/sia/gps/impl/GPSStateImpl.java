@@ -1,12 +1,12 @@
 package ar.edu.itba.sia.gps.impl;
 
-import java.awt.Point;
-import java.util.List;
-
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.BoardImpl;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.gps.api.GPSState;
+
+import java.awt.*;
+import java.util.List;
 
 public class GPSStateImpl implements GPSState {
 
@@ -16,22 +16,10 @@ public class GPSStateImpl implements GPSState {
 
 	private GPSStateImpl() {
 	}
-
-	public static int checkSumCheck = 0;
-	public static int checkSumHit = 0;
-	public static int equalsHit = 0;
-	public static int errorHit = 0;
-
 	public boolean compare(GPSState state) {
         Board other = state.getBoard();
 
-
-        checkSumCheck++;
-        if (other.getDepth() == board.getDepth()) {
-
-            if (board.likelyToBeEqual(other)) {
-                checkSumHit++;
-            }
+        if (other.getDepth() == board.getDepth() && board.likelyToBeEqual(other)) {
 
             boolean eq = other.equals(board);
 
@@ -47,14 +35,6 @@ public class GPSStateImpl implements GPSState {
 
                     }
                 }
-            }
-
-            if (eq) {
-                equalsHit++;
-            }
-
-            if (eq && !board.likelyToBeEqual(other)) {
-                errorHit++;
             }
 
             return eq;
@@ -95,4 +75,20 @@ public class GPSStateImpl implements GPSState {
 		return state;
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GPSStateImpl gpsState = (GPSStateImpl) o;
+
+        if (!board.equals(gpsState.board)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return board.hashCode();
+    }
 }
