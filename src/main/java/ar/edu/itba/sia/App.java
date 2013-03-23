@@ -1,23 +1,10 @@
 package ar.edu.itba.sia;
 
-import java.awt.Point;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.BoardImpl;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.domain.StatsHolderImpl;
-import ar.edu.itba.sia.domain.costFunctions.DummyCostFunction;
 import ar.edu.itba.sia.domain.heuristics.CenterHeuristic;
-import ar.edu.itba.sia.domain.heuristics.ColorHeuristic;
 import ar.edu.itba.sia.domain.heuristics.OrderHeuristic;
 import ar.edu.itba.sia.domain.persist.GameXML;
 import ar.edu.itba.sia.domain.persist.GameXML.GameNode;
@@ -27,76 +14,30 @@ import ar.edu.itba.sia.gps.api.Heuristic;
 import ar.edu.itba.sia.gps.api.StatsHolder;
 import ar.edu.itba.sia.gps.impl.GPSEngine;
 import ar.edu.itba.sia.gps.impl.GPSProblemImpl;
-import ar.edu.itba.sia.gps.impl.GreedyEngine;
-
 import com.google.common.collect.Lists;
 
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static ar.edu.itba.sia.CLIParser.getAppConfig;
+
 public class App {
-
-    @SuppressWarnings("static-access")
-    private static Options getInputOptions() {
-        final Options opts = new Options();
-
-
-        final Option shownodes = OptionBuilder
-                .withLongOpt("shownodes")
-                .hasArg()
-                .withDescription(
-                        "The percentage of evaluated nodes to show, accepted value: a double from 0 to 1")
-                .create("shownodes");
-
-        final Option cachedepth = OptionBuilder
-                .withLongOpt("cachedepth")
-                .hasArg()
-                .withDescription(
-                        "The depth of the cache size for accesing board elements, a low value has a negative impact on CPU but uses few RAM, but the higher the value is, the more RAM it consumes")
-                .create("cachedepth");
-
-        final Option method = OptionBuilder
-                .withLongOpt("method")
-                .hasArg()
-                .withDescription(
-                        "The method to explore, options are: ID, DFS, BFS, AStar, Greedy")
-                .create("method");
-
-        final Option heuristic = OptionBuilder.withLongOpt("heuristic")
-                .withDescription("The heuristic to use (only with AStar/Greedy methods), accepted values are: center, order")
-                .hasArg().create("heuristic");
-
-        final Option filename = OptionBuilder
-                .withLongOpt("filename")
-                .hasArg()
-                .withDescription(
-                        "The filename of the board to load, must be a valid XML")
-                .create("filename");
-
-
-        final Option boardsize = OptionBuilder
-                .withLongOpt("boardsize")
-                .hasArg()
-                .withDescription(
-                        "If no filename is passed, generates a random board with the size given.")
-                .create("boardsize");
-
-        final Option help = OptionBuilder.withLongOpt("help")
-                .withDescription("Shows this help").create("help");
-
-        opts.addOption(help);
-
-        opts.addOption(method);
-        opts.addOption(heuristic);
-        opts.addOption(filename);
-        opts.addOption(shownodes);
-        opts.addOption(cachedepth);
-        opts.addOption(boardsize);
-
-        return opts;
-    }
-
 
     public static AtomicBoolean isOver = new AtomicBoolean(false);
 
     public static void main(String[] args) throws Exception {
+        final AppConfig config;
+
+        config = getAppConfig(args);
+
+        if (config == null) {
+            return;
+        }
+
         shutDownHook();
 
         GameXML game = GameXML.fromXml("random.4.xml");
@@ -119,9 +60,9 @@ public class App {
         System.out.println("Showing the start level...");
         new BoardRenderer(board).render();
         final StatsHolder holder = new StatsHolderImpl();
-		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors, heuristics, new DummyCostFunction());
-		GPSEngine engine = new GreedyEngine(problem, null);
-		engine.engine(problem, null, holder);
+		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors, config);
+        GPSEngine engine = config.getEngine(problem);
+		engine.engine(problem, holder);
 		System.out.println("-------------------------------------------");
 		System.out.println("Simulation time: " + holder.getSimulationTime()/(double)1000 + " seconds");
 		System.out.println("Exploded nodes: " + holder.getExplodedNodes());
@@ -129,6 +70,9 @@ public class App {
 		System.out.println("Solution depth: " + holder.getSolutionDepth());
 		System.out.println("Generated states: " + holder.getStatesNumber());
     }
+
+
+
 
     private static void shutDownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {

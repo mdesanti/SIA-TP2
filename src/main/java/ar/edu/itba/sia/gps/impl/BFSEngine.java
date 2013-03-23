@@ -1,7 +1,6 @@
 package ar.edu.itba.sia.gps.impl;
 
 import ar.edu.itba.sia.gps.api.GPSProblem;
-import ar.edu.itba.sia.gps.api.SearchStrategy;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,12 +8,13 @@ import java.util.List;
 public class BFSEngine extends GPSEngine {
 
 	private List<GPSNode> open = new LinkedList<GPSNode>();
-	
-	public BFSEngine(GPSProblem problem, SearchStrategy strategy) {
-		super(problem, strategy);
-	}
 
-	@Override
+    public BFSEngine(GPSProblem problem) {
+        super(problem);
+    }
+
+
+    @Override
 	public void addNode(GPSNode node) {
 		super.addNode(node);
 		open.add(node);

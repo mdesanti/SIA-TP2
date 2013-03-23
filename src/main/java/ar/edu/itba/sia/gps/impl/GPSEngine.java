@@ -17,25 +17,20 @@ public abstract class GPSEngine {
 
 	private StatsHolder stats;
 
-	// Use this variable in the addNode implementation
-	private SearchStrategy strategy;
-
-	public GPSEngine(GPSProblem problem, SearchStrategy strategy) {
+	public GPSEngine(GPSProblem problem) {
 		super();
 		this.problem = problem;
-		this.strategy = strategy;
 	}
 
 	private Random r = new Random();
 
-	public boolean engine(GPSProblem myProblem, SearchStrategy myStrategy,
+	public boolean engine(GPSProblem myProblem,
 			StatsHolder holder) {
 		visitedBoards.clear();
         closedBoards.clear();
 		resetOpen();
 		this.stats = holder;
 		problem = myProblem;
-		strategy = myStrategy;
 
 		GPSNode rootNode = new GPSNode(problem.getInitState(), 0);
 		stats.addState();

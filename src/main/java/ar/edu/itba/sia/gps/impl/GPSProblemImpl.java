@@ -1,12 +1,10 @@
 package ar.edu.itba.sia.gps.impl;
 
-import ar.edu.itba.sia.domain.heuristics.CenterHeuristic;
-import ar.edu.itba.sia.domain.heuristics.ColorHeuristic;
-import com.google.common.collect.Lists;
+import ar.edu.itba.sia.AppConfig;
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Piece;
-import ar.edu.itba.sia.domain.heuristics.OrderHeuristic;
 import ar.edu.itba.sia.gps.api.*;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 
@@ -18,13 +16,13 @@ public class GPSProblemImpl implements GPSProblem {
 	private static int id = 0;
 	private List<Heuristic> heuristics = Lists.newArrayList();
 
-	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount, List<Heuristic> heuristics, CostFunction costFunction) {
+	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount, AppConfig config) {
 		this.height = height;
 		this.width = width;
 		all.addAll(allPieces);
-		generateRules(costFunction);
+		generateRules(config.getCostFunction());
 		this.initState = GPSStateImpl.initialState(height, width, all, colorCount);
-		this.heuristics.addAll(heuristics);
+		this.heuristics.addAll(config.getHeuristics());
 	}
 
 	private void generateRules(CostFunction costFunction) {

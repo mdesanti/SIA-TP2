@@ -1,19 +1,18 @@
 package ar.edu.itba.sia.gps.impl;
 
 import ar.edu.itba.sia.gps.api.GPSProblem;
-import ar.edu.itba.sia.gps.api.SearchStrategy;
 import ar.edu.itba.sia.gps.api.StatsHolder;
 
 public class IDEngine extends DFSEngine {
 
 	private int depth = 0;
 
-	public IDEngine(GPSProblem problem, SearchStrategy strategy) {
-		super(problem, strategy);
+	public IDEngine(GPSProblem problem) {
+		super(problem);
 	}
 
 	@Override
-	public boolean engine(GPSProblem myProblem, SearchStrategy myStrategy,
+	public boolean engine(GPSProblem myProblem,
 			StatsHolder holder) {
 		boolean solutionFound = false;
 		long start = System.currentTimeMillis();
@@ -21,7 +20,7 @@ public class IDEngine extends DFSEngine {
 		while (!solutionFound) {
 			
 //			holder.resetStats();
-			solutionFound = super.engine(myProblem, myStrategy, holder);
+			solutionFound = super.engine(myProblem, holder);
 			if(!solutionFound) {
 				System.out.println("No solution found for depth: " + depth);
 			}

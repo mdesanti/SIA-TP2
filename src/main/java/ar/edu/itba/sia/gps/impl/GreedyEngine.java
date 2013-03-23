@@ -1,7 +1,6 @@
 package ar.edu.itba.sia.gps.impl;
 
 import ar.edu.itba.sia.gps.api.GPSProblem;
-import ar.edu.itba.sia.gps.api.SearchStrategy;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -10,8 +9,8 @@ public class GreedyEngine extends GPSEngine {
 
 	private PriorityQueue<GPSNode> open;
 
-	public GreedyEngine(final GPSProblem problem, SearchStrategy strategy) {
-		super(problem, strategy);
+	public GreedyEngine(final GPSProblem problem) {
+		super(problem);
 		open = new PriorityQueue<GPSNode>(128, new Comparator<GPSNode>() {
 			public int compare(GPSNode o1, GPSNode o2) {
 				int h1 = problem.getHValue(o1.getState());
