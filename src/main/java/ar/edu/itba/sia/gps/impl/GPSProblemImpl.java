@@ -1,14 +1,16 @@
 package ar.edu.itba.sia.gps.impl;
 
-import ar.edu.itba.sia.domain.heuristics.CenterHeuristic;
-import ar.edu.itba.sia.domain.heuristics.ColorHeuristic;
-import com.google.common.collect.Lists;
+import java.util.List;
+
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Piece;
-import ar.edu.itba.sia.domain.heuristics.OrderHeuristic;
-import ar.edu.itba.sia.gps.api.*;
+import ar.edu.itba.sia.gps.api.CostFunction;
+import ar.edu.itba.sia.gps.api.GPSProblem;
+import ar.edu.itba.sia.gps.api.GPSRule;
+import ar.edu.itba.sia.gps.api.GPSState;
+import ar.edu.itba.sia.gps.api.Heuristic;
 
-import java.util.List;
+import com.google.common.collect.Lists;
 
 public class GPSProblemImpl implements GPSProblem {
 	private int height, width;
@@ -31,13 +33,20 @@ public class GPSProblemImpl implements GPSProblem {
 		for(Piece piece: all) {
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
-					rules.add(new GPSRuleImpl(piece, j, i));
+					rules.add(new GPSRuleImpl(piece, j, i, costFunction));
 
-                    Piece rotated = piece.rotate(1);
-                    for (int k = 0; k < 3; k++) {
-                        rules.add(new GPSRuleImpl(rotated, j ,i));
-                        rotated = rotated.rotate(1);
-                    }
+				}
+			}
+		}
+		for(Piece piece: all) {
+			for (int i = 0; i < height; i++) {
+				for (int j = 0; j < width; j++) {
+					Piece rotated = piece.rotate(1);
+					for (int k = 0; k < 3; k++) {
+						rules.add(new GPSRuleImpl(rotated, j ,i, costFunction));
+						rotated = rotated.rotate(1);
+					}
+
 				}
 			}
 		}

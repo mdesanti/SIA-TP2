@@ -44,7 +44,7 @@ public class BoardImpl implements Board {
 		board.state = state;
 		board.depth = 0;
 		board.colorCount = colorCount;
-		board.buildColorCountMap(piecesInProblem);
+//		board.buildColorCountMap(piecesInProblem);
 		board.getChecksum();
 		return board;
 	}
@@ -60,7 +60,7 @@ public class BoardImpl implements Board {
 		board.piece = toAdd;
 		board.depth = state.getParent().getBoard().getDepth() + 1;
 		board.parent = state.getParent().getBoard();
-		board.decrementColorCount(toAdd, state.getParent().getBoard());
+//		board.decrementColorCount(toAdd, state.getParent().getBoard());
 		board.setPieceIn(pieceLocation.x, pieceLocation.y, toAdd);
 		board.getChecksum();
 		return board;
