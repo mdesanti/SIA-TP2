@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
  * Time: 14:27
  * To change this template use File | Settings | File Templates.
  */
+@SuppressWarnings("ALL")
 public class CLIParser {
     private static Options getInputOptions() {
         final Options opts = new Options();
@@ -63,14 +64,14 @@ public class CLIParser {
                 .withLongOpt("costfunction")
                 .hasArg()
                 .withDescription(
-                        "The percentage of evaluated nodes to show, accepted value: a double from 0 to 1")
+                        "Cost function to use: color, dummy, rotation, default is dummy")
                 .create("costfunction");
 
         final Option timeoutseconds = OptionBuilder
                 .withLongOpt("timeoutseconds")
                 .hasArg()
                 .withDescription(
-                        "The percentage of evaluated nodes to show, accepted value: a double from 0 to 1")
+                        "The time it takes to cut the simulation, in seconds.")
                 .create("timeoutseconds");
 
         opts.addOption(help);
@@ -95,14 +96,14 @@ public class CLIParser {
             return null;
         } else {
             AppConfig config = new AppConfig();
-            if (!line.hasOption("filename") && !line.hasOption("boardSize")) {
+            if (!line.hasOption("filename") && !line.hasOption("boardsize")) {
                 return null;
             } else {
                 if (line.hasOption("filename")) {
                     config.setFilePath(line.getOptionValue("filename"));
                 } else {
                     try {
-                        config.setBoardSize(Integer.parseInt(line.getOptionValue("boardSize")));
+                        config.setBoardSize(Integer.parseInt(line.getOptionValue("boardsize")));
                     } catch (NumberFormatException e) {
                         return null;
                     }
@@ -110,23 +111,23 @@ public class CLIParser {
             }
 
             try {
-                config.setCachedepth(Integer.parseInt(line.getOptionValue("cachedepth", "12")));
+                config.setCachDepth(Integer.parseInt(line.getOptionValue("cachedepth", "12")));
             } catch (NumberFormatException e) {
                 return null;
             }
 
             try {
-                config.setTimeoutseconds(Integer.parseInt(line.getOptionValue("timeoutseconds", "-1")));
+                config.setTimeoutSeconds(Integer.parseInt(line.getOptionValue("timeoutseconds", "-1")));
             } catch (NumberFormatException e) {
                 return null;
             }
 
 
-            config.setCostfunction(line.getOptionValue("costfunction", "dummy"));
+            config.setCostFunction(line.getOptionValue("costfunction", "dummy"));
             config.setMethod(line.getOptionValue("method", "DFS"));
 
             try {
-                config.setNodePrintFactor(Double.parseDouble(line.getOptionValue("shownodes", "-1.0")));
+                config.setNodePrintFactor(Double.parseDouble(line.getOptionValue("shownodes", "2.0")));
             } catch (NumberFormatException e) {
                 return null;
             }

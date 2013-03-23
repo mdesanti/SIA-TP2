@@ -23,7 +23,7 @@ public class AppConfig {
     private Class<? extends GPSEngine> method;
     private int cachedepth;
     private CostFunction costfunction;
-    private int timeoutseconds;
+    private int timeoutSeconds;
 
 
     public void setFilePath(String filePath) {
@@ -67,11 +67,11 @@ public class AppConfig {
 
     }
 
-    public void setCachedepth(int cachedepth) {
+    public void setCachDepth(int cachedepth) {
         this.cachedepth = cachedepth;
     }
 
-    public void setCostfunction(String costfunction) {
+    public void setCostFunction(String costfunction) {
         if (costfunction.equals("dummy")) {
             this.costfunction = new DummyCostFunction();
         } else if (costfunction.equals("colors")) {
@@ -83,8 +83,8 @@ public class AppConfig {
         }
     }
 
-    public void setTimeoutseconds(int timeoutseconds) {
-        this.timeoutseconds = timeoutseconds;
+    public void setTimeoutSeconds(int timeoutSeconds) {
+        this.timeoutSeconds = timeoutSeconds;
     }
 
     public GPSEngine getEngine(GPSProblem problem) {
@@ -109,5 +109,25 @@ public class AppConfig {
 
     public Set<Heuristic> getHeuristics() {
         return heuristics;
+    }
+
+    public double getNodePrintFactor() {
+        return nodePrintFactor;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public int getBoardSize() {
+        return boardSize;
+    }
+
+    public int cacheDepthSize() {
+        return this.cachedepth;
+    }
+
+    public int getTimeoutSeconds() {
+        return timeoutSeconds;
     }
 }

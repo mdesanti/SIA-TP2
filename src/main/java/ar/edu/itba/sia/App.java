@@ -4,13 +4,11 @@ import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.BoardImpl;
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.domain.StatsHolderImpl;
-import ar.edu.itba.sia.domain.heuristics.CenterHeuristic;
-import ar.edu.itba.sia.domain.heuristics.OrderHeuristic;
 import ar.edu.itba.sia.domain.persist.GameXML;
 import ar.edu.itba.sia.domain.persist.GameXML.GameNode;
+import ar.edu.itba.sia.domain.persist.generate.GameGenerator;
 import ar.edu.itba.sia.domain.renderer.BoardRenderer;
 import ar.edu.itba.sia.gps.api.GPSProblem;
-import ar.edu.itba.sia.gps.api.Heuristic;
 import ar.edu.itba.sia.gps.api.StatsHolder;
 import ar.edu.itba.sia.gps.impl.GPSEngine;
 import ar.edu.itba.sia.gps.impl.GPSProblemImpl;
@@ -40,14 +38,18 @@ public class App {
 
         shutDownHook();
 
-        GameXML game = GameXML.fromXml("random.4.xml");
+
+        GameXML game;
+
+        if (config.getFilePath() != null) {
+            game = GameXML.fromXml(config.getFilePath());
+        } else {
+            game = new GameGenerator(config.getBoardSize(), 6).generate();
+        }
+
         Map<Point, GameNode> map =  game.nodes;
 		List<Piece> pieces = Lists.newArrayList();
         List<Point> points = Lists.newArrayList();
-        List<Heuristic> heuristics = Lists.newArrayList();
-        heuristics.add(new CenterHeuristic());
-        heuristics.add(new OrderHeuristic());
-//        heuristics.add(new ColorHeuristic());
         points.addAll(map.keySet());
         Collections.reverse(points);
 		for(Point p: points) {
@@ -62,6 +64,12 @@ public class App {
         final StatsHolder holder = new StatsHolderImpl();
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors, config);
         GPSEngine engine = config.getEngine(problem);
+
+
+        if (config.getTimeoutSeconds() > 0){
+            doTimeoutThread(config);
+        }
+
 		engine.engine(problem, holder);
 		System.out.println("-------------------------------------------");
 		System.out.println("Simulation time: " + holder.getSimulationTime()/(double)1000 + " seconds");
@@ -71,7 +79,18 @@ public class App {
 		System.out.println("Generated states: " + holder.getStatesNumber());
     }
 
-
+    private static void doTimeoutThread(final AppConfig config) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(config.getTimeoutSeconds());
+                } catch (InterruptedException e) {
+                }
+                App.isOver.set(true);
+            }
+        }).start();
+    }
 
 
     private static void shutDownHook() {

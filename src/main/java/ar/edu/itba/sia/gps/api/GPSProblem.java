@@ -34,4 +34,5 @@ public interface GPSProblem {
 	 */
 	Integer getHValue(GPSState state);
 
+    double getPrintInterval();
 }

@@ -2,7 +2,10 @@ package ar.edu.itba.sia.gps.impl;
 
 import ar.edu.itba.sia.App;
 import ar.edu.itba.sia.domain.Board;
-import ar.edu.itba.sia.gps.api.*;
+import ar.edu.itba.sia.gps.api.GPSProblem;
+import ar.edu.itba.sia.gps.api.GPSRule;
+import ar.edu.itba.sia.gps.api.GPSState;
+import ar.edu.itba.sia.gps.api.StatsHolder;
 import ar.edu.itba.sia.gps.exception.NotAppliableException;
 import com.google.common.collect.Sets;
 
@@ -22,7 +25,7 @@ public abstract class GPSEngine {
 		this.problem = problem;
 	}
 
-	private Random r = new Random();
+    private Random r = new Random();
 
 	public boolean engine(GPSProblem myProblem,
 			StatsHolder holder) {
@@ -47,11 +50,20 @@ public abstract class GPSEngine {
                 closedBoards.add(currentNode.getState().getBoard());
 				removeNode(currentNode);
 
+                if (problem.getPrintInterval() <= r.nextDouble())  {
+                    System.out.println("Currently exploring...");
+                    System.out.println(currentNode.getState());
+                }
+
 				if (isGoal(currentNode) || App.isOver.get()) {
 					finished = true;
 					stopSim(holder);
 					holder.setSolutionDepth(currentNode.getDepth());
-					System.out.println("Showing a solution");
+                    if (isGoal(currentNode)) {
+					    System.out.println("Showing a solution");
+                    }  else {
+                        System.out.println("Task has been cut!");
+                    }
 					System.out.println(currentNode.getSolution());
                     App.isOver.set(false);
 				} else {

@@ -15,25 +15,30 @@ public class GPSProblemImpl implements GPSProblem {
 	private GPSState initState;
 	private static int id = 0;
 	private List<Heuristic> heuristics = Lists.newArrayList();
+    private double printInterval;
 
-	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount, AppConfig config) {
+    public static int depthSize = 12;
+
+    public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount, AppConfig config) {
 		this.height = height;
 		this.width = width;
 		all.addAll(allPieces);
 		generateRules(config.getCostFunction());
 		this.initState = GPSStateImpl.initialState(height, width, all, colorCount);
 		this.heuristics.addAll(config.getHeuristics());
+        this.printInterval = config.getNodePrintFactor();
+        depthSize = config.cacheDepthSize();
 	}
 
 	private void generateRules(CostFunction costFunction) {
 		for(Piece piece: all) {
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
-					rules.add(new GPSRuleImpl(piece, j, i));
+					rules.add(new GPSRuleImpl(piece, j, i, costFunction));
 
                     Piece rotated = piece.rotate(1);
                     for (int k = 0; k < 3; k++) {
-                        rules.add(new GPSRuleImpl(rotated, j ,i));
+                        rules.add(new GPSRuleImpl(rotated, j ,i, costFunction));
                         rotated = rotated.rotate(1);
                     }
 				}
@@ -60,7 +65,12 @@ public class GPSProblemImpl implements GPSProblem {
 		return max;
 	}
 
-	public boolean checkGoalState(GPSState state) {
+    @Override
+    public double getPrintInterval() {
+        return printInterval;
+    }
+
+    public boolean checkGoalState(GPSState state) {
 		Board board = state.getBoard();
         return board.getPieceCount() == board.getWidth() * board.getHeight() && state.getBoard().isValid();
     }

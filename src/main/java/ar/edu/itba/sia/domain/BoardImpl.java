@@ -3,6 +3,7 @@ package ar.edu.itba.sia.domain;
 import ar.edu.itba.sia.domain.persist.GameXML;
 import ar.edu.itba.sia.domain.renderer.BoardRenderer;
 import ar.edu.itba.sia.gps.api.GPSState;
+import ar.edu.itba.sia.gps.impl.GPSProblemImpl;
 import com.google.common.collect.Maps;
 
 import java.awt.*;
@@ -186,10 +187,8 @@ public class BoardImpl implements Board {
 	}
 
 	private boolean cacheableBoard() {
-		return depth <= 25; // TODO: Parametrize this
-
+		return depth <= GPSProblemImpl.depthSize;
 	}
-
 
 	public boolean containsPiece(Piece piece) {
 		boolean result;
@@ -288,9 +287,7 @@ public class BoardImpl implements Board {
         } else {
             return checkSum;
         }
-
     }
-
 
 	@Override
 	public Piece getPieceIn(Point point) {
