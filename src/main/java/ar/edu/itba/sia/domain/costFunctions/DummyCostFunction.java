@@ -7,6 +7,6 @@ public class DummyCostFunction implements CostFunction {
 
 	@Override
 	public Integer getCost(Piece piece) {
-		return 0;
+		return 1;
 	}
 }
