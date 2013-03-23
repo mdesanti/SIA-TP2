@@ -28,4 +28,6 @@ public interface Piece {
     boolean hasSameIdWith(Piece piece);
 
 	long generateChecksum();
+	
+	public int getRotationLevel();
 }

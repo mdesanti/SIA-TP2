@@ -135,6 +135,9 @@ public class PieceImpl implements Piece {
 				+ ", down=" + down + ", id=" + id + "]";
 	}
 	
+    public int getRotationLevel() {
+		return rotationLevel;
+	}
 	
 	
 }

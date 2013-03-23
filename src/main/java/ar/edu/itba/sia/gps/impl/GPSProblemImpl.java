@@ -1,5 +1,6 @@
 package ar.edu.itba.sia.gps.impl;
 
+import ar.edu.itba.sia.domain.heuristics.CenterHeuristic;
 import ar.edu.itba.sia.domain.heuristics.ColorHeuristic;
 import com.google.common.collect.Lists;
 import ar.edu.itba.sia.domain.Board;
@@ -15,17 +16,18 @@ public class GPSProblemImpl implements GPSProblem {
 	private List<GPSRule> rules = Lists.newArrayList();
 	private GPSState initState;
 	private static int id = 0;
-	private Heuristic manhattan = new ColorHeuristic();
+	private List<Heuristic> heuristics = Lists.newArrayList();
 
-	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount) {
+	public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount, List<Heuristic> heuristics, CostFunction costFunction) {
 		this.height = height;
 		this.width = width;
 		all.addAll(allPieces);
-		generateRules();
+		generateRules(costFunction);
 		this.initState = GPSStateImpl.initialState(height, width, all, colorCount);
+		this.heuristics.addAll(heuristics);
 	}
 
-	private void generateRules() {
+	private void generateRules(CostFunction costFunction) {
 		for(Piece piece: all) {
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
@@ -50,7 +52,14 @@ public class GPSProblemImpl implements GPSProblem {
 	}
 
 	public Integer getHValue(GPSState state) {
-		return manhattan.apply(state);
+		int max = 0;
+		for(Heuristic heuristic: heuristics) {
+			int result = heuristic.apply(state);
+			if(result > max) {
+				max = result;
+			}
+		}
+		return max;
 	}
 
 	public boolean checkGoalState(GPSState state) {
