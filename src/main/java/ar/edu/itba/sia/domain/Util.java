@@ -177,8 +177,5 @@ public class Util {
         Point p = spiralArray[pieceLocation.x][pieceLocation.y];
 
         return p.x == x && p.y == y;
-
-
-//        return pieceLocation.x == x && pieceLocation.y == y;
     }
 }

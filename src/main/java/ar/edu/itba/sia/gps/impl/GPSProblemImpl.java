@@ -19,6 +19,7 @@ public class GPSProblemImpl implements GPSProblem {
 	private static boolean checkSymmetry;
 
     public static int depthSize = 12;
+    private final AppConfig config;
 
     public GPSProblemImpl(int height, int width, List<Piece> allPieces, int colorCount, AppConfig config) {
 		this.height = height;
@@ -30,6 +31,7 @@ public class GPSProblemImpl implements GPSProblem {
         this.printInterval = config.getNodePrintFactor();
         checkSymmetry = config.getCheckSymmetry();
         depthSize = config.cacheDepthSize();
+        this.config = config;
 	}
 
 	private void generateRules(CostFunction costFunction) {
@@ -69,6 +71,11 @@ public class GPSProblemImpl implements GPSProblem {
     @Override
     public double getPrintInterval() {
         return printInterval;
+    }
+
+    @Override
+    public AppConfig getConfig() {
+        return config;
     }
 
     public boolean checkGoalState(GPSState state) {

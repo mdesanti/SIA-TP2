@@ -1,5 +1,7 @@
 package ar.edu.itba.sia.gps.api;
 
+import ar.edu.itba.sia.AppConfig;
+
 import java.util.List;
 
 /**
@@ -35,4 +37,6 @@ public interface GPSProblem {
 	Integer getHValue(GPSState state);
 
     double getPrintInterval();
+
+    AppConfig getConfig();
 }

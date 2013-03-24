@@ -26,6 +26,7 @@ public class AppConfig {
     private int timeoutSeconds;
 	private boolean checkSymmetry;
     private int boardColor;
+    private boolean onlyResult;
 
     public void setHeuristic(String heuristic) {
         if (heuristic.contains("center")) {
@@ -62,7 +63,6 @@ public class AppConfig {
 
     public GPSEngine getEngine(GPSProblem problem) {
         try {
-            System.out.println(this.method);
             return this.method.getConstructor(GPSProblem.class).newInstance(problem);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -146,5 +146,13 @@ public class AppConfig {
 
     public void setBoardColor(Integer boardColor) {
         this.boardColor = boardColor;
+    }
+
+    public void setOnlyResult(boolean onlyResult) {
+        this.onlyResult = onlyResult;
+    }
+
+    public boolean isOnlyResult() {
+        return onlyResult;
     }
 }

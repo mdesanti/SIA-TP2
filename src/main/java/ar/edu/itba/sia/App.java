@@ -26,6 +26,8 @@ public class App {
 
     public static AtomicBoolean isOver = new AtomicBoolean(false);
 
+    public static AtomicBoolean cut = new AtomicBoolean(false);
+
     public static void main(String[] args) throws Exception {
         final AppConfig config;
 
@@ -55,11 +57,13 @@ public class App {
             pieces.add(node.toPiece());
 		}
 
-        System.out.println("Press a key to continue...");
-        System.in.read();
         Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
-        System.out.println("Showing the start level...");
-        new BoardRenderer(board).render();
+
+        if (!config.isOnlyResult())       {
+            System.out.println("Showing the start level...");
+            new BoardRenderer(board).render();
+        }
+
         final StatsHolder holder = new StatsHolderImpl();
 
 		GPSProblem problem = new GPSProblemImpl(game.gameSize, game.gameSize, pieces, game.numberOfColors, config);
@@ -77,21 +81,29 @@ public class App {
 		System.out.println("Leaf nodes: " + holder.getLeafNodesNumber());
 		System.out.println("Solution depth: " + holder.getSolutionDepth());
 		System.out.println("Generated states: " + holder.getStatesNumber());
+        System.out.println("Symmetries found: " + holder.getSymmetriesCount());
     }
 
     private static void doTimeoutThread(final AppConfig config) {
-        new Thread(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(config.getTimeoutSeconds() * 1000);
-                } catch (InterruptedException e) {
+                for (int i = 0; i < config.getTimeoutSeconds(); i++) {
+                    if (App.cut.get()) {
+                        break;
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                    }
                 }
+
                 App.isOver.set(true);
             }
-        }).start();
+        });
+        t.setDaemon(false);
+        t.start();
     }
-
 
     private static void shutDownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {

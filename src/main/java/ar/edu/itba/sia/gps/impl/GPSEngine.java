@@ -1,6 +1,7 @@
 package ar.edu.itba.sia.gps.impl;
 
 import ar.edu.itba.sia.App;
+import ar.edu.itba.sia.AppConfig;
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.gps.api.GPSProblem;
 import ar.edu.itba.sia.gps.api.GPSRule;
@@ -15,17 +16,17 @@ import java.util.Random;
 public abstract class GPSEngine {
 
 	private HashSet<Board> closedBoards = Sets.newHashSet();
-
 	private GPSProblem problem;
-
 	private StatsHolder stats;
+    private Random r = new Random();
+    private HashSet<Board> visitedBoards = Sets.newHashSet();
+    private AppConfig config;
 
-	public GPSEngine(GPSProblem problem) {
-		super();
-		this.problem = problem;
-	}
-
-	private Random r = new Random();
+    public GPSEngine(GPSProblem problem) {
+        super();
+        this.problem = problem;
+        this.config = problem.getConfig();
+    }
 
 	public boolean engine(GPSProblem myProblem, StatsHolder holder) {
 		visitedBoards.clear();
@@ -62,23 +63,32 @@ public abstract class GPSEngine {
 					holder.setSolutionDepth(currentNode.getDepth());
 					if (isGoal(currentNode)) {
 						valid = true;
-						System.out.println("Showing a solution");
-					} else {
-						System.out.println("Task has been cut!");
-					}
-					System.out.println(currentNode.getSolution());
-					App.isOver.set(false);
-				} else {
-					stats.addExplodedNode();
-					explode(currentNode);
+                        if (!config.isOnlyResult()) {
+                            System.out.println("Showing a solution");
+                        }
+                    } else {
+                        if (!config.isOnlyResult()) {
+                            System.out.println("Task has been cut!");
+                        }
+                    }
+                    if (!config.isOnlyResult()) {
+                        System.out.println(currentNode.getSolution());
+                    }
+                    App.isOver.set(false);
+                    App.cut.set(true);
+                } else {
+                    stats.addExplodedNode();
+                    explode(currentNode);
 				}
 			}
 		}
 
 		if (finished) {
 			if (valid) {
-				System.out.println("OK! solution found!");
-			}
+                if (!config.isOnlyResult()) {
+                    System.out.println("OK! solution found!");
+                }
+            }
 			stats.setLeafNodes(getOpenSize());
 			return true;
 		} else if (failed) {
@@ -126,27 +136,32 @@ public abstract class GPSEngine {
 		}
 
 		if (visitedBoards.contains(state.getBoard())) {
-			return true;
-		}
+            stats.addSymmetry();
+            return true;
+        }
 
-		for (int i = 1; i <= 3; i++) {
-			Board b = state.getBoard().rotateBoard();
+        for (int i = 1; i <= 3; i++) {
+            Board b = state.getBoard().rotateBoard();
 			boolean eq = visitedBoards.contains(b);
 			if (eq) {
-				return true;
-			}
+                stats.addSymmetry();
+                return true;
+            }
 
-		}
+        }
 
-		if (closedBoards.contains(state.getBoard())) {
-			return true;
-		}
+        if (closedBoards.contains(state.getBoard())) {
+            stats.addSymmetry();
+            return true;
 
-		for (int i = 1; i <= 3; i++) {
+        }
+
+        for (int i = 1; i <= 3; i++) {
 			Board b = state.getBoard().rotateBoard();
 			boolean eq = closedBoards.contains(b);
 			if (eq) {
-				return true;
+                stats.addSymmetry();
+                return true;
 			}
 
 		}
@@ -161,8 +176,6 @@ public abstract class GPSEngine {
 		return checkBranch(parent.getParent(), state)
 				|| state.compare(parent.getState());
 	}
-
-	private HashSet<Board> visitedBoards = Sets.newHashSet();
 
 	public void addNode(GPSNode node) {
 		node.getState().getBoard().clean();
