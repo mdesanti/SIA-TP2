@@ -5,6 +5,6 @@ import ar.edu.itba.sia.domain.Piece;
 
 public interface CostFunction {
 
-	Integer getCost(Piece piece);
+	Integer getCost(Piece piece, GPSState state);
 	
 }

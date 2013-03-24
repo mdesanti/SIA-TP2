@@ -24,14 +24,14 @@ public class OrderHeuristic implements Heuristic {
         if (result == -1
                 && !Util.canPutPieceOnBoard(state.getBoard().getPiece(), state.getBoard(),
                 state.getBoard().getPieceLocation().x, state.getBoard().getPieceLocation().y)) {
-            result = Integer.MAX_VALUE;
+            result = Integer.MAX_VALUE / 10;
         }
         if (result == -1 && !state.getBoard().isValid()) {
-            result = Integer.MAX_VALUE;
+            result = Integer.MAX_VALUE / 10;
         }
 
         if(result == -1 && !state.getBoard().isValid()) {
-            result = Integer.MAX_VALUE;
+            result = Integer.MAX_VALUE / 10;
 		}
 		if(result == -1 && Util.isValidEvalLocation(state)) {
 			Board board = state.getBoard();
@@ -41,7 +41,7 @@ public class OrderHeuristic implements Heuristic {
 	    	int y = depth / board.getHeight();
 	    	result = max - y*board.getWidth() + x;
 		} else {
-            result = Integer.MAX_VALUE;
+            result = Integer.MAX_VALUE / 10;
 		}
 
 

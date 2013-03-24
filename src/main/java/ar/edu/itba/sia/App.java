@@ -42,7 +42,7 @@ public class App {
         if (config.getFilePath() != null) {
             game = GameXML.fromXml(config.getFilePath());
         } else {
-            game = new GameGenerator(config.getBoardSize(), 6).generate();
+            game = new GameGenerator(config.getBoardSize(), config.getBoardColor()).generate();
         }
 
         Map<Point, GameXML.GameNode> map =  game.nodes;
@@ -55,6 +55,7 @@ public class App {
             pieces.add(node.toPiece());
 		}
 
+        System.out.println("Press a key to continue...");
         System.in.read();
         Board board = BoardImpl.withPieces(game.gameSize, game.gameSize, map);
         System.out.println("Showing the start level...");
@@ -83,7 +84,7 @@ public class App {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(config.getTimeoutSeconds());
+                    Thread.sleep(config.getTimeoutSeconds() * 1000);
                 } catch (InterruptedException e) {
                 }
                 App.isOver.set(true);

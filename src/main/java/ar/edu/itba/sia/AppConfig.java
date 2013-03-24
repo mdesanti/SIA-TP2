@@ -1,5 +1,6 @@
 package ar.edu.itba.sia;
 
+import ar.edu.itba.sia.domain.costFunctions.CenterCostFunction;
 import ar.edu.itba.sia.domain.costFunctions.ColorBasedCostFunction;
 import ar.edu.itba.sia.domain.costFunctions.DummyCostFunction;
 import ar.edu.itba.sia.domain.costFunctions.RotationCostFunction;
@@ -16,28 +17,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 public class AppConfig {
+    Set<Heuristic> heuristics = Sets.newHashSet();
     private String filePath;
     private int boardSize;
     private double nodePrintFactor;
-    Set<Heuristic> heuristics = Sets.newHashSet();
     private Class<? extends GPSEngine> method;
     private int cachedepth;
     private CostFunction costfunction;
     private int timeoutSeconds;
 	private boolean checkSymmetry;
-
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public void setBoardSize(int boardSize) {
-        this.boardSize = boardSize;
-    }
-
-    public void setNodePrintFactor(double nodePrintFactor) {
-        this.nodePrintFactor = nodePrintFactor;
-    }
+    private int boardColor;
 
     public void setHeuristic(String heuristic) {
         if (heuristic.contains("center")) {
@@ -72,22 +61,6 @@ public class AppConfig {
         this.cachedepth = cachedepth;
     }
 
-    public void setCostFunction(String costfunction) {
-        if (costfunction.equals("dummy")) {
-            this.costfunction = new DummyCostFunction();
-        } else if (costfunction.equals("colors")) {
-            this.costfunction = new ColorBasedCostFunction();
-        } else if (costfunction.equals("rotation")) {
-            this.costfunction = new RotationCostFunction();
-        } else {
-            throw new RuntimeException("Invalid cost function passed!");
-        }
-    }
-
-    public void setTimeoutSeconds(int timeoutSeconds) {
-        this.timeoutSeconds = timeoutSeconds;
-    }
-
     public GPSEngine getEngine(GPSProblem problem) {
         try {
             System.out.println(this.method);
@@ -108,6 +81,20 @@ public class AppConfig {
         return costfunction;
     }
 
+    public void setCostFunction(String costfunction) {
+        if (costfunction.equals("dummy")) {
+            this.costfunction = new DummyCostFunction();
+        } else if (costfunction.equals("color")) {
+            this.costfunction = new ColorBasedCostFunction();
+        } else if (costfunction.equals("rotation")) {
+            this.costfunction = new RotationCostFunction();
+        } else if (costfunction.equals("center")) {
+            this.costfunction = new CenterCostFunction();
+        } else {
+            throw new RuntimeException("Invalid cost function passed!");
+        }
+    }
+
     public Set<Heuristic> getHeuristics() {
         return heuristics;
     }
@@ -116,12 +103,24 @@ public class AppConfig {
         return nodePrintFactor;
     }
 
+    public void setNodePrintFactor(double nodePrintFactor) {
+        this.nodePrintFactor = nodePrintFactor;
+    }
+
     public String getFilePath() {
         return filePath;
     }
 
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public int getBoardSize() {
         return boardSize;
+    }
+
+    public void setBoardSize(int boardSize) {
+        this.boardSize = boardSize;
     }
 
     public int cacheDepthSize() {
@@ -132,11 +131,23 @@ public class AppConfig {
         return timeoutSeconds;
     }
 
-	public boolean getCheckSymmetry() {
+    public void setTimeoutSeconds(int timeoutSeconds) {
+        this.timeoutSeconds = timeoutSeconds;
+    }
+
+    public boolean getCheckSymmetry() {
 		return this.checkSymmetry;
 	}
 
 	public void setCheckSymmetry(boolean checkSymmetry) {
 		this.checkSymmetry = checkSymmetry;
 	}
+
+    public int getBoardColor() {
+        return boardColor;
+    }
+
+    public void setBoardColor(Integer boardColor) {
+        this.boardColor = boardColor;
+    }
 }

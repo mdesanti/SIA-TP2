@@ -2,6 +2,7 @@ package ar.edu.itba.sia.domain.costFunctions;
 
 import ar.edu.itba.sia.domain.Piece;
 import ar.edu.itba.sia.gps.api.CostFunction;
+import ar.edu.itba.sia.gps.api.GPSState;
 
 public class ColorBasedCostFunction implements CostFunction {
 	
@@ -9,7 +10,7 @@ public class ColorBasedCostFunction implements CostFunction {
 	private static int NOT_GREY_FACTOR = 3;
 
 	@Override
-	public Integer getCost(Piece piece) {
+	public Integer getCost(Piece piece, GPSState state) {
 		int[] colors = new int[4];
 		colors[0] = piece.getUpColor();
 		colors[1] = piece.getDownColor();
@@ -22,7 +23,7 @@ public class ColorBasedCostFunction implements CostFunction {
 			if(color == -1) {
 				grey++;
 			} else {
-				notGrey++;
+	    		notGrey++;
 			}
 		}
 		

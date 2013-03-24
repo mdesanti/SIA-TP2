@@ -107,11 +107,11 @@ public abstract class GPSEngine {
 			}
 			if (newState != null
 					&& !checkBranch(node, newState)
-					&& !checkOpenAndClosed(node.getCost() + rule.getCost(),
+					&& !checkOpenAndClosed(node.getCost() + rule.getCost(newState),
 							newState)) {
 				stats.addState();
 				GPSNode newNode = new GPSNode(newState, node.getCost()
-						+ rule.getCost());
+						+ rule.getCost(newState));
 				newNode.setParent(node);
 				addNode(newNode);
 			}

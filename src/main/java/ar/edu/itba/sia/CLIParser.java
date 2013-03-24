@@ -64,7 +64,7 @@ public class CLIParser {
                 .withLongOpt("costfunction")
                 .hasArg()
                 .withDescription(
-                        "Cost function to use: color, dummy, rotation, default is dummy")
+                        "Cost function to use: color, dummy, rotation, center, default is dummy")
                 .create("costfunction");
 
        
@@ -82,6 +82,14 @@ public class CLIParser {
                         "Disable or enable symmetry check")
                 .create("checksymmetry");
 
+        final Option boardcolors = OptionBuilder
+                .withLongOpt("boardcolors")
+                .hasArg()
+                .withDescription(
+                        "Disable or enable symmetry check")
+                .create("boardcolors");
+
+
         opts.addOption(help);
         opts.addOption(method);
         opts.addOption(heuristic);
@@ -92,6 +100,7 @@ public class CLIParser {
         opts.addOption(costfunction);
         opts.addOption(timeoutseconds);
         opts.addOption(checksymmetry);
+        opts.addOption(boardcolors);
 
         return opts;
     }
@@ -131,14 +140,17 @@ public class CLIParser {
                 return null;
             }
 
-
             try {
                 config.setCheckSymmetry(Boolean.parseBoolean(line.getOptionValue("checksymmetry", "true")));
             } catch (NumberFormatException e) {
                 return null;
             }
 
-
+            try {
+                config.setBoardColor(Integer.parseInt(line.getOptionValue("boardcolors", "2")));
+            } catch (NumberFormatException e) {
+                return null;
+            }
             config.setCostFunction(line.getOptionValue("costfunction", "dummy"));
             config.setMethod(line.getOptionValue("method", "DFS"));
 

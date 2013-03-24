@@ -22,8 +22,8 @@ public class GPSRuleImpl implements GPSRule {
         this.x = x;
         this.function = function;
     }
-    public Integer getCost() {
-        return function.getCost(piece);
+    public Integer getCost(GPSState state) {
+        return function.getCost(piece, state);
     }
 
     public String getName() {

@@ -1,13 +1,11 @@
 package ar.edu.itba.sia.domain.heuristics;
 
-import java.util.Random;
-
 import ar.edu.itba.sia.domain.Board;
-import ar.edu.itba.sia.domain.Piece;
-import ar.edu.itba.sia.domain.PieceImpl;
 import ar.edu.itba.sia.domain.Util;
 import ar.edu.itba.sia.gps.api.GPSState;
 import ar.edu.itba.sia.gps.api.Heuristic;
+
+import java.util.Random;
 
 public class CenterHeuristic implements Heuristic {
 
@@ -27,10 +25,10 @@ public class CenterHeuristic implements Heuristic {
 					&& !Util.canPutPieceOnBoard(board.getPiece(), board,
 							board.getPieceLocation().x,
 							board.getPieceLocation().y)) {
-				result = Integer.MAX_VALUE;
+				result = Integer.MAX_VALUE / 10;
 			}
 			if (result == -1 && !board.isValid()) {
-				result = Integer.MAX_VALUE;
+				result = Integer.MAX_VALUE / 10;
 			}
 
 			if (result == -1 && board.getDepth() <= 4) {
@@ -40,18 +38,18 @@ public class CenterHeuristic implements Heuristic {
 						|| (j == 0 && i == board.getWidth() - 1)
 						|| (i == 0 && j == board.getWidth() - 1) || (i == board
 						.getWidth() - 1 && j == board.getWidth() - 1))) {
-					result = Integer.MAX_VALUE;
+					result = Integer.MAX_VALUE / 10;
 				}
 			}
 
 			if (result == -1
-					&& board.getDepth() < board.getWidth() * 2
+					&& board.getDepth() <= board.getWidth() * 2
 							+ (board.getWidth() - 2) * 2) {
 				int i = board.getPieceLocation().x;
 				int j = board.getPieceLocation().y;
 				if (!(j == 0 || i == 0 || i + 1 == board.getHeight() || j + 1 == board
 						.getWidth())) {
-					result = Integer.MAX_VALUE;
+					result = Integer.MAX_VALUE / 10;
 				}
 			}
 

@@ -45,18 +45,6 @@ public class GPSProblemImpl implements GPSProblem {
 				}
 			}
 		}
-//		for(Piece piece: all) {
-//			for (int i = 0; i < height; i++) {
-//				for (int j = 0; j < width; j++) {
-//					Piece rotated = piece.rotate(1);
-//					for (int k = 0; k < 3; k++) {
-//						rules.add(new GPSRuleImpl(rotated, j ,i, costFunction));
-//						rotated = rotated.rotate(1);
-//					}
-//
-//				}
-//			}
-//		}
 	}
 
 	public GPSState getInitState() {
