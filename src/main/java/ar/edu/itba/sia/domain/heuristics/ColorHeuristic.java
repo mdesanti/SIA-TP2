@@ -45,19 +45,20 @@ public class ColorHeuristic implements Heuristic {
         int result = -1;
 
         if (result == -1
+                && board.getPiece() != null
                 && !Util.canPutPieceOnBoard(board.getPiece(), board,
                 board.getPieceLocation().x, board.getPieceLocation().y)) {
             result = Integer.MAX_VALUE / 10;
         }
-        if (result == -1 && !board.isValid()) {
+        if (result == -1 && board.getPiece() != null && !board.isValid()) {
             result = Integer.MAX_VALUE / 10;
         }
 
-        if (result == -1 && !isValidColorCount(board)) {
+        if (result == -1 && board.getPiece() != null && !isValidColorCount(board)) {
             result = Integer.MAX_VALUE / 10;
         }
         else if (result == -1) {
-            result = board.getHeight() * board.getWidth() * 4 - board.getPieceCount() * 4;
+            result = (board.getHeight() * board.getWidth() - board.getPieceCount());
         }
 
         return result;

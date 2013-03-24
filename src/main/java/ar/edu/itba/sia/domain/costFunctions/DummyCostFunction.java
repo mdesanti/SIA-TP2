@@ -8,6 +8,6 @@ public class DummyCostFunction implements CostFunction {
 
 	@Override
 	public Integer getCost(Piece piece, GPSState state) {
-		return 1;
+        return 1;
 	}
 }

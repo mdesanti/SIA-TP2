@@ -68,7 +68,7 @@ public class CenterHeuristic implements Heuristic {
 						complete += distance;
 					}
 				}
-				result = (complete - actual);
+				result = (complete - actual) * (n * n);
 			}
 
 			return (int) (result * factor);

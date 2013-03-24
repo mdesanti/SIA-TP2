@@ -1,7 +1,6 @@
 package ar.edu.itba.sia;
 
 import ar.edu.itba.sia.domain.costFunctions.CenterCostFunction;
-import ar.edu.itba.sia.domain.costFunctions.ColorBasedCostFunction;
 import ar.edu.itba.sia.domain.costFunctions.DummyCostFunction;
 import ar.edu.itba.sia.domain.costFunctions.RotationCostFunction;
 import ar.edu.itba.sia.domain.heuristics.CenterHeuristic;
@@ -84,8 +83,6 @@ public class AppConfig {
     public void setCostFunction(String costfunction) {
         if (costfunction.equals("dummy")) {
             this.costfunction = new DummyCostFunction();
-        } else if (costfunction.equals("color")) {
-            this.costfunction = new ColorBasedCostFunction();
         } else if (costfunction.equals("rotation")) {
             this.costfunction = new RotationCostFunction();
         } else if (costfunction.equals("center")) {

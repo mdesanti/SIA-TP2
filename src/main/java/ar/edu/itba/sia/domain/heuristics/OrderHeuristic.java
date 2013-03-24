@@ -15,37 +15,34 @@ public class OrderHeuristic implements Heuristic {
     @Override
 	public Integer apply(GPSState state) {
 
-        if (cache.containsKey(state)) {
-            return cache.get(state);
-        }
+//        if (cache.containsKey(state)) {
+//            return cache.get(state);
+//        }
 
         int result = -1;
 
-        if (result == -1
+        if (result == -1 && state.getBoard().getPiece() != null
                 && !Util.canPutPieceOnBoard(state.getBoard().getPiece(), state.getBoard(),
                 state.getBoard().getPieceLocation().x, state.getBoard().getPieceLocation().y)) {
             result = Integer.MAX_VALUE / 10;
         }
-        if (result == -1 && !state.getBoard().isValid()) {
+        if (result == -1 && state.getBoard().getPiece() != null && !state.getBoard().isValid()) {
             result = Integer.MAX_VALUE / 10;
         }
 
-        if(result == -1 && !state.getBoard().isValid()) {
-            result = Integer.MAX_VALUE / 10;
-		}
-		if(result == -1 && Util.isValidEvalLocation(state)) {
-			Board board = state.getBoard();
+        if (state.getBoard().getPiece() == null || (result == -1 && Util.isValidEvalLocation(state))) {
+            Board board = state.getBoard();
 			int max = state.getBoard().getHeight() * state.getBoard().getWidth();
 			int depth = board.getDepth();
 			int x = depth % board.getWidth();
 	    	int y = depth / board.getHeight();
-	    	result = max - y*board.getWidth() + x;
+	    	result = max - y * board.getWidth() - x;
 		} else {
             result = Integer.MAX_VALUE / 10;
 		}
 
 
-        cache.put(state, result);
+//        cache.put(state, result);
         return result;
 	}
 }

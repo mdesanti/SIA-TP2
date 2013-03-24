@@ -26,8 +26,9 @@ public class CenterCostFunction implements CostFunction {
             int j = state.getBoard().getPieceLocation().y;
 
 
-            return Math.abs(constant - i)
-                    + Math.abs(constant - j);
+            return (Math.abs(constant - 0)
+                    + Math.abs(constant - 0)) - (Math.abs(constant - i)
+                    + Math.abs(constant - j));
         } else {
             return 0;
         }
