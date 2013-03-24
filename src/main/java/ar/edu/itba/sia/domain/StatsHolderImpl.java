@@ -10,10 +10,14 @@ public class StatsHolderImpl implements StatsHolder {
 	private long depth = 0;
 	private long explotions = 0;
 	private long leafNodes = 0;
+    private Integer symmetriesCount = 0;
 
-	public void addState() {
+    public void addState() {
 		states++;
 	}
+    public void addSymmetry() {
+        symmetriesCount++;
+    }
 
 	public long getStatesNumber() {
 		return states;
@@ -68,5 +72,11 @@ public class StatsHolderImpl implements StatsHolder {
 	public void setLeafNodes(long leafNodes) {
 		this.leafNodes = leafNodes;
 	}
+
+    @Override
+    public Integer getSymmetriesCount() {
+        
+        return symmetriesCount;
+    }
 
 }

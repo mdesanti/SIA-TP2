@@ -89,6 +89,13 @@ public class CLIParser {
                         "Disable or enable symmetry check")
                 .create("boardcolors");
 
+        final Option onlyresults = OptionBuilder
+                .withLongOpt("onlyresults")
+                .hasArg()
+                .withDescription(
+                        "Only show results")
+                .create("onlyresults");
+
 
         opts.addOption(help);
         opts.addOption(method);
@@ -101,6 +108,7 @@ public class CLIParser {
         opts.addOption(timeoutseconds);
         opts.addOption(checksymmetry);
         opts.addOption(boardcolors);
+        opts.addOption(onlyresults);
 
         return opts;
     }
@@ -136,6 +144,12 @@ public class CLIParser {
 
             try {
                 config.setTimeoutSeconds(Integer.parseInt(line.getOptionValue("timeoutseconds", "-1")));
+            } catch (NumberFormatException e) {
+                return null;
+            }
+
+            try {
+                config.setOnlyResult(Boolean.parseBoolean(line.getOptionValue("onlyresults", "true")));
             } catch (NumberFormatException e) {
                 return null;
             }
