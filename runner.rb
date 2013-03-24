@@ -10,7 +10,7 @@ files.each do |file|
 	noninformed.each do |method|
 		output.puts "Checking method: #{method} on file: #{file}"
 		output.flush
-		output.puts `java -Xmx4g -jar TP1-SIA-0.0.1-SNAPSHOT-jar-with-dependencies.jar --checksymmetry true --cachedepth 36 --filename #{file} --method #{method} --timeoutseconds 120 --onlyresults true`
+		output.puts `java -Xmx4g -jar TP1-SIA-0.0.1-SNAPSHOT-jar-with-dependencies.jar --checksymmetry true --cachedepth 36 --filename #{file} --method #{method} --timeoutseconds 60 --onlyresults true`
 		output.flush
 	end
 end
@@ -21,7 +21,7 @@ files.each do |file|
 			noninformed.each do |method|
 				output.puts "Checking method: #{method} with costfunction #{costfunction} with heuristic #{heuristic} on file: #{file}"
 				output.flush
-				output.puts `java -Xmx4g -jar TP1-SIA-0.0.1-SNAPSHOT-jar-with-dependencies.jar --checksymmetry true --cachedepth 36 --filename #{file} --method #{method} --timeoutseconds 120 --onlyresults true --costfunction #{costfunction} --heuristic #{heuristic}`
+				output.puts `java -Xmx4g -jar TP1-SIA-0.0.1-SNAPSHOT-jar-with-dependencies.jar --checksymmetry true --cachedepth 36 --filename #{file} --method #{method} --timeoutseconds 60 --onlyresults true --costfunction #{costfunction} --heuristic #{heuristic}`
 				output.flush			
 			end
 		end
