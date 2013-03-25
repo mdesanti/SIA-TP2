@@ -5,4 +5,5 @@
 /.idea
 *.iml
 *.jar
+.DS_Store
 test.txt

@@ -2,7 +2,7 @@ heuristics = %w(center color order order,color)
 costfunction = %w(rotation dummy center)
 noninformed = %w(DFS BFS ID)
 files = %w(random.2.xml random.3.xml random.4.xml random.5.xml random.6.xml)
-informed = %w(AStar greedy)
+informed = %w(AStar Greedy)
 
 output = File.open("results.txt", "w+")
 
@@ -18,7 +18,7 @@ end
 files.each do |file|
 	heuristics.each do |heuristic|
 		costfunction.each do |costfunction|
-			noninformed.each do |method|
+			informed.each do |method|
 				output.puts "Checking method: #{method} with costfunction #{costfunction} with heuristic #{heuristic} on file: #{file}"
 				output.flush
 				output.puts `java -Xmx4g -jar TP1-SIA-0.0.1-SNAPSHOT-jar-with-dependencies.jar --checksymmetry true --cachedepth 36 --filename #{file} --method #{method} --timeoutseconds 60 --onlyresults true --costfunction #{costfunction} --heuristic #{heuristic}`
