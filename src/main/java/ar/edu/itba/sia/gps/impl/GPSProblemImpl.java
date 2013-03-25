@@ -1,13 +1,20 @@
 package ar.edu.itba.sia.gps.impl;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import ar.edu.itba.sia.AppConfig;
 import ar.edu.itba.sia.domain.Board;
 import ar.edu.itba.sia.domain.Piece;
-import ar.edu.itba.sia.gps.api.*;
-import com.google.common.collect.Lists;
+import ar.edu.itba.sia.gps.api.CostFunction;
+import ar.edu.itba.sia.gps.api.GPSProblem;
+import ar.edu.itba.sia.gps.api.GPSRule;
+import ar.edu.itba.sia.gps.api.GPSState;
+import ar.edu.itba.sia.gps.api.Heuristic;
 
-import java.util.List;
-import java.util.Random;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class GPSProblemImpl implements GPSProblem {
 	private int height, width;
@@ -26,13 +33,14 @@ public class GPSProblemImpl implements GPSProblem {
 		this.height = height;
 		this.width = width;
 		all.addAll(allPieces);
+
+        this.config = config;
 		generateRules(config.getCostFunction());
 		this.initState = GPSStateImpl.initialState(height, width, all, colorCount);
 		this.heuristics.addAll(config.getHeuristics());
         this.printInterval = config.getNodePrintFactor();
         checkSymmetry = config.getCheckSymmetry();
         depthSize = config.cacheDepthSize();
-        this.config = config;
 	}
 
 	private void generateRules(CostFunction costFunction) {
@@ -48,12 +56,14 @@ public class GPSProblemImpl implements GPSProblem {
 				}
 			}
 		}
-//		shuffle(rules);
+        if (config.shuffleRules()) {
+            shuffle(rules);
+        }
 	}
 	
 	private static <T> void shuffle(List<T> list) {
 		Random random = new Random();
-		for (int i = 0; i < 5000000; i++) {
+		for (int i = 0; i < 256; i++) {
 			T auxA = null;
 			int a = random.nextInt(list.size());
 			auxA = list.get(a);
@@ -70,7 +80,14 @@ public class GPSProblemImpl implements GPSProblem {
 		return rules;
 	}
 
+	private Map<GPSState, Integer> resultCache = Maps.newHashMap();
+	
 	public Integer getHValue(GPSState state) {
+		
+		if (resultCache.containsKey(state)) {
+			return resultCache.get(state);
+		}
+		
 		int max = 0;
 		for(Heuristic heuristic: heuristics) {
 			int result = heuristic.apply(state);
@@ -78,6 +95,7 @@ public class GPSProblemImpl implements GPSProblem {
 				max = result;
 			}
 		}
+		resultCache.put(state, max);
 		return max;
 	}
 

@@ -97,6 +97,14 @@ public class CLIParser {
                 .create("onlyresults");
 
 
+        final Option shufflerules = OptionBuilder
+                .withLongOpt("shufflerules")
+                .hasArg()
+                .withDescription(
+                        "Shuffle the rules when evaluating them")
+                .create("shufflerules");
+
+
         opts.addOption(help);
         opts.addOption(method);
         opts.addOption(heuristic);
@@ -109,6 +117,7 @@ public class CLIParser {
         opts.addOption(checksymmetry);
         opts.addOption(boardcolors);
         opts.addOption(onlyresults);
+        opts.addOption(shufflerules);
 
         return opts;
     }
@@ -147,6 +156,13 @@ public class CLIParser {
             } catch (NumberFormatException e) {
                 return null;
             }
+
+            try {
+                config.setShuffleRules(Boolean.parseBoolean(line.getOptionValue("shufflerules", "false")));
+            } catch (NumberFormatException e) {
+                return null;
+            }
+
 
             try {
                 config.setOnlyResult(Boolean.parseBoolean(line.getOptionValue("onlyresults", "true")));

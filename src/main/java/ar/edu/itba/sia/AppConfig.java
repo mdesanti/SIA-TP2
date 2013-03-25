@@ -27,6 +27,7 @@ public class AppConfig {
 	private boolean checkSymmetry;
     private int boardColor;
     private boolean onlyResult;
+    private boolean shuffleRules;
 
     public void setHeuristic(String heuristic) {
         if (heuristic.contains("center")) {
@@ -154,5 +155,13 @@ public class AppConfig {
 
     public boolean isOnlyResult() {
         return onlyResult;
+    }
+
+    public boolean shuffleRules() {
+        return shuffleRules;
+    }
+
+    public void setShuffleRules(boolean shuffleRules) {
+        this.shuffleRules = shuffleRules;
     }
 }
