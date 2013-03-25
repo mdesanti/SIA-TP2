@@ -61,9 +61,9 @@ public class GPSProblemImpl implements GPSProblem {
         }
 	}
 	
-	private static <T> void shuffle(List<T> list) {
+	private <T> void shuffle(List<T> list) {
 		Random random = new Random();
-		for (int i = 0; i < 256; i++) {
+		for (int i = 0; i < this.width * this.width * this.width * this.width * 4; i++) {
 			T auxA = null;
 			int a = random.nextInt(list.size());
 			auxA = list.get(a);
