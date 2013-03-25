@@ -7,6 +7,7 @@ import ar.edu.itba.sia.gps.api.*;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.Random;
 
 public class GPSProblemImpl implements GPSProblem {
 	private int height, width;
@@ -46,6 +47,18 @@ public class GPSProblemImpl implements GPSProblem {
 					}
 				}
 			}
+		}
+//		shuffle(rules);
+	}
+	
+	private static <T> void shuffle(List<T> list) {
+		Random random = new Random();
+		for (int i = 0; i < 5000000; i++) {
+			T auxA = null;
+			int a = random.nextInt(list.size());
+			auxA = list.get(a);
+			list.remove(a);
+			list.add(0, auxA);
 		}
 	}
 
