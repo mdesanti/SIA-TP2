@@ -1,8 +1,10 @@
 source('parte1.m');
 source('functions.m');
 source('util.m');
-global DELTA = 0.001;
+global delta = 0.001;
 global weights = [];
+global eta = 0.0015;
+global beta = 7;
 
 function x = work(in, func)
 	global weights
@@ -28,7 +30,7 @@ end
 
 function x = retrain(n, shouldFunct, func) 
 	global weights
-	global DELTA
+	global delta
 	if (length(weights) == 0) 
 		weights = (2*rand(1,n+1)-1)/2;
 	end
@@ -46,7 +48,7 @@ function x = retrain(n, shouldFunct, func)
 			result = stepNeuron(in, func);
 			should = shouldFunct(inWithNoBias);
 			err = abs(result-should);
-			if err > DELTA
+			if err > delta
 				weights = weights .+ fixWeights(in, should, result);
 				finished = zeros(1,top);
 			else
@@ -66,6 +68,6 @@ function x = train(n, shouldFunct, func)
 end
 
 function out = fixWeights(in, should, was)
-	eta = 0.0015;
+	global eta
 	out =in .* eta*(should-was);
 end

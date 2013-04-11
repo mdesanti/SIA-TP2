@@ -7,7 +7,8 @@ function x = step(in)
 end
 
 function x = sigmoide(in)
-	x = (tanh(7*in) + 1)/2;
+	global beta
+	x = (tanh(beta*in) + 1)/2;
 end
 
 function x = lineal(in)
