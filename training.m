@@ -1,14 +1,15 @@
 source('parte1.m');
 source('functions.m');
 source('util.m');
+global DELTA = 0.001;
+global weights = [];
 
-weights = zeros(1,1);
-
-function x = work(weights, in, func)
+function x = work(in, func)
+	global weights
 	in2 = zeros(1,length(in)+1);
 	in2(1,2:length(in2)) = in;
 	in2(1) = -1;
-	x = stepNeuron(weights, in2, func);
+	x = stepNeuron(in2, func);
 end
 
 function y = generateTrainingSets(n)
@@ -25,9 +26,12 @@ function y = generateTrainingSets(n)
 	y = x;
 end
 
-function x = train(n, shouldFunct, func)
-	DELTA = 0.001;
-	weights = (2*rand(1,n+1)-1)/2;
+function x = retrain(n, shouldFunct, func) 
+	global weights
+	global DELTA
+	if (length(weights) == 0) 
+		weights = (2*rand(1,n+1)-1)/2;
+	end
 	sets = generateTrainingSets(n)
 	top = 2^n;
 	finished = zeros(1,top);
@@ -39,7 +43,7 @@ function x = train(n, shouldFunct, func)
 			num = ceil(rand(1,1)*top);
 			in = sets(num,:);
 			inWithNoBias = in(2:n+1);
-			result = stepNeuron(weights, in, func);
+			result = stepNeuron(in, func);
 			should = shouldFunct(inWithNoBias);
 			err = abs(result-should);
 			if err > DELTA
@@ -53,7 +57,12 @@ function x = train(n, shouldFunct, func)
 		end
 		j++;
 	end
-	x = weights;
+end
+
+function x = train(n, shouldFunct, func)
+	global weights
+	weights = (2*rand(1,n+1)-1)/2;
+	retrain(n, shouldFunct, func)
 end
 
 function out = fixWeights(in, should, was)
