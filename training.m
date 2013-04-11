@@ -1,11 +1,12 @@
 source('parte1.m');
+source('functions.m');
 weights = zeros(1,1);
 
-function x = work(weights, in)
+function x = work(weights, in, func)
 	in2 = zeros(1,length(in)+1);
 	in2(1,2:length(in2)) = in;
 	in2(1) = -1;
-	x = stepNeuron(weights, in2);
+	x = stepNeuron(weights, in2, func);
 end
 
 function y = generateTrainingSets(n)
@@ -22,7 +23,7 @@ function y = generateTrainingSets(n)
 	y = x;
 end
 
-function x = train(n)
+function x = train(n, shouldFunct, func)
 	weights = (2*rand(1,n+1)-1)/2;
 	sets = generateTrainingSets(n)
 	max = 2^n
@@ -32,8 +33,8 @@ function x = train(n)
 		num = mod(i,max) + 1;
 		in = sets(num,:);
 		inWithNoBias = in(2:n+1);
-		result = stepNeuron(weights, in);
-		should = prod(inWithNoBias);
+		result = stepNeuron(weights, in, func);
+		should = shouldFunct(inWithNoBias);
 		if(result != should)
 			weights = weights .+ fixWeights(in, should, result);
 			finished = zeros(1,max);

@@ -1,10 +1,5 @@
-function x = stepNeuron(weights, in)
+function x = stepNeuron(weights, in, func)
 	result = weights .* in;
-	h = sum(result);
-	if(h < 0)
-		x = 0;
-	else
-		x = 1;
-	end
+	x = func(result);
 		
 end
