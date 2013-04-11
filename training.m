@@ -24,18 +24,18 @@ function y = generateTrainingSets(n)
 end
 
 function x = train(n, shouldFunct, func)
-	DELTA = 0.0001;
+	DELTA = 0.01;
 	weights = (2*rand(1,n+1)-1)/2;
 	sets = generateTrainingSets(n)
-	max = 2^n
-	finished = zeros(1,max);
+	top = 2^n;
+	finished = zeros(1,top);
 	i = 1;
 	j = 0;
 	eta = 0.4;
 	while(prod(finished) < 1 && j < 100)
 		i = 1;
 		while(i < 1000)
-			num = mod(i,max) + 1;
+			num = ceil(rand(1,1)*top);
 			in = sets(num,:);
 			inWithNoBias = in(2:n+1);
 			result = stepNeuron(weights, in, func);
@@ -43,14 +43,14 @@ function x = train(n, shouldFunct, func)
 			err = abs(result-should);
 			if err > DELTA
 				weights = weights .+ fixWeights(in, should, result);
-				finished = zeros(1,max);
+				finished = zeros(1,top);
 			else
 				finished(num) += 1;
 			end
 			fflush(stdout);
 			i++;
 		end
-		weights
+		%weights
 		j++;
 	end
 	x = weights;

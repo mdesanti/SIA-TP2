@@ -7,7 +7,7 @@ function x = step(in)
 end
 
 function x = sigmoide(in)
-	x = tanh(1000*in);
+	x = (tanh(in) + 1)/2;
 end
 
 function x = and(in)
