@@ -24,7 +24,7 @@ function y = generateTrainingSets(n)
 end
 
 function x = train(n, shouldFunct, func)
-	DELTA = 0.01;
+	DELTA = 0.001;
 	weights = (2*rand(1,n+1)-1)/2;
 	sets = generateTrainingSets(n)
 	top = 2^n;

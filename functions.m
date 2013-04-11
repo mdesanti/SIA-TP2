@@ -7,7 +7,11 @@ function x = step(in)
 end
 
 function x = sigmoide(in)
-	x = (tanh(in) + 1)/2;
+	x = (tanh(7*in) + 1)/2;
+end
+
+function x = lineal(in)
+
 end
 
 function x = and(in)
