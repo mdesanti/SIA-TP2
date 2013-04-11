@@ -31,7 +31,6 @@ function x = train(n, shouldFunct, func)
 	finished = zeros(1,top);
 	i = 1;
 	j = 0;
-	eta = 0.4;
 	while(prod(finished) < 1 && j < 100)
 		i = 1;
 		while(i < 1000)
@@ -50,15 +49,13 @@ function x = train(n, shouldFunct, func)
 			fflush(stdout);
 			i++;
 		end
-		%weights
 		j++;
 	end
 	x = weights;
 end
 
 function out = fixWeights(in, should, was)
-	eta = 0.015;
-	debug_on_error (1);
+	eta = 0.0015;
 	out =in .* eta*(should-was);
 end
 
