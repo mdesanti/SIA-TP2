@@ -1,5 +1,7 @@
 source('parte1.m');
 source('functions.m');
+source('util.m');
+
 weights = zeros(1,1);
 
 function x = work(weights, in, func)
@@ -57,27 +59,4 @@ end
 function out = fixWeights(in, should, was)
 	eta = 0.0015;
 	out =in .* eta*(should-was);
-end
-
-function out = binary2vector(data,nBits)
-
-	powOf2 = 2.^[0:nBits-1];
-
-	%# do a tiny bit of error-checking
-	if data > sum(powOf2)
-	   error('not enough bits to represent the data')
-	end
-
-	out = false(1,nBits);
-
-	ct = nBits;
-
-	while data>0
-		if data >= powOf2(ct)
-			data = data-powOf2(ct);
-			out(ct) = true;
-		end
-		ct = ct - 1;
-	end
-	out = fliplr(out);
 end
