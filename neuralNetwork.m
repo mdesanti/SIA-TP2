@@ -10,7 +10,6 @@ function x = eval(in, ni)
 	global weights
 	global neuronWeights 
     
-
 	neuronWeights = weights(ni, :);
 
 	in2 = zeros(1,length(in)+1);

@@ -1,8 +1,8 @@
 % Utility Functions
 
-utilsFile = util
-funcsFile = funcs
-neuronFile = neuron
+utilsFile = util;
+funcsFile = funcs;
+neuronFile = neuron;
 
 global util
 util = utilsFile
