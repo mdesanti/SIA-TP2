@@ -21,7 +21,7 @@ end
 function retrain(n) 
     global neuron
     global util
-
+    global weights
 	global neuronsPerLayer   
 
 	util.networkPrepare(n);

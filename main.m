@@ -33,13 +33,13 @@ weights = [];
 
 % Parameters to use when computing
 global toCompute
-toCompute = funcs.or;
+toCompute = funcs.xor;
 global func;
-func = funcs.step;
+func = funcs.sigmoide;
 
 % Network definition.
 global neuronsPerLayer;
-neuronsPerLayer = [ 1 ];
+neuronsPerLayer = [ 2 1 ];
 
 % Results of all the network, indexed by neuron
 global neuronResult;

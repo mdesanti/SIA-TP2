@@ -3,8 +3,9 @@ function func = func()
     func.sigmoide = @sigmoide;
     func.derivsigmoide = @derivsigmoide;
     func.lineal = @lineal;
-    func.and = @and;
-    func.or = @or;
+    func.and = @andF;
+    func.or = @orF;
+    func.xor = @xorF;
 end
 
 
@@ -23,22 +24,30 @@ end
 
 function x = derivsigmoide(in)
 	global beta
-	x = 1 - (tanh(beta*in) + 1)/2 .^2;
+	x = 1/2 * beta * sec(beta*in)^2;
 end
 
 function x = lineal(in)
 
 end
 
-function x = and(in)
+function x = andF(in)
 	x = prod(in);
 end
 
-function x = or(in)
+function x = orF(in)
 	v = sum(in);
 	if v > 0
 		x = 1;
 	else
 		x = 0;
 	end
+end
+
+function x = xorF(in)
+	result = bitxor(in(1), in(2));
+	for i=3:length(in)
+		result = bitxor(result, in(i));
+	end
+	x = result;
 end

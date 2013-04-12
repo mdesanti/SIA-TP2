@@ -20,11 +20,13 @@ function runInput(n, ni, inputIndex)
 	global inputForLayer
 	global layerForNeuron
 	global layerIndexForNeuron
+	global weightsPerLayer
 
 	layer = layerForNeuron(ni);
 	layerIndex = layerIndexForNeuron(ni);
 	neuronWeights = weights(ni, :);
-	in = inputForLayer(inputIndex,:,layer);
+	weightnum = weightsPerLayer(layer);
+	in = inputForLayer(inputIndex,1:weightnum,layer);
 	
 
 	% Step 3 on book
@@ -51,14 +53,16 @@ function prepareDeltas(n, ni, inputIndex)
 	global layerForNeuron
 	global neuronsPerLayer
 	global deltas
+	global weightsPerLayer
 
 	neuronWeights = weights(ni, :);
 
 	layer = layerForNeuron(ni);
 	layerIndex = layerIndexForNeuron(ni);
-	in = inputForLayer(inputIndex,:,layer);
+	weightnum = weightsPerLayer(layer);
+	in = inputForLayer(inputIndex,1:weightnum,layer);
 	hi = sum(neuronWeights .* in);
-	gprima = 1; funcs.derivsigmoide(hi); % Check this
+	gprima = funcs.derivsigmoide(hi); % Check this
 
 	if (layer == length(neuronsPerLayer))
 		% Step 4 on book
@@ -86,6 +90,7 @@ function fixWeights(n, ni, inputIndex)
 	global layerIndexForNeuron
 	global layerForNeuron
 	global neuronsPerLayer
+	global weightsPerLayer
 
 	neuronWeights = weights(ni, :);
 	layer = layerForNeuron(ni);
@@ -102,6 +107,7 @@ function fixWeights(n, ni, inputIndex)
 	% Step 6 on book
 
 	% Check this
-	deltaWeight = eta .* deltas(layerIndex, layer) .* inputForLayer(inputIndex, :, layer);
+	weightnum = weightsPerLayer(layer);
+	deltaWeight = eta .* deltas(layerIndex, layer) .* inputForLayer(inputIndex, 1:weightnum, layer);
 	weights(ni, :) = neuronWeights + deltaWeight;
 end
