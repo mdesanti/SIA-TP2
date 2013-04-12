@@ -11,6 +11,11 @@ function x = sigmoide(in)
 	x = (tanh(beta*in) + 1)/2;
 end
 
+function x = derivsigmoide(in)
+	global beta
+	x = 1 - (tanh(beta*in) + 1)/2 .^2
+end
+
 function x = lineal(in)
 
 end

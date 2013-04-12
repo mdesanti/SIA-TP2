@@ -1,6 +1,7 @@
-function x = stepNeuron(in, func)
-	global weights
-	result = sum(weights .* in);
+function x = stepNeuron(in)
+	global nodeWeights
+	global func
+	result = sum(nodeWeights .* in);
 
 	debug_on_error(1)
 	x = func(result);
