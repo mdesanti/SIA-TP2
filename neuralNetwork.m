@@ -1,24 +1,31 @@
-function x = networkEval(in, ni)
+function n = neuralNetwork()
+    n.eval = @eval;
+    n.retrain = @retrain;
+    n.train = @train;
+end
+
+function x = eval(in, ni)
+    global neuron
+
 	global weights
 	global neuronWeights 
+    
 
 	neuronWeights = weights(ni, :);
 
 	in2 = zeros(1,length(in)+1);
 	in2(1,2:length(in2)) = in;
 	in2(1) = -1;
-	x = neuronEval(in2);
+	x = neuron.eval(in2);
 end
 
-function networkRetrain(n) 
-	global weights
-	global delta
-	global neuronsPerLayer
-	global weightsPerLayer
-	global layerForNeuron
-	global inputForLayer
+function retrain(n) 
+    global neuron
+    global util
 
-	networkPrepare(n);
+	global neuronsPerLayer   
+
+	util.networkPrepare(n);
 
 	neuronCount = sum(neuronsPerLayer);
 
@@ -27,27 +34,27 @@ function networkRetrain(n)
 		for inputIndex = 1:2^n
 			% Eval down-up...
 			for ni = 1:neuronCount
-				neuronRunInput(n, ni, inputIndex);
+				neuron.runInput(n, ni, inputIndex);
 			end
 			% Prepare up-down...
 			for ni = neuronCount:-1:1
-				neuronPrepareDeltas(n, ni, inputIndex);
+				neuron.prepareDeltas(n, ni, inputIndex);
 			end
 			% Fix weights up-down...
 			for ni = neuronCount:-1:1
-				neuronFixWeights(n, ni, inputIndex);
+				neuron.fixWeights(n, ni, inputIndex);
 			end
 		end
 	end
 end
 
-function networkTrain(n)
+function train(n)
 	global weights
 	global neuronsPerLayer
 
 	neuronCount = sum(neuronsPerLayer);
 	weights = ((2*rand(neuronCount,n+1)-1)/2);
 
-	networkRetrain(n);
+	retrain(n);
 end
 

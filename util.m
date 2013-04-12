@@ -1,10 +1,16 @@
+function util = util()
+    util.networkPrepare = @networkPrepare;
+    util.binary2vector = @binary2vector;
+    util.generateRandomInputs = @generateRandomInputs;
+end
+
 
 % Initializes Weights
 % Initializes Inputs
 % Models the network
 function networkPrepare(n)
+    global util
 	global weights
-	global delta
 	global deltas
 	global neuronsPerLayer
 	global weightsPerLayer
@@ -16,17 +22,14 @@ function networkPrepare(n)
 
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
-	if (length(weights) == 0) 
-		weights = ((2*rand(neuronCount,n+1)-1)/2);
-	end
-
-	neuronResult = zeros(neuronCount);
-	neuronExpectedResult = zeros(neuronCount);
+	if isempty(weights)
+        weights = ((2*rand(neuronCount,n+1)-1)/2);
+    end
 
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
 	inputForLayer = zeros(2^n, n+1, length(neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-	inputForLayer(:,:,1) = generateRandomInputs(n);
+	inputForLayer(:,:,1) = util.generateRandomInputs(n);
 	for i = 2:length(neuronsPerLayer) + 1
 		inputForLayer(:,1,i) = -1;
 	end
@@ -49,14 +52,15 @@ function networkPrepare(n)
 	for layer = 1:length(neuronsPerLayer)
 		for k = 1:neuronsPerLayer(layer)
 			layerIndexForNeuron(i) = k;
-			layerForNeuron(i++) = layer;
+			layerForNeuron(i) = layer;
+            i = i + 1;
 		end
 	end
 end
 
 % Converts a number to its size in bits
 function out = binary2vector(data,nBits)
-	powOf2 = 2.^[0:nBits-1];
+	powOf2 = 2.^(0:nBits-1);
 	
 	if data > sum(powOf2)
 	   error('not enough bits to represent the data')
@@ -82,11 +86,10 @@ function y = generateRandomInputs(n)
 	k = 1;
 	x = zeros(max,n+1);
 	for i=0:max-1
-		out = (zeros(1,n));
 		out = binary2vector(i,n);
 		x(k,1) = -1;
 		x(k,2:length(out)+1) = out;
-		k++;
+		k = k + 1;
 	end
 	y = x;
 end

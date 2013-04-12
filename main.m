@@ -1,20 +1,29 @@
 % Utility Functions
-source('util.m');      
+
+utilsFile = util
+funcsFile = funcs
+neuronFile = neuron
+
+global util
+util = utilsFile
 
 % Functions used to evaluate inputs or to compute them correctly
-source('functions.m'); 
+global funcs
+funcs = funcsFile
 
 % Functions related to a single neuron
-source('neuron.m');
+global neuron
+neuron = neuronFile
 
 % Functions related to the network
-source('network.m');
+global network
+network = neuralNetwork
 
 % Control variables
 global delta;
 delta = 0.0001;
 global eta;
-eta = 0.00015
+eta = 0.00015;
 global beta;
 beta = 7;
 
@@ -24,9 +33,9 @@ weights = [];
 
 % Parameters to use when computing
 global toCompute
-toCompute = @or;
+toCompute = funcs.or;
 global func;
-func = @step;
+func = funcs.step;
 
 % Network definition.
 global neuronsPerLayer;

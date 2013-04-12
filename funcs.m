@@ -1,3 +1,13 @@
+function func = func()
+    func.step = @step;
+    func.sigmoide = @sigmoide;
+    func.derivsigmoide = @derivsigmoide;
+    func.lineal = @lineal;
+    func.and = @and;
+    func.or = @or;
+end
+
+
 function x = step(in)
 	if (in < 0)
 		x = 0;
