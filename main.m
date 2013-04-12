@@ -11,34 +11,46 @@ source('neuron.m');
 source('network.m');
 
 % Control variables
-global delta = 0.0001;
-global eta = 0.00015;
-global beta = 7;
+global delta;
+delta = 0.0001;
+global eta;
+eta = 0.00015
+global beta;
+beta = 7;
 
 % Weights of all the network, indexed by neuron
-global weights = [];
+global weights;
+weights = [];
 
 % Parameters to use when computing
-global toCompute = @or;
-global func = @step;
+global toCompute
+toCompute = @or;
+global func;
+func = @step;
 
 % Network definition.
-global neuronsPerLayer = [ 1 ];
+global neuronsPerLayer;
+neuronsPerLayer = [ 1 ];
 
 % Results of all the network, indexed by neuron
-global neuronResult = [];
-
-% Expected results of all the network, indexed by neuron
-global neuronExpectedResult = []; % Im still thinking if this is useful
+global neuronResult;
+neuronResult = [];
 
 % Pre-calculated data related to the layers and neurons.
-global layerForNeuron = [];
-global layerIndexForNeuron = [];
-global deltas = [];
+global layerForNeuron;
+global layerIndexForNeuron;
+global deltas;
+
+layerForNeuron = [];
+layerIndexForNeuron = [];
+deltas = [];
 
 % Pre-calculated inputs and weights.
-global weightsPerLayer = [];
-global inputForLayer = [];
+global weightsPerLayer;
+global inputForLayer;
+
+weightsPerLayer = [];
+inputForLayer = [];
 
 % Array used as a pointer to the weights of a single node.
 global neuronWeights;
