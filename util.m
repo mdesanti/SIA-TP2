@@ -1,5 +1,5 @@
 function util = util()
-    util.networkPrepare = @networkPrepare;d
+    util.networkPrepare = @networkPrepare;
     util.binary2vector = @binary2vector;
     util.generateRandomInputs = @generateRandomInputs;
     util.getNodeIndex = @getNodeIndex;

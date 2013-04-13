@@ -66,6 +66,7 @@ function prepareDeltas(n, ni, inputIndex)
 	hi = sum(neuronWeights(1:length(in)) .* in);
 	gprima = funcs.derivsigmoide(hi); % Check this
 
+    
 	if (layer == length(neuronsPerLayer))
 		% Step 4 on book
 		should = inputForLayer(inputIndex,layerIndex + 1,layer + 1);
@@ -75,22 +76,22 @@ function prepareDeltas(n, ni, inputIndex)
 		% if (err < delta)
 		% 	err = 0;
 		% end
-        err
     else
-        nextLayerNodeCount = neuronsPerLayer(layer + 1)
+        nextLayerNodeCount = neuronsPerLayer(layer + 1);
         % gets the indexes of the nodes in the upper layer
         nextLayerFirstNodeIndex = util.getIndexesForLayer(layer+1);
         
 		% Step 5 on book
         added = 0;
-        for i=nextLayerFirstNodeIndex:nextLayerNodeCount
+        for i = nextLayerFirstNodeIndex: nextLayerFirstNodeIndex+nextLayerNodeCount - 1
             %the index is +1 because of the biased input weight
-            added = nextLayersWeights(i,index+1)*deltas(i-1);
+            li = layerIndexForNeuron(i); % Index on layer for this neuron
+            added = added + weights(layerIndex,i+1) * deltas(li, layer + 1);
         end
 		err = added; % Check This
         
 	end
-	deltas(ni) = gprima .* err;
+	deltas(layerIndex, layer) = gprima * err;
 end
 
 function fixWeights(n, ni, inputIndex)
@@ -120,6 +121,6 @@ function fixWeights(n, ni, inputIndex)
 
 	% Check this
 	weightnum = weightsPerLayer(layer);
-	deltaWeight = eta .* deltas(layerIndex, layer) .* inputForLayer(inputIndex, 1:weightnum, layer);
+	deltaWeight = eta .* deltas(layerIndex, layer) .* inputForLayer(inputIndex, 2:(weightnum-1), layer);
 	weights(ni, :) = neuronWeights + deltaWeight;
 end
