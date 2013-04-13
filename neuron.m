@@ -55,7 +55,11 @@ function prepareDeltas(n, ni, inputIndex)
 	global layerForNeuron
 	global neuronsPerLayer
 	global deltas
+    global delta
 	global weightsPerLayer
+    
+    global errs;
+    global errI;
 
 	neuronWeights = weights(ni, :);
 
@@ -69,14 +73,16 @@ function prepareDeltas(n, ni, inputIndex)
     
 	if (layer == length(neuronsPerLayer))
 		% Step 4 on book
-        in = inputForLayer(inputIndex,weightsPerLayer(1),1);
+        in = inputForLayer(inputIndex,1:weightsPerLayer(1),1);
 		result = inputForLayer(inputIndex,layerIndex + 1,layer + 1);
         inWithNoBias = in(2:length(in)); % TODO: Take this, it's unsafe!
 		expected = toCompute(inWithNoBias);
 		err = (expected - result); % Check This
-		% if (err < delta)
-		% 	err = 0;
-		% end
+        
+        % Store error history
+        iSubIndex = mod(inputIndex, 4) + 1;
+        errs(errI(iSubIndex),iSubIndex) = err;
+        errI(iSubIndex) = errI(iSubIndex) + 1;
     else
         nextLayerNodeCount = neuronsPerLayer(layer + 1);
         % gets the indexes of the nodes in the upper layer
@@ -90,9 +96,12 @@ function prepareDeltas(n, ni, inputIndex)
             added = added + weights(layerIndex,i+1) * deltas(li, layer + 1);
         end
 		err = added; % Check This
-        
-	end
-	deltas(layerIndex, layer) = gprima * err;
+    end
+    
+    if (abs(err) < delta)
+        err = 0;
+    end
+    deltas(layerIndex, layer) = gprima * err;
 end
 
 function fixWeights(n, ni, inputIndex)
@@ -111,10 +120,8 @@ function fixWeights(n, ni, inputIndex)
 	niOnLayer = layerIndexForNeuron(ni);
 
 	% Step 6 on book
-
 	% Check this
 	weightnum = weightsPerLayer(layer);
-	deltaWeight = eta .* deltas(niOnLayer, layer) .* inputForLayer(inputIndex, 2:weightnum, layer + 1);
-    neuronWeights(2:weightnum) = neuronWeights(2:weightnum) + deltaWeight;
-	weights(ni, :) = neuronWeights;
+	deltaWeight = eta .* deltas(niOnLayer, layer) .* inputForLayer(inputIndex, :, layer + 1);
+	weights(ni, :) = neuronWeights + deltaWeight;
 end

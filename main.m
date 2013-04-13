@@ -21,9 +21,9 @@ network = neuralNetwork
 
 % Control variables
 global delta;
-delta = 0.0001;
+delta = 0.01;
 global eta;
-eta = 0.00015;
+eta = 0.0015;
 global beta;
 beta = 7;
 
@@ -35,11 +35,15 @@ weights = [];
 global toCompute
 toCompute = funcs.xor;
 global func;
+global errs;
+errs = zeros(10000,4);
+global errI;
+errI = ones(4,1);
 func = funcs.sigmoide;
 
 % Network definition.
 global neuronsPerLayer;
-neuronsPerLayer = [ 1 1 ];
+neuronsPerLayer = [ 1 ];
 
 % Results of all the network, indexed by neuron
 global neuronResult;
