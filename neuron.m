@@ -9,7 +9,8 @@ end
 function x = neuronEval(in)
 	global neuronWeights
 	global func
-	result = sum(neuronWeights .* in);
+    dbstop if error
+	result = sum(neuronWeights(1:length(in)) .* in);
 	x = func(result);
 end
 
@@ -44,6 +45,7 @@ end
 
 function prepareDeltas(n, ni, inputIndex)
     global funcs
+    global util
 
 	global weights
 	global neuronWeights
@@ -61,34 +63,32 @@ function prepareDeltas(n, ni, inputIndex)
 	layerIndex = layerIndexForNeuron(ni);
 	weightnum = weightsPerLayer(layer);
 	in = inputForLayer(inputIndex,1:weightnum,layer);
-	hi = sum(neuronWeights .* in);
+	hi = sum(neuronWeights(1:length(in)) .* in);
 	gprima = funcs.derivsigmoide(hi); % Check this
 
 	if (layer == length(neuronsPerLayer))
 		% Step 4 on book
 		should = inputForLayer(inputIndex,layerIndex + 1,layer + 1);
-        inWithNoBias = in(2:n+1); % TODO: Take this, it's unsafe!
+        inWithNoBias = in(2:length(in)); % TODO: Take this, it's unsafe!
 		expected = toCompute(inWithNoBias);
 		err = (expected - should); % Check This
 		% if (err < delta)
 		% 	err = 0;
 		% end
+        err
     else
-         % gets the index in the layer for the given node index
-        index = util.getNodeIndex(ni);
+        nextLayerNodeCount = neuronsPerLayer(layer + 1)
         % gets the indexes of the nodes in the upper layer
-        indexes = util.getIndexesForLayer(layer+1);
-        nextLayersWeights = zeros(neuronsPerLayer(layer+1),length(weights(1)));
-        for i=indexes:neuronsPerLayer(layer+1)
-            nextLayersWeights(i-indexes+1,:) = weights(i);
-        end
+        nextLayerFirstNodeIndex = util.getIndexesForLayer(layer+1);
+        
 		% Step 5 on book
         added = 0;
-        for i=1:neuronsPerLayer(layer+1)
+        for i=nextLayerFirstNodeIndex:nextLayerNodeCount
             %the index is +1 because of the biased input weight
-            added = nextLayersWeights(i,index+1)*deltas(indexes+i-1);
+            added = nextLayersWeights(i,index+1)*deltas(i-1);
         end
 		err = added; % Check This
+        
 	end
 	deltas(ni) = gprima .* err;
 end
@@ -110,7 +110,7 @@ function fixWeights(n, ni, inputIndex)
 
 	if (layer == length(neuronsPerLayer))
 		if (layer == 1)
-			deltaWeight = eta .* deltas(layerIndex + 1, layer) .* inputForLayer(inputIndex, :, layer);
+			deltaWeight = eta .* deltas(layerIndex, layer) .* inputForLayer(inputIndex, :, layer);
 			weights(ni, :) = neuronWeights + deltaWeight;
 		end
 		return

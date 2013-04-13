@@ -1,5 +1,5 @@
 function util = util()
-    util.networkPrepare = @networkPrepare;
+    util.networkPrepare = @networkPrepare;d
     util.binary2vector = @binary2vector;
     util.generateRandomInputs = @generateRandomInputs;
     util.getNodeIndex = @getNodeIndex;
@@ -80,9 +80,9 @@ function indexes = getIndexesForLayer(layer)
     if (layer == 1)
         indexes = 1;
     else
-        aux = sum(neuronsPerLayer(1:layer-1));
+        indexes = sum(neuronsPerLayer(1:layer-1)) + 1;
     end
-    indexes = aux+1;
+
 end
 
 % Converts a number to its size in bits

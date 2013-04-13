@@ -39,7 +39,7 @@ func = funcs.sigmoide;
 
 % Network definition.
 global neuronsPerLayer;
-neuronsPerLayer = [ 2 1 ];
+neuronsPerLayer = [ 1 ];
 
 % Results of all the network, indexed by neuron
 global neuronResult;
