@@ -23,9 +23,11 @@ network = neuralNetwork
 global delta;
 delta = 0.01;
 global eta;
-eta = 0.0015;
+eta = 0.015;
 global beta;
-beta = 7;
+beta = 100;
+global N;
+N = 1000;
 
 % Weights of all the network, indexed by neuron
 global weights;
@@ -44,7 +46,6 @@ func = funcs.sigmoide;
 % Network definition.
 global neuronsPerLayer;
 neuronsPerLayer = [ 2 1 ];
-
 % Results of all the network, indexed by neuron
 global neuronResult;
 neuronResult = [];

@@ -88,7 +88,7 @@ function prepareDeltas(n, ni, inputIndex)
         for i = nextLayerFirstNodeIndex: nextLayerFirstNodeIndex+nextLayerNodeCount - 1
             %the index is +1 because of the biased input weight
             li = layerIndexForNeuron(i); % Index on layer for this neuron
-            added = added + weights(layerIndex,i+1) * deltas(li, layer + 1);
+            added = added + weights(i,layerIndex) * deltas(li, layer + 1);
         end
 		err = added; % Check This
     end

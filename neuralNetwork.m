@@ -10,8 +10,11 @@ function x = eval(in)
 	global weights
 	global neuronsPerLayer
     global inputForLayer
+
     
     n = length(weights(1,:));
+    
+    
     
     neuronCount = sum(neuronsPerLayer);
     inputForLayer = zeros(1, n + 1, length(neuronsPerLayer)+1);
@@ -29,12 +32,14 @@ function retrain(n)
     global neuron
     global util
 	global neuronsPerLayer   
+    
+    global N
 
 	util.networkPrepare(n);
 
 	neuronCount = sum(neuronsPerLayer);
 
-	for i=1:1000
+	for i=1:N
 		% For every input
 		for inputIndex = 1:2^n
 			% Eval down-up...
