@@ -4,31 +4,42 @@ function n = neuralNetwork()
     n.train = @train;
 end
 
-function x = eval(in, ni)
+function x = eval(in)
     global neuron
 
 	global weights
-	global neuronWeights 
-    
-	neuronWeights = weights(ni, :);
+	global neuronsPerLayer
+    global inputForLayer
 
-	in2 = zeros(1,length(in)+1);
-	in2(1,2:length(in2)) = in;
-	in2(1) = -1;
-	x = neuron.eval(in2);
+    
+    n = length(weights(1,:));
+    
+    
+    
+    neuronCount = sum(neuronsPerLayer);
+    inputForLayer = zeros(1, n + 1, length(neuronsPerLayer)+1);
+	inputForLayer(1,2:n,1) = in;
+    inputForLayer(:,1,:) = -1;
+    
+    for ni = 1:neuronCount
+        neuron.runInput(n, ni, 1);
+    end
+    
+    x = inputForLayer(1,2,length(neuronsPerLayer) + 1);
 end
 
 function retrain(n) 
     global neuron
     global util
-
 	global neuronsPerLayer   
+    
+    global N
 
 	util.networkPrepare(n);
 
 	neuronCount = sum(neuronsPerLayer);
 
-	for i=1:10000
+	for i=1:N
 		% For every input
 		for inputIndex = 1:2^n
 			% Eval down-up...
