@@ -37,7 +37,7 @@ function networkPrepare(n)
 	end
 
 	% Prepares the deltas matrix
-	deltas = zeros(sum(neuronsPerLayer));
+	deltas = zeros(max(neuronsPerLayer), sum(neuronsPerLayer));
 	
 	% Generates an index to know how many weights has each layer
 	weightsPerLayer = zeros(neuronCount);

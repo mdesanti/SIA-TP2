@@ -69,10 +69,11 @@ function prepareDeltas(n, ni, inputIndex)
     
 	if (layer == length(neuronsPerLayer))
 		% Step 4 on book
-		should = inputForLayer(inputIndex,layerIndex + 1,layer + 1);
+        in = inputForLayer(inputIndex,weightsPerLayer(1),1);
+		result = inputForLayer(inputIndex,layerIndex + 1,layer + 1);
         inWithNoBias = in(2:length(in)); % TODO: Take this, it's unsafe!
 		expected = toCompute(inWithNoBias);
-		err = (expected - should); % Check This
+		err = (expected - result); % Check This
 		% if (err < delta)
 		% 	err = 0;
 		% end
@@ -107,20 +108,13 @@ function fixWeights(n, ni, inputIndex)
 
 	neuronWeights = weights(ni, :);
 	layer = layerForNeuron(ni);
-	layerIndex = layerIndexForNeuron(ni);
-
-	if (layer == length(neuronsPerLayer))
-		if (layer == 1)
-			deltaWeight = eta .* deltas(layerIndex, layer) .* inputForLayer(inputIndex, :, layer);
-			weights(ni, :) = neuronWeights + deltaWeight;
-		end
-		return
-	end
+	niOnLayer = layerIndexForNeuron(ni);
 
 	% Step 6 on book
 
 	% Check this
 	weightnum = weightsPerLayer(layer);
-	deltaWeight = eta .* deltas(layerIndex, layer) .* inputForLayer(inputIndex, 2:(weightnum-1), layer);
-	weights(ni, :) = neuronWeights + deltaWeight;
+	deltaWeight = eta .* deltas(niOnLayer, layer) .* inputForLayer(inputIndex, 2:weightnum, layer + 1);
+    neuronWeights(2:weightnum) = neuronWeights(2:weightnum) + deltaWeight;
+	weights(ni, :) = neuronWeights;
 end
