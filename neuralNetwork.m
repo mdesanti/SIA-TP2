@@ -58,13 +58,11 @@ function retrain(n)
 	end
 end
 
+
+
 function train(n)
 	global weights
-	global neuronsPerLayer
-
-	neuronCount = sum(neuronsPerLayer);
-	weights = ((2*rand(neuronCount,n+1)-1)/2);
-
+	weights = [];
 	retrain(n);
 end
 

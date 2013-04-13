@@ -25,13 +25,13 @@ function networkPrepare(n)
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
 	if isempty(weights)
-        weights = ((2*rand(neuronCount,n+1)-1)/2);
+        weights = ((2*rand(neuronCount,max(max(neuronsPerLayer)+1, n+1))-1)/2);
     end
 
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
-	inputForLayer = zeros(2^n, n+1, length(neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-	inputForLayer(:,:,1) = util.generateRandomInputs(n);
+	inputForLayer = zeros(2^n, max(neuronsPerLayer)+1, length(neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+	inputForLayer(:,1:n+1,1) = util.generateRandomInputs(n);
 	for i = 2:length(neuronsPerLayer) + 1
 		inputForLayer(:,1,i) = -1;
 	end

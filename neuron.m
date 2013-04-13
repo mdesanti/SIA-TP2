@@ -94,8 +94,8 @@ function prepareDeltas(n, ni, inputIndex)
     end
     
     % Store error history
-    iSubIndex = mod(inputIndex, 4) + 1;
-    errs(errI(iSubIndex),iSubIndex, ni) = err;
+    iSubIndex = mod(inputIndex - 1, 4) + 1;
+    errs(errI(iSubIndex, ni),iSubIndex, ni) = err;
     errI(iSubIndex,ni) = errI(iSubIndex,ni) + 1;
     
     if (abs(err) < delta)
