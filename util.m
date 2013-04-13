@@ -2,6 +2,8 @@ function util = util()
     util.networkPrepare = @networkPrepare;
     util.binary2vector = @binary2vector;
     util.generateRandomInputs = @generateRandomInputs;
+    util.getNodeIndex = @getNodeIndex;
+    util.getIndexesForLayer = @getIndexesForLayer;
 end
 
 
@@ -35,7 +37,7 @@ function networkPrepare(n)
 	end
 
 	% Prepares the deltas matrix
-	deltas = zeros(max(neuronsPerLayer) + 1, length(neuronsPerLayer));
+	deltas = zeros(sum(neuronsPerLayer));
 	
 	% Generates an index to know how many weights has each layer
 	weightsPerLayer = zeros(neuronCount);
@@ -56,6 +58,31 @@ function networkPrepare(n)
             i = i + 1;
 		end
 	end
+end
+
+% Retunrs the index of the node in the layer
+% i.e. if the node is the first, second, third, etc. in the layer
+function index = getNodeIndex(ni)
+	global neuronsPerLayer
+
+    for layer = 1:length(neuronsPerLayer)
+		for k = 1:neuronsPerLayer(layer)
+			ni = ni - 1;
+            if ni == 0
+                index = k;
+            end
+		end
+	end
+end
+
+function indexes = getIndexesForLayer(layer)
+    global neuronsPerLayer
+    if (layer == 1)
+        indexes = 1;
+    else
+        aux = sum(neuronsPerLayer(1:layer-1));
+    end
+    indexes = aux+1;
 end
 
 % Converts a number to its size in bits

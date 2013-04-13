@@ -73,12 +73,24 @@ function prepareDeltas(n, ni, inputIndex)
 		% if (err < delta)
 		% 	err = 0;
 		% end
-	else
+    else
+         % gets the index in the layer for the given node index
+        index = util.getNodeIndex(ni);
+        % gets the indexes of the nodes in the upper layer
+        indexes = util.getIndexesForLayer(layer+1);
+        nextLayersWeights = zeros(neuronsPerLayer(layer+1),length(weights(1)));
+        for i=indexes:neuronsPerLayer(layer+1)
+            nextLayersWeights(i-indexes+1,:) = weights(i);
+        end
 		% Step 5 on book
-		err = sum(neuronWeights .* deltas(:, layer + 1)'); % Check This
+        added = 0;
+        for i=1:neuronsPerLayer(layer+1)
+            %the index is +1 because of the biased input weight
+            added = nextLayersWeights(i,index+1)*deltas(indexes+i-1);
+        end
+		err = added; % Check This
 	end
-	deltas(1, layer) = -1;
-	deltas(layerIndex + 1, layer) = gprima .* err;
+	deltas(ni) = gprima .* err;
 end
 
 function fixWeights(n, ni, inputIndex)
