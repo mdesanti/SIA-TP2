@@ -36,14 +36,14 @@ global toCompute
 toCompute = funcs.xor;
 global func;
 global errs;
-errs = zeros(10000,4);
+errs = [];
 global errI;
-errI = ones(4,1);
+errI = [];
 func = funcs.sigmoide;
 
 % Network definition.
 global neuronsPerLayer;
-neuronsPerLayer = [ 1 ];
+neuronsPerLayer = [ 2 1 ];
 
 % Results of all the network, indexed by neuron
 global neuronResult;

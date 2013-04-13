@@ -57,7 +57,12 @@ function networkPrepare(n)
 			layerForNeuron(i) = layer;
             i = i + 1;
 		end
-	end
+    end
+    
+    global errI;
+    global errs;
+    errs = zeros(1000,4,neuronCount);
+    errI = ones(4,neuronCount);
 end
 
 % Retunrs the index of the node in the layer
