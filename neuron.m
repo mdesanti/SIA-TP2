@@ -9,7 +9,6 @@ end
 function x = neuronEval(in)
 	global neuronWeights
 	global func
-    dbstop if error
 	result = sum(neuronWeights(1:length(in)) .* in);
 	x = func(result);
 end
@@ -88,20 +87,20 @@ function prepareDeltas(n, ni, inputIndex)
         for i = nextLayerFirstNodeIndex: nextLayerFirstNodeIndex+nextLayerNodeCount - 1
             %the index is +1 because of the biased input weight
             li = layerIndexForNeuron(i); % Index on layer for this neuron
-            added = added + weights(i,layerIndex) * deltas(li, layer + 1);
+            added = added + weights(i,layerIndex + 1) * deltas(li, layer + 1);
         end
 		err = added; % Check This
     end
     
     % Store error history
-    iSubIndex = mod(inputIndex - 1, 4) + 1;
+    iSubIndex = mod(inputIndex - 1, 2^n) + 1;
     errs(errI(iSubIndex, ni),iSubIndex, ni) = err;
     errI(iSubIndex,ni) = errI(iSubIndex,ni) + 1;
-    
+%     
     if (abs(err) < delta)
         err = 0;
     end
-    deltas(layerIndex, layer) = err;
+    deltas(layerIndex, layer) = gprima * err;
 end
 
 function fixWeights(n, ni, inputIndex)
@@ -112,7 +111,7 @@ function fixWeights(n, ni, inputIndex)
 	global deltas
 	global layerIndexForNeuron
 	global layerForNeuron
-	global neuronsPerLayer
+	global neuronsPerLayer 
 	global weightsPerLayer
 
 	neuronWeights = weights(ni, :);
