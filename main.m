@@ -25,11 +25,11 @@ network = neuralNetwork
 global delta;
 delta = 0.01;
 global eta;
-eta = 0.015;
+eta = 0.5
 global beta;
-beta = 100;
+beta = 1;
 global N;
-N = 1000;
+N = 10000;
 
 % Weights of all the network, indexed by neuron
 global weights;
