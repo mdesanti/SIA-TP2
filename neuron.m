@@ -92,15 +92,17 @@ function prepareDeltas(n, ni, inputIndex)
 		err = added; % Check This
     end
     
-    % Store error history
-    iSubIndex = mod(inputIndex - 1, 2^n) + 1;
-    errs(errI(iSubIndex, ni),iSubIndex, ni) = err;
-    errI(iSubIndex,ni) = errI(iSubIndex,ni) + 1;
+    
 %     
     if (abs(err) < delta)
         err = 0;
     end
     deltas(layerIndex, layer) = gprima * err;
+    
+    % Store error history
+    iSubIndex = mod(inputIndex - 1, 2^n) + 1;
+    errs(errI(iSubIndex, ni),:,iSubIndex, ni) = neuronWeights;
+    errI(iSubIndex,ni) = errI(iSubIndex,ni) + 1;
 end
 
 function fixWeights(n, ni, inputIndex)

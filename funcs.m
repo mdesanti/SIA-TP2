@@ -19,16 +19,17 @@ end
 
 function x = sigmoide(in)
 	global beta
-	x = (tanh(beta*in) + 1)/2;
+	x = 1/(1+exp(-in));
 end
 
 function x = derivsigmoide(in)
 	global beta
-	x = 1/2 * beta * sec(beta*in)^2;
+    y = sigmoide(in);
+	x = y * (1 - y);
 end
 
 function x = lineal(in)
-
+    
 end
 
 function x = andF(in)

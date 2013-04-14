@@ -19,7 +19,7 @@ function x = eval(in)
     neuronCount = sum(neuronsPerLayer);
     inputForLayer = zeros(1, n + 1, length(neuronsPerLayer)+1);
 	inputForLayer(1,2:n,1) = in;
-    inputForLayer(:,1,:) = -1;
+    inputForLayer(:,1,:) = 1;
     
     for ni = 1:neuronCount
         neuron.runInput(n, ni, 1);
@@ -32,6 +32,7 @@ function retrain(n)
     global neuron
     global util
 	global neuronsPerLayer   
+    global errs
     
     global N
 
@@ -56,8 +57,8 @@ function retrain(n)
 			end
         end
         
-        if mod(i, 5000) == 0
-           i
+        if mod(i, 500) == 0
+           plot(errs(:,:,neuronCount));figure(gcf)
         end
 	end
 end
