@@ -33,7 +33,7 @@ function networkPrepare(n)
 	inputForLayer = zeros(2^n, max(neuronsPerLayer)+1, length(neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
 	inputForLayer(:,1:n+1,1) = util.generateRandomInputs(n);
 	for i = 2:length(neuronsPerLayer) + 1
-		inputForLayer(:,1,i) = -1;
+		inputForLayer(:,1,i) = 1;
 	end
 
 	% Prepares the deltas matrix
@@ -62,7 +62,7 @@ function networkPrepare(n)
     global errI;
     global errs;
     global N;
-    errs = zeros(N,2^n,neuronCount);
+    errs = zeros(N, n + 1,2^n,neuronCount);
     errI = ones(2^n,neuronCount);
 end
 
@@ -120,7 +120,7 @@ function y = generateRandomInputs(n)
 	x = zeros(max,n+1);
 	for i=0:max-1
 		out = binary2vector(i,n);
-		x(k,1) = -1;
+		x(k,1) = 1;
 		x(k,2:length(out)+1) = out;
 		k = k + 1;
 	end
