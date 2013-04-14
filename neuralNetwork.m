@@ -54,7 +54,11 @@ function retrain(n)
 			for ni = neuronCount:-1:1
 				neuron.fixWeights(n, ni, inputIndex);
 			end
-		end
+        end
+        
+        if mod(i, 5000) == 0
+           i
+        end
 	end
 end
 

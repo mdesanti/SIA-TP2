@@ -62,8 +62,8 @@ function networkPrepare(n)
     global errI;
     global errs;
     global N;
-    errs = zeros(N,4,neuronCount);
-    errI = ones(4,neuronCount);
+    errs = zeros(N,2^n,neuronCount);
+    errI = ones(2^n,neuronCount);
 end
 
 % Retunrs the index of the node in the layer
