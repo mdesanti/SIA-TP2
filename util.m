@@ -58,9 +58,9 @@ function networkPrepare(n)
     
     logging.errors = zeros(network.N,2^n,network.neuronCount);
     logging.errorIndexes = ones(2^n,network.neuronCount);
-    logging.lastError = zeros(2^n);
-    logging.currentError = zeros(2^n);
-    logging.errorRepetition = zeros(2^n);
+    logging.lastError = 0;
+    logging.currentError = 0;
+    logging.errorRepetition = 0;
 end
 
 % Retunrs the index of the node in the layer

@@ -36,6 +36,7 @@ function retrain(n)
     i = 1;
     totalErr = [];
     aux = 0;
+    firstIteration = false;
 	while(~finished)
 		% For every input
 		for inputIndex = 1:2^n
@@ -52,47 +53,57 @@ function retrain(n)
 				neuron.fixWeights(n, ni, inputIndex);
             end
 
-            deltaError = logging.currentError(inputIndex) - logging.lastError(inputIndex);            
-            if (abs(logging.errorRepetition(inputIndex)) < 100)
-                if (deltaError > 0.1)    
-                   logging.errorRepetition(inputIndex) = logging.errorRepetition(inputIndex) - 1;
-                   deltaEta = -0.5 * network.eta;
-                   logging.errorRepetition(inputIndex) = 0;
-                elseif (deltaError < -0.1)
-                   logging.errorRepetition(inputIndex) = logging.errorRepetition(inputIndex) + 1;
-                end
-            else
-                if (deltaError > 0) 
-                    deltaEta = 0.1 * network.eta;
-                    logging.errorRepetition(inputIndex) = 0;
-                    network.eta = network.eta + deltaEta;
-                end
-            end
         end
 
         
          if mod(i, 500) == 0
              figure(1)
             plot(logging.errors(:,:,neuronCount));
-            network.eta
          end
         
-
-        if mod(i, 50) == 1
-            for inputIndex = 1:2^n
-                % Eval down-up...
-                for ni = 1:neuronCount
-                    neuron.runInput(n, ni, inputIndex);
-                end
-                % Prepare up-down...
-                for ni = neuronCount:-1:1
-                    neuron.prepareDeltas(n, ni, inputIndex);
-                end
+         
+         for inputIndex = 1:2^n
+            % Eval down-up...
+            for ni = 1:neuronCount
+                neuron.runInput(n, ni, inputIndex);
             end
-            aux = sum(network.err.^2)/length(network.err);
-            totalErr = [totalErr;aux];
-            figure(2)
+            % Prepare up-down...
+            for ni = neuronCount:-1:1
+                neuron.prepareDeltas(n, ni, inputIndex);
+            end
+        end
+        aux = sum(network.err.^2)/length(network.err);
+        totalErr = [totalErr;aux];
+        figure(2)
+
+
+
+
+        
+
+
+        if mod(i, 25) == 1
+            
+%             if (~firstIteration)
+%                 logging.lastError = logging.currentError;
+%                 logging.currentError = sum(totalErr);
+% 
+%                 deltaError = logging.currentError - logging.lastError;            
+%                 if (deltaError > 0.00001)    
+%                    deltaEta = -0.9 * network.eta;
+%                    network.eta = network.eta + deltaEta;
+%                    eta = network.eta
+%                 else
+%                    deltaEta = 0.1;
+%                    network.eta = network.eta + deltaEta;
+%                    eta = network.eta
+%                 end
+%             else
+%                firstIteration = true;
+%             end
+            
             plot(totalErr);
+            
             if aux < network.delta
                 finished = 1;
             end
