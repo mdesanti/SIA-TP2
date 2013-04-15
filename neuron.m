@@ -72,6 +72,9 @@ function prepareDeltas(n, ni, inputIndex)
     end
     
     network.deltas(layerIndex, layer) = gprima * error;
+     
+    logging.lastError(inputIndex) = logging.currentError(inputIndex);
+    logging.currentError(inputIndex) = error;
     
     % Store error history
     iSubIndex = mod(inputIndex - 1, 2^n) + 1;

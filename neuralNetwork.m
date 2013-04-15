@@ -46,14 +46,30 @@ function retrain(n)
 				neuron.prepareDeltas(n, ni, inputIndex);
 			end
 			% Fix weights up-down...
-			for ni = neuronCount:-1:1
+			for ni = 1:neuronCount
 				neuron.fixWeights(n, ni, inputIndex);
-			end
+            end
+
+            
+            deltaError = logging.currentError(inputIndex) - logging.lastError(inputIndex);
+            if (deltaError > 0) 
+               deltaEta = -0.0005 * network.eta;
+            else
+               deltaEta = 0.0012 * network.eta;
+            end
+            network.eta = network.eta + deltaEta;
+
+           
         end
         
         if mod(i, 500) == 0
            plot(logging.errors(:,:,neuronCount));figure(gcf)
+           network.eta
         end
+        
+        
+        
+        
         finished = 1;
         for e=1:length(network.err)
            if(network.err(e) > network.delta)
