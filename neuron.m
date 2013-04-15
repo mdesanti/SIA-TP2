@@ -104,7 +104,7 @@ function prepareDeltas(n, ni, inputIndex)
     
     % Store error history
     iSubIndex = mod(inputIndex - 1, 2^n) + 1;
-    errs(errI(iSubIndex, ni),:,iSubIndex, ni) = neuronWeights;
+    errs(errI(iSubIndex, ni),iSubIndex, ni) = err;
     errI(iSubIndex,ni) = errI(iSubIndex,ni) + 1;
 end
 
