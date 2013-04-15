@@ -6,41 +6,32 @@ end
 
 function x = eval(in)
     global neuron
-
-	global weights
-	global neuronsPerLayer
-    global inputForLayer
+    global network
 
     
-    n = length(weights(1,:));
+    n = length(network.weights(1,:));
     
-    
-    
-    neuronCount = sum(neuronsPerLayer);
-    inputForLayer = zeros(1, n + 1, length(neuronsPerLayer)+1);
-	inputForLayer(1,2:n,1) = in;
-    inputForLayer(:,1,:) = 1;
+    neuronCount = sum(network.neuronsPerLayer);
+    network.inputForLayer = zeros(1, n + 1, length(network.neuronsPerLayer)+1);
+	network.inputForLayer(1,2:n,1) = in;
+    network.inputForLayer(:,1,:) = 1;
     
     for ni = 1:neuronCount
         neuron.runInput(n, ni, 1);
     end
     
-    x = inputForLayer(1,2,length(neuronsPerLayer) + 1);
+    x = network.inputForLayer(1,2,length(network.neuronsPerLayer) + 1);
 end
 
 function retrain(n) 
     global neuron
     global util
-	global neuronsPerLayer   
-    global errs
-    global err;
-    global delta
+    global logging
+    global network
     
-    global N
-
 	util.networkPrepare(n);
 
-	neuronCount = sum(neuronsPerLayer);
+	neuronCount = sum(network.neuronsPerLayer);
     finished = 0;
     i = 1;
 	while(~finished)
@@ -61,23 +52,24 @@ function retrain(n)
         end
         
         if mod(i, 500) == 0
-           plot(errs(:,:,neuronCount));figure(gcf)
+           plot(logging.errors(:,:,neuronCount));figure(gcf)
         end
         finished = 1;
-        for e=1:length(err)
-           if(err(e) > delta)
+        for e=1:length(network.err)
+           if(network.err(e) > network.delta)
                finished = 0;
+               break;
            end
         end
-        i = i +1;
+        i = i + 1;
 	end
 end
 
 
 
 function train(n)
-	global weights
-	weights = [];
+	global network
+	network.weights = [];
 	retrain(n);
 end
 
