@@ -62,7 +62,7 @@ function networkPrepare(n)
     global errI;
     global errs;
     global N;
-    errs = zeros(N, n + 1,2^n,neuronCount);
+    errs = zeros(N,2^n,neuronCount);
     errI = ones(2^n,neuronCount);
 end
 
