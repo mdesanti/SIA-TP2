@@ -63,7 +63,7 @@ function retrain(n)
                     neuron.prepareDeltas(n, ni, inputIndex);
                 end
             end
-            aux = sum(err.^2)/length(err);
+            aux = sum(network.err.^2)/length(network.err);
             totalErr = [totalErr;aux];
             plot(totalErr);figure(gcf)
         end
@@ -71,7 +71,7 @@ function retrain(n)
         %if mod(i, 500) == 0
          %  plot(errs(:,:,neuronCount));figure(gcf)
         %end
-        if aux < delta
+        if aux < network.delta
             finished = 1;
         end
         i = i + 1;
