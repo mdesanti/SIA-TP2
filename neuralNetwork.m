@@ -52,43 +52,31 @@ function retrain(n)
 				neuron.fixWeights(n, ni, inputIndex);
             end
 
-            
-            deltaError = logging.currentError(inputIndex) - logging.lastError(inputIndex);
-            
+            deltaError = logging.currentError(inputIndex) - logging.lastError(inputIndex);            
             if (abs(logging.errorRepetition(inputIndex)) < 100)
-                if (deltaError > 0)    
+                if (deltaError > 0.1)    
                    logging.errorRepetition(inputIndex) = logging.errorRepetition(inputIndex) - 1;
-                else
+                   deltaEta = -0.5 * network.eta;
+                   logging.errorRepetition(inputIndex) = 0;
+                elseif (deltaError < -0.1)
                    logging.errorRepetition(inputIndex) = logging.errorRepetition(inputIndex) + 1;
                 end
             else
                 if (deltaError > 0) 
-                    deltaEta = -0.05 * network.eta;
-                else
-                    deltaEta = 0.12 * network.eta;
+                    deltaEta = 0.1 * network.eta;
+                    logging.errorRepetition(inputIndex) = 0;
+                    network.eta = network.eta + deltaEta;
                 end
-                network.eta = network.eta + deltaEta;
             end
-
-           
         end
 
         
-%         if mod(i, 500) == 0
-%            plot(logging.errors(:,:,neuronCount));figure(gcf)
-%            network.eta
-%         end
+         if mod(i, 500) == 0
+             figure(1)
+            plot(logging.errors(:,:,neuronCount));
+            network.eta
+         end
         
-        
-        
-        
-        finished = 1;
-        for e=1:length(network.err)
-           if(network.err(e) > network.delta)
-               finished = 0;
-               break;
-           end
-        end
 
         if mod(i, 50) == 1
             for inputIndex = 1:2^n
@@ -103,7 +91,11 @@ function retrain(n)
             end
             aux = sum(network.err.^2)/length(network.err);
             totalErr = [totalErr;aux];
-            plot(totalErr);figure(gcf)
+            figure(2)
+            plot(totalErr);
+            if aux < network.delta
+                finished = 1;
+            end
         end
         i = i + 1;
     end
