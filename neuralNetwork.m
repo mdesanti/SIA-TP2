@@ -52,7 +52,6 @@ function retrain(n)
 				neuron.fixWeights(n, ni, inputIndex);
 			end
         end
-<<<<<<< HEAD
         if mod(i, 500) == 1
             for inputIndex = 1:2^n
                 % Eval down-up...
