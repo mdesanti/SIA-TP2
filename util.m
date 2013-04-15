@@ -19,7 +19,10 @@ function networkPrepare(n)
 	global layerForNeuron
 	global inputForLayer
 	global layerIndexForNeuron
+    global err
 
+    err = zeros(2^n);
+    
 	neuronCount = sum(neuronsPerLayer);
 
 	% Initializes the weight only if its the first time.

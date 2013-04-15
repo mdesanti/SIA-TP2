@@ -31,6 +31,9 @@ beta = 100;
 global N;
 N = 1000;
 
+% Global errors
+global err
+err = [];
 % Weights of all the network, indexed by neuron
 global weights;
 weights = [];
@@ -47,7 +50,7 @@ func = funcs.sigmoide;
 
 % Network definition.
 global neuronsPerLayer;
-neuronsPerLayer = [ 2 1 ];
+neuronsPerLayer = [ 3 1 ];
 % Results of all the network, indexed by neuron
 global neuronResult;
 neuronResult = [];

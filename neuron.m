@@ -59,6 +59,8 @@ function prepareDeltas(n, ni, inputIndex)
     
     global errs;
     global errI;
+    global err;
+    
 
 	neuronWeights = weights(ni, :);
 
@@ -76,7 +78,8 @@ function prepareDeltas(n, ni, inputIndex)
 		result = inputForLayer(inputIndex,layerIndex + 1,layer + 1);
         inWithNoBias = in(2:length(in)); % TODO: Take this, it's unsafe!
 		expected = toCompute(inWithNoBias);
-		err = (expected - result); % Check This
+		error = (expected - result); % Check This
+        err(inputIndex) = error;
     else
         nextLayerNodeCount = neuronsPerLayer(layer + 1);
         % gets the indexes of the nodes in the upper layer
@@ -89,15 +92,15 @@ function prepareDeltas(n, ni, inputIndex)
             li = layerIndexForNeuron(i); % Index on layer for this neuron
             added = added + weights(i,layerIndex + 1) * deltas(li, layer + 1);
         end
-		err = added; % Check This
+		error = added; % Check This
     end
     
     
 %     
-    if (abs(err) < delta)
-        err = 0;
+    if (abs(error) < delta)
+        error = 0;
     end
-    deltas(layerIndex, layer) = gprima * err;
+    deltas(layerIndex, layer) = gprima * error;
     
     % Store error history
     iSubIndex = mod(inputIndex - 1, 2^n) + 1;

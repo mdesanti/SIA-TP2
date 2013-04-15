@@ -6,6 +6,7 @@ function func = func()
     func.and = @andF;
     func.or = @orF;
     func.xor = @xorF;
+    func.simmetry = @simmetry;
 end
 
 
@@ -51,4 +52,14 @@ function x = xorF(in)
 		result = bitxor(result, in(i));
 	end
 	x = result;
+end
+
+function x = simmetry(in)
+    other = in(length(in):-1:1);
+    x = 1;
+    for i=1:length(in)
+        if other(i) ~= in(i)
+            x = 0;
+        end
+    end
 end

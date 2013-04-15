@@ -33,14 +33,17 @@ function retrain(n)
     global util
 	global neuronsPerLayer   
     global errs
+    global err;
+    global delta
     
     global N
 
 	util.networkPrepare(n);
 
 	neuronCount = sum(neuronsPerLayer);
-
-	for i=1:N
+    finished = 0;
+    i = 1;
+	while(~finished)
 		% For every input
 		for inputIndex = 1:2^n
 			% Eval down-up...
@@ -60,6 +63,13 @@ function retrain(n)
         if mod(i, 500) == 0
            plot(errs(:,:,neuronCount));figure(gcf)
         end
+        finished = 1;
+        for e=1:length(err)
+           if(err(e) > delta)
+               finished = 0;
+           end
+        end
+        i = i +1;
 	end
 end
 
