@@ -78,7 +78,6 @@ function prepareDeltas(n, ni, inputIndex)
     
     % Store error history
     iSubIndex = mod(inputIndex - 1, 2^n) + 1;
-    
     errorIndex = logging.errorIndexes(iSubIndex, ni);
     logging.errors(errorIndex,iSubIndex, ni) = error;
     logging.errorIndexes(iSubIndex, ni) = errorIndex + 1;

@@ -34,6 +34,8 @@ function retrain(n)
 	neuronCount = sum(network.neuronsPerLayer);
     finished = 0;
     i = 1;
+    totalErr = [];
+    aux = 0;
 	while(~finished)
 		% For every input
 		for inputIndex = 1:2^n
@@ -61,11 +63,12 @@ function retrain(n)
 
            
         end
+
         
-        if mod(i, 500) == 0
-           plot(logging.errors(:,:,neuronCount));figure(gcf)
-           network.eta
-        end
+%         if mod(i, 500) == 0
+%            plot(logging.errors(:,:,neuronCount));figure(gcf)
+%            network.eta
+%         end
         
         
         
@@ -77,8 +80,24 @@ function retrain(n)
                break;
            end
         end
+
+        if mod(i, 50) == 1
+            for inputIndex = 1:2^n
+                % Eval down-up...
+                for ni = 1:neuronCount
+                    neuron.runInput(n, ni, inputIndex);
+                end
+                % Prepare up-down...
+                for ni = neuronCount:-1:1
+                    neuron.prepareDeltas(n, ni, inputIndex);
+                end
+            end
+            aux = sum(network.err.^2)/length(network.err);
+            totalErr = [totalErr;aux];
+            plot(totalErr);figure(gcf)
+        end
         i = i + 1;
-	end
+    end
 end
 
 
