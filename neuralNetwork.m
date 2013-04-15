@@ -54,12 +54,21 @@ function retrain(n)
 
             
             deltaError = logging.currentError(inputIndex) - logging.lastError(inputIndex);
-            if (deltaError > 0) 
-               deltaEta = -0.0005 * network.eta;
+            
+            if (abs(logging.errorRepetition(inputIndex)) < 100)
+                if (deltaError > 0)    
+                   logging.errorRepetition(inputIndex) = logging.errorRepetition(inputIndex) - 1;
+                else
+                   logging.errorRepetition(inputIndex) = logging.errorRepetition(inputIndex) + 1;
+                end
             else
-               deltaEta = 0.0012 * network.eta;
+                if (deltaError > 0) 
+                    deltaEta = -0.05 * network.eta;
+                else
+                    deltaEta = 0.12 * network.eta;
+                end
+                network.eta = network.eta + deltaEta;
             end
-            network.eta = network.eta + deltaEta;
 
            
         end

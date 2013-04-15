@@ -75,6 +75,7 @@ function prepareDeltas(n, ni, inputIndex)
      
     logging.lastError(inputIndex) = logging.currentError(inputIndex);
     logging.currentError(inputIndex) = error;
+
     
     % Store error history
     iSubIndex = mod(inputIndex - 1, 2^n) + 1;
