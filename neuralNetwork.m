@@ -43,6 +43,8 @@ function retrain(n)
 	neuronCount = sum(neuronsPerLayer);
     finished = 0;
     i = 1;
+    totalErr = [];
+    aux = 0;
 	while(~finished)
 		% For every input
 		for inputIndex = 1:2^n
@@ -59,15 +61,27 @@ function retrain(n)
 				neuron.fixWeights(n, ni, inputIndex);
 			end
         end
-        
-        if mod(i, 500) == 0
-           plot(errs(:,:,neuronCount));figure(gcf)
+        if mod(i, 500) == 1
+            for inputIndex = 1:2^n
+                % Eval down-up...
+                for ni = 1:neuronCount
+                    neuron.runInput(n, ni, inputIndex);
+                end
+                % Prepare up-down...
+                for ni = neuronCount:-1:1
+                    neuron.prepareDeltas(n, ni, inputIndex);
+                end
+            end
+            aux = sum(err.^2)/length(err);
+            totalErr = [totalErr;aux];
+            plot(totalErr);figure(gcf)
         end
-        finished = 1;
-        for e=1:length(err)
-           if(err(e) > delta)
-               finished = 0;
-           end
+        
+        %if mod(i, 500) == 0
+         %  plot(errs(:,:,neuronCount));figure(gcf)
+        %end
+        if aux < delta
+            finished = 1;
         end
         i = i +1;
 	end
