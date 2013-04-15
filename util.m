@@ -12,70 +12,60 @@ end
 % Models the network
 function networkPrepare(n)
     global util
-	global weights
-	global deltas
-	global neuronsPerLayer
-	global weightsPerLayer
-	global layerForNeuron
-	global inputForLayer
-	global layerIndexForNeuron
-    global err
+    global network
+    global logging
 
-    err = zeros(2^n);
+    network.err = zeros(2^n);
     
-	neuronCount = sum(neuronsPerLayer);
+	network.neuronCount = sum(network.neuronsPerLayer);
 
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
-	if isempty(weights)
-        weights = ((2*rand(neuronCount,max(max(neuronsPerLayer)+1, n+1))-1)/2);
+	if isempty(network.weights)
+        network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)/2);
     end
 
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
-	inputForLayer = zeros(2^n, max(neuronsPerLayer)+1, length(neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-	inputForLayer(:,1:n+1,1) = util.generateRandomInputs(n);
-	for i = 2:length(neuronsPerLayer) + 1
-		inputForLayer(:,1,i) = 1;
+	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+	network.inputForLayer(:,1:n+1,1) = util.generateRandomInputs(n);
+	for i = 2:length(network.neuronsPerLayer) + 1
+		network.inputForLayer(:,1,i) = 1;
 	end
 
 	% Prepares the deltas matrix
-	deltas = zeros(max(neuronsPerLayer), sum(neuronsPerLayer));
+	network.deltas = zeros(max(network.neuronsPerLayer), sum(network.neuronsPerLayer));
 	
 	% Generates an index to know how many weights has each layer
-	weightsPerLayer = zeros(neuronCount);
-	for layer = 1:length(neuronsPerLayer)
+	network.weightsPerLayer = zeros(network.neuronCount);
+	for layer = 1:length(network.neuronsPerLayer)
 		if (layer == 1)
-			weightsPerLayer(layer) = 1 + n;
+			network.weightsPerLayer(layer) = 1 + n;
 		else
-			weightsPerLayer(layer) = 1 + neuronsPerLayer(layer - 1);
+			network.weightsPerLayer(layer) = 1 + network.neuronsPerLayer(layer - 1);
 		end
 	end
 
 	% Helps to know for a given node index to which layer it belongs.
 	i = 1;
-	for layer = 1:length(neuronsPerLayer)
-		for k = 1:neuronsPerLayer(layer)
-			layerIndexForNeuron(i) = k;
-			layerForNeuron(i) = layer;
+	for layer = 1:length(network.neuronsPerLayer)
+		for k = 1:network.neuronsPerLayer(layer)
+			network.layerIndexForNeuron(i) = k;
+			network.layerForNeuron(i) = layer;
             i = i + 1;
 		end
     end
     
-    global errI;
-    global errs;
-    global N;
-    errs = zeros(N,2^n,neuronCount);
-    errI = ones(2^n,neuronCount);
+    logging.errors = zeros(network.N,2^n,network.neuronCount);
+    logging.errorIndexes = ones(2^n,network.neuronCount);
 end
 
 % Retunrs the index of the node in the layer
 % i.e. if the node is the first, second, third, etc. in the layer
 function index = getNodeIndex(ni)
-	global neuronsPerLayer
-
-    for layer = 1:length(neuronsPerLayer)
-		for k = 1:neuronsPerLayer(layer)
+	global network
+    for layer = 1:length(network.neuronsPerLayer)
+		for k = 1:network.neuronsPerLayer(layer)
 			ni = ni - 1;
             if ni == 0
                 index = k;
@@ -85,11 +75,11 @@ function index = getNodeIndex(ni)
 end
 
 function indexes = getIndexesForLayer(layer)
-    global neuronsPerLayer
+    global network
     if (layer == 1)
         indexes = 1;
     else
-        indexes = sum(neuronsPerLayer(1:layer-1)) + 1;
+        indexes = sum(network.neuronsPerLayer(1:layer-1)) + 1;
     end
 
 end

@@ -19,58 +19,23 @@ neuron = neuronFile
 
 % Functions related to the network
 global network
+
 network = neuralNetwork
 
 % Control variables
-global delta;
-delta = 0.01;
-global eta;
-eta = 0.5
-global beta;
-beta = 1;
-global N;
-N = 10000;
+network.delta = 0.01;
+network.eta = 0.5;
+network.beta = 1;
+network.N = 10000;
 
-% Global errors
-global err
-err = [];
-% Weights of all the network, indexed by neuron
-global weights;
-weights = [];
+network.weights = [];
+network.neuronsPerLayer = [3 1];
 
-% Parameters to use when computing
-global toCompute
-toCompute = funcs.xor;
-global func;
-global errs;
-errs = [];
-global errI;
-errI = [];
-func = funcs.sigmoide;
+network.toCompute = funcs.xor;
+network.func = funcs.sigmoide;
 
-% Network definition.
-global neuronsPerLayer;
-neuronsPerLayer = [ 3 1 ];
-% Results of all the network, indexed by neuron
-global neuronResult;
-neuronResult = [];
+global logging
 
-% Pre-calculated data related to the layers and neurons.
-global layerForNeuron;
-global layerIndexForNeuron;
-global deltas;
-
-layerForNeuron = [];
-layerIndexForNeuron = [];
-deltas = [];
-
-% Pre-calculated inputs and weights.
-global weightsPerLayer;
-global inputForLayer;
-
-weightsPerLayer = [];
-inputForLayer = [];
-
-% Array used as a pointer to the weights of a single node.
-global neuronWeights;
-
+logging.errors = [];
+logging.errorIndexes = [];
+logging.modes = [1 0];
