@@ -34,9 +34,8 @@ network.N = 10000;
 
 network.intervals = [-1 1];
 network.weights = [];
-network.neuronsPerLayer = [3 1];
 
-network.problem = problem.xor(2, functs.sigmoide);
+network.problem = problem.xor(5, functs.sigmoide);
 
 global logging
 
