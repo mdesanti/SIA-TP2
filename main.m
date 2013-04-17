@@ -1,17 +1,22 @@
-% XOR OUTPUT FOR N = 3 [0 1 1 0 1 0 0 1];
-
 % Utility Functions
 
 utilsFile = util;
-funcsFile = funcs;
+functsFile = functs;
+problemFile = problem;
 neuronFile = neuron;
+networkFile = neuralNetwork;
 
-global util
-util = utilsFile
+% Utility methods
+global util;
+util = utilsFile;
 
 % Functions used to evaluate inputs or to compute them correctly
-global funcs
-funcs = funcsFile
+global functs
+functs = functsFile
+
+% Problems to solve
+global problem
+problem = problemFile 
 
 % Functions related to a single neuron
 global neuron
@@ -19,20 +24,19 @@ neuron = neuronFile
 
 % Functions related to the network
 global network
-
-network = neuralNetwork
+network = networkFile
 
 % Control variables
-network.delta = 0.01;
+network.delta = 0.001;
 network.eta = 0.5;
 network.beta = 1;
 network.N = 10000;
 
+network.intervals = [-1 1];
 network.weights = [];
 network.neuronsPerLayer = [3 1];
 
-network.toCompute = funcs.xor;
-network.func = funcs.sigmoide;
+network.problem = problem.xor(2, functs.sigmoide);
 
 global logging
 
