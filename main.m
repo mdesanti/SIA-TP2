@@ -36,6 +36,7 @@ network.intervals = [-1 1];
 network.weights = [];
 network.neuronsPerLayer = [3 1];
 
+network.inputGenerator = util.randomInput;
 network.problem = problem.xor(2, functs.sigmoide);
 
 global logging
