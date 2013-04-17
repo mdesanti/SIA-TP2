@@ -22,8 +22,8 @@ function networkPrepare(n)
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
 	if isempty(network.weights)
-        network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)/2);
-    end
+    network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)/2);
+  end
 
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
@@ -112,13 +112,15 @@ end
 
 % Generates inputs for the network
 function y = generateRandomInputs(n)
+	global network
+	intervalDiff = abs(network.intervals(1) - network.intervals(2));
 	max = 2^n;
 	k = 1;
 	x = zeros(max,n+1);
 	for i=0:max-1
 		out = binary2vector(i,n);
 		x(k,1) = 1;
-		x(k,2:length(out)+1) = (out - 0.5) * 2;
+		x(k,2:length(out)+1) = (out - 0.5) * intervalDiff;
 		k = k + 1;
 	end
 	y = x;
