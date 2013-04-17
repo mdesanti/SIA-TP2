@@ -35,6 +35,7 @@ network.N = 10000;
 network.intervals = [-1 1];
 network.weights = [];
 
+network.inputGenerator = util.randomInput;
 network.problem = problem.xor(5, functs.sigmoide);
 
 global logging
