@@ -1,10 +1,14 @@
 function funct = funct()
-    funct.sigmoide.f = @sigmoide;
-    funct.sigmoide.df = @derivSigmoide;
+    funct.sigmoide.f = @tanhf;
+    funct.sigmoide.df = @tanhdf;
     funct.step.f = @step;
     funct.step.df = @derivStep;
     funct.lineal.f = @lineal;
     funct.lineal.df = @derivStep;
+    funct.exp.f = @expf;
+    funct.exp.df = @expdf;
+    funct.tanh.f = @tanhf;
+    funct.tanh.df = @tanhdf;
 end
 
 function x = step(in)
@@ -20,19 +24,31 @@ function x = derivStep(in)
 	x = 1;
 end
 
-function x = sigmoide(in)
+function x = tanhf(in)
 	global network
 	intervalDiff = abs(network.intervals(1) - network.intervals(2));
 	x = tanh(in) * intervalDiff / 2;
 end
 
-function x = derivSigmoide(in)
+function x = tanhdf(in)
 	global beta
 	global network
   intervalDiff = abs(network.intervals(1) - network.intervals(2));
 	x = sech(in).^2  * intervalDiff / 2; %intervalDiff * (y * (1 - y)) - 0.5;
 end
 
+function x = expf(in)
+    global network
+    intervalDiff = abs(network.intervals(1) - network.intervals(2));
+    x = (1./(1+exp(-in)) - 0.5) .* intervalDiff;
+end
+
+function x = expdf(in)
+    global network
+    intervalDiff = abs(network.intervals(1) - network.intervals(2));
+    x = intervalDiff * exp(in) / (exp(in) + 1)^2;
+end
+
 function x = lineal(in)
-    % TODO: Implement this
+
 end

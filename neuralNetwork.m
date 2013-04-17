@@ -130,24 +130,28 @@ function retrain(n)
         oldEta = [oldEta network.eta];
 
         if mod(i, 25) == 0
-            figure(1); 
+            figure(1);
             plot(logging.errors(:,:,neuronCount));
+            title('Error de cada input');
         end
             
         if mod(i, 25) == 0
             figure(2);
             plot(totalErr);
+            title('Error cuadratico medio');
         end
         
         if mod(i, 25) == 0
             figure(3);
             plot(oldEta);
+            title('Eta');
         end
 
         if mod(i, 25) == 0
             figure(4);
             permuted = permute(network.oldWeights, [2 3 1]);
             plot(permuted(:,:,neuronCount)');
+            title('Pesos de las aristas');
         end
 
         
