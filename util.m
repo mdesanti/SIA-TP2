@@ -35,6 +35,7 @@ function networkPrepare(n)
 
 	% Prepares the deltas matrix
 	network.deltas = zeros(max(network.neuronsPerLayer), sum(network.neuronsPerLayer));
+	network.lastDeltaWeights = zeros(network.neuronCount, max(max(network.neuronsPerLayer)+1, n+1)); 
 	
 	% Generates an index to know how many weights has each layer
 	network.weightsPerLayer = zeros(network.neuronCount);
@@ -56,7 +57,7 @@ function networkPrepare(n)
 		end
     end
     
-    logging.errors = zeros(network.N,2^n,network.neuronCount);
+    logging.errors = zeros(1,2^n,network.neuronCount);
     logging.errorIndexes = ones(2^n,network.neuronCount);
     logging.lastError = 0;
     logging.currentError = 0;

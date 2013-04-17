@@ -51,6 +51,9 @@ function prepareDeltas(n, ni, inputIndex)
         inWithNoBias = in(2:length(in)); % TODO: Take this, it's unsafe!
 		expected = network.toCompute(inWithNoBias);
 		error = (expected - result); % Check This
+        if (abs(error) < 0.0001) 
+           error = 0;
+        end
         network.err(inputIndex) = error;
     else
         nextLayerNodeCount = network.neuronsPerLayer(layer + 1);
@@ -65,30 +68,43 @@ function prepareDeltas(n, ni, inputIndex)
             added = added + network.weights(i,layerIndex + 1) * network.deltas(li, layer + 1);
         end
 		error = added; % Check This
+        if (abs(error) < 0.0001) 
+           error = 0;
+        end
     end
     
-    if (abs(error) < network.delta)
-        error = 0;
-    end
     
-    network.deltas(layerIndex, layer) = gprima * error;
+    network.deltas(layerIndex, layer) = (gprima + 0.1) * error;
+    
 
-    
-    % Store error history
-    iSubIndex = mod(inputIndex - 1, 2^n) + 1;
-    logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = error;
-    logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
+    if (logging.enabled)
+        % Store error history
+        iSubIndex = mod(inputIndex - 1, 2^n) + 1;
+        logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = (gprima + 0.1) * error;
+        logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
+    end
 end
 
-function fixWeights(n, ni, inputIndex)
-	global network
 
-	neuronWeights = network.weights(ni, :);
-	layer = network.layerForNeuron(ni);
-	niOnLayer = network.layerIndexForNeuron(ni);
 
-	% Step 6 on book
-	% Check this
-	deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
-	network.weights(ni, :) = neuronWeights + deltaWeight;
+function fixWeights(n, ni, inputIndex, cancelMult)
+    global network
+ 
+    neuronWeights = network.weights(ni, :);
+    layer = network.layerForNeuron(ni);
+    niOnLayer = network.layerIndexForNeuron(ni);
+ 
+    % Step 6 on book
+    % Check this
+    deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
+    
+    if (cancelMult == 0)
+        deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
+    else
+        deltaWeight = 0 + deltaWeight;
+    end
+    
+    network.lastDeltaWeights(ni,:) = deltaWeight;
+    
+    network.weights(ni, :) = neuronWeights + deltaWeight;
 end
