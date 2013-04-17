@@ -9,7 +9,7 @@ end
 function x = neuronEval(in)
 	global network
 	result = sum(network.neuronWeights(1:length(in)) .* in);
-	x = network.func(result);
+	x = network.problem.f(result);
 end
 
 % Runs the input and stores the results for each neuron
@@ -41,7 +41,7 @@ function prepareDeltas(n, ni, inputIndex)
 	weightnum = network.weightsPerLayer(layer);
 	in = network.inputForLayer(inputIndex,1:weightnum,layer);
 	hi = sum(network.neuronWeights(1:length(in)) .* in);
-	gprima = funcs.derivsigmoide(hi); % Check this
+	gprima = network.problem.df(hi); % Check this
 
     
 	if (layer == length(network.neuronsPerLayer))
@@ -49,7 +49,7 @@ function prepareDeltas(n, ni, inputIndex)
         in = network.inputForLayer(inputIndex,1:network.weightsPerLayer(1),1);
 		result = network.inputForLayer(inputIndex,layerIndex + 1,layer + 1);
         inWithNoBias = in(2:length(in)); % TODO: Take this, it's unsafe!
-		expected = network.toCompute(inWithNoBias);
+		expected = network.problem.learnF(inWithNoBias);
 		error = (expected - result); % Check This
         if (abs(error) < 0.0001) 
            error = 0;
@@ -99,7 +99,7 @@ function fixWeights(n, ni, inputIndex, cancelMult)
     deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
     
     if (cancelMult == 0)
-        deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
+        % deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
     else
         deltaWeight = 0 + deltaWeight;
     end

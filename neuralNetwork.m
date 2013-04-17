@@ -7,7 +7,6 @@ end
 function x = eval(in)
     global neuron
     global network
-
     
     n = length(network.weights(1,:));
     

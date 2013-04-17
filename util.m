@@ -118,7 +118,7 @@ function y = generateRandomInputs(n)
 	for i=0:max-1
 		out = binary2vector(i,n);
 		x(k,1) = 1;
-		x(k,2:length(out)+1) = out;
+		x(k,2:length(out)+1) = (out - 0.5) * 2;
 		k = k + 1;
 	end
 	y = x;
