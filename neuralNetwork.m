@@ -53,8 +53,8 @@ function retrain(n)
         % For every input
         logging.enabled = false;
         slice = randperm(2^n);
-%         for inputIndex = slice
-         for inputIndex = 1:2^n
+        for inputIndex = slice
+         % for inputIndex = 1:2^n
 			% Eval down-up...
 			for ni = 1:neuronCount
 				neuron.runInput(n, ni, inputIndex);
