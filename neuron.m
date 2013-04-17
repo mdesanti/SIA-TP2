@@ -73,21 +73,18 @@ function prepareDeltas(n, ni, inputIndex)
         end
     end
     
-    
     network.deltas(layerIndex, layer) = (gprima + 0.1) * error;
-    
-
-    if (logging.enabled)
-        % Store error history
-        iSubIndex = mod(inputIndex - 1, 2^n) + 1;
-        logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = (gprima + 0.1) * error;
-        logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
-    end
+     if (logging.enabled)
+         % Store error history
+         iSubIndex = mod(inputIndex - 1, 2^n) + 1;
+         logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = (gprima + 0.1) * error;
+         logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
+     end
 end
 
 
 
-function fixWeights(n, ni, inputIndex, cancelMult)
+function fixWeights(n, ni, inputIndex, cancelAlpha)
     global network
  
     neuronWeights = network.weights(ni, :);
@@ -98,10 +95,8 @@ function fixWeights(n, ni, inputIndex, cancelMult)
     % Check this
     deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
     
-    if (cancelMult == 0)
+    if (cancelAlpha == 0)
         deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
-    else
-        deltaWeight = 0 + deltaWeight;
     end
     
     network.lastDeltaWeights(ni,:) = deltaWeight;

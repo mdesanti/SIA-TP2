@@ -11,11 +11,11 @@ end
 % Initializes Inputs
 % Models the network
 function networkPrepare(n)
-    global util
-    global network
-    global logging
+  global util
+  global network
+  global logging
 
-    network.err = zeros(2^n);
+  network.err = zeros(2^n,1);
     
 	network.neuronCount = sum(network.neuronsPerLayer);
 
@@ -71,21 +71,20 @@ function index = getNodeIndex(ni)
     for layer = 1:length(network.neuronsPerLayer)
 		for k = 1:network.neuronsPerLayer(layer)
 			ni = ni - 1;
-            if ni == 0
-                index = k;
-            end
+      if ni == 0
+          index = k;
+      end
 		end
 	end
 end
 
 function indexes = getIndexesForLayer(layer)
-    global network
-    if (layer == 1)
-        indexes = 1;
-    else
-        indexes = sum(network.neuronsPerLayer(1:layer-1)) + 1;
-    end
-
+  global network
+  if (layer == 1)
+      indexes = 1;
+  else
+      indexes = sum(network.neuronsPerLayer(1:layer-1)) + 1;
+  end
 end
 
 % Converts a number to its size in bits
