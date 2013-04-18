@@ -55,9 +55,7 @@ function retrain(n)
         
         slice = randperm(2^n);
 
-        slice = slice(1:max(2^n,1));
-
-        for inputIndex = slice
+        inputIndex = slice(1);
             logging.enabled = false;
 			% Eval down-up...
 			for ni = 1:neuronCount
@@ -71,7 +69,7 @@ function retrain(n)
 			for ni = 1:neuronCount
 				neuron.fixWeights(n, ni, inputIndex, cancelAlpha);
             end
-         end
+        
         
          
             logging.enabled = true;
@@ -84,7 +82,7 @@ function retrain(n)
             end
         
             oldTotalErr = totalErr;
-            aux = sum(network.err.^2)./length(network.err);
+            aux = sum(network.err.^2);
             totalErr = [totalErr;aux];
 
 
@@ -98,7 +96,7 @@ function retrain(n)
                currE = logging.currentError;
                lastE = logging.lastError;
                eta = network.eta;
-               if (deltaError > 0)    
+               if (deltaError > 0.01)    
                 deltaEta = -0.5 * network.eta;
                 network.eta = network.eta + deltaEta;
                 eta = network.eta;
@@ -113,9 +111,9 @@ function retrain(n)
                 cancelAlpha = 1;
                else
                 network.errorRepeats = network.errorRepeats + 1;
-                if (network.errorRepeats > 10)
-                    deltaEta = 5;
-                    network.eta = network.eta * deltaEta;
+                if (network.errorRepeats > 2)
+                    deltaEta = 1.2;
+                    network.eta = network.eta + deltaEta;
                     eta = network.eta;
                     network.errorRepeats = 0;
                     % noEtaUpdateTime = 10;

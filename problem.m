@@ -65,17 +65,18 @@ end
 
 function x = xorF(in)
 	global network
-    
-    in = (in - network.intervals(1)) / network.intervals(2);
+    in = (in + 1)./2;
     
 	result = bitxor(in(1), in(2));
+    
 	for i=3:length(in)
 		result = bitxor(result, in(i));
-	end
+    end
+    
 	if result == 0 
-		x = network.intervals(1);
-	else
 		x = network.intervals(2);
+    else
+		x = network.intervals(1);
 	end
 end
 
