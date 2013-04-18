@@ -43,13 +43,16 @@ function prepareDeltas(n, ni, inputIndex)
 	hi = sum(network.neuronWeights(1:length(in)) .* in);
 	gprima = network.problem.df(hi); % Check this
 
-    
 	if (layer == length(network.neuronsPerLayer))
 		% Step 4 on book
         in = network.inputForLayer(inputIndex,1:network.weightsPerLayer(1),1);
 		result = network.inputForLayer(inputIndex,layerIndex + 1,layer + 1);
-        inWithNoBias = in(2:length(in)); % TODO: Take this, it's unsafe!
-		expected = network.problem.learnF(inWithNoBias);
+        inWithNoBias = in(2:length(in)); 
+        if (~network.problem.indexBased)
+		  expected = network.problem.learnF(inWithNoBias);
+        else
+          expected = network.problem.learnF(inputIndex);
+        end
 		error = (expected - result); % Check This
         if (abs(error) < 0.0001) 
            error = 0;
@@ -79,7 +82,7 @@ function prepareDeltas(n, ni, inputIndex)
 
      if (logging.enabled)
          % Store error history
-         iSubIndex = mod(inputIndex - 1, 2^n) + 1;
+         iSubIndex = mod(inputIndex - 1, N) + 1;
 
          network.gprimas(logging.errorIndexes(iSubIndex, ni), inputIndex) = gprima;
          logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = error;

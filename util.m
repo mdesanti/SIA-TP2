@@ -2,6 +2,7 @@ function util = util()
     util.networkPrepare = @networkPrepare;
     util.binary2vector = @binary2vector;
     util.randomInput = @generateRandomInputs;
+    util.trainingSets = @generateTrainingSets;
     util.getNodeIndex = @getNodeIndex;
     util.getIndexesForLayer = @getIndexesForLayer;
 end
@@ -27,8 +28,15 @@ function networkPrepare(n)
 
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
-	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-	network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
+	
+    
+    if ~network.problem.indexBased
+    	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
+	else
+		network.inputForLayer = zeros(length(network.data) - n, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+		network.inputForLayer(:,:,1) = network.inputGenerator(n);
+	end
 	for i = 2:length(network.neuronsPerLayer) + 1
 		network.inputForLayer(:,1,i) = 1;
 	end
@@ -126,18 +134,23 @@ function y = generateRandomInputs(n)
 end
 
 
-function x = generateTrainingSets(n, from)
+function x = generateTrainingSets(n)
     global network
-    allSets = zeros(length(from) - 1, n + 2);
-    trainingQty = length(from)*network.testPctg;
-    testQty = length(from)*(1 - network.testPctg);
+    from = network.data;
+    allSets = zeros(length(from) - n, n + 1);
+    trainingQty = length(from)*network.trainPctg;
+    testQty = length(from)*(1 - network.trainPctg);
     
-    for i=1:length(from)-1
+
+    network.problem.expected = zeros(1);
+    for i=1:length(from)-n
         %input for neuralNetwork
-        allSets(i,2:n+1) = from(i:i+n);
+        allSets(i,2:n+1) = from(i:i+n-1);
         %bias
         allSets(i,1) = 1;
         %expexted result
-        allSets(i,n+2) = from(i+n+1);
+        network.problem.expected(i) = from(i+n);
     end
+
+    x = allSets;
 end

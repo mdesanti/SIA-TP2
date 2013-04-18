@@ -48,17 +48,24 @@ function retrain(n)
     noEtaUpdateTime = 2;
     oldLastError = 0;
     network.weights;
-    network.gprimas = zeros(1, 2^n);
+
+    if (network.problem.indexBased)
+        N = length(network.data) - n;
+    else
+        N = 2^n;
+    end
+
+    network.N = N;
+    network.gprimas = zeros(1, N);
 
     while(~finished)
         weightsBeforeIteration = network.weights;
         oldDeltaWeights = network.lastDeltaWeights;
         % For every input
  
+        slice = randperm(N);
 
-        slice = randperm(2^n);
-
-        for inputIndex = slice(1)
+        for inputIndex = 1:N
             logging.enabled = false;
 			% Eval down-up...
 			for ni = 1:neuronCount
@@ -75,8 +82,10 @@ function retrain(n)
          end
         
          
-            logging.enabled = true;
-            for subInputIndex = 1:2^n
+            logging.enabled = false;
+
+
+            for subInputIndex = 1:N
                 % Eval down-up...
                 for ni = 1:neuronCount
                     neuron.runInput(n, ni, subInputIndex);
@@ -85,7 +94,7 @@ function retrain(n)
             end
         
             oldTotalErr = totalErr;
-            aux = sum(network.err.^2)./length(network.err);
+            aux = sum(network.err.^2)./min(i,length(network.err));
             totalErr = [totalErr;aux];
 
 
@@ -116,7 +125,7 @@ function retrain(n)
                 network.errorRepeats = network.errorRepeats + 1;
                 if (network.errorRepeats > 3)
                     deltaEta = 2;
-                    network.eta = network.eta + 1.2;
+                    network.eta = network.eta * 2;
                     eta = network.eta;
                     network.errorRepeats = 0;
                     % noEtaUpdateTime = 10;
@@ -130,30 +139,27 @@ function retrain(n)
         
         oldEta = [oldEta network.eta];
 
-        if mod(i, 25) == 0
             figure(1);
             plot(logging.errors(:,:,neuronCount));
             title('Error de cada input');
-        end
+
             
-        if mod(i, 25) == 0
+
             figure(2);
-            plot(totalErr);
+            semilogy(totalErr);
             title('Error cuadratico medio');
-        end
+
         
-        if mod(i, 25) == 0
+
             figure(3);
             semilogy(oldEta);
             title('Eta');
-        end
 
-        if mod(i, 25) == 0
             figure(4);
             permuted = permute(network.oldWeights, [2 3 1]);
             plot(permuted(:,:,neuronCount)');
             title('Pesos de las aristas');
-        end
+       
 
         
         if (length(deltaErrors) > 100) 
@@ -161,13 +167,14 @@ function retrain(n)
             plot(deltaErrors(50:length(deltaErrors)));
         end
 
-        if mod(i, 25) == 0
+        
             figure(6);
             plot(network.gprimas);
             title('GPrima');
-        end
+       
         
         if aux < network.delta
+            aux
             finished = 1;
         end
         if (i > 1)
