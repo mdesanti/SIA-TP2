@@ -73,10 +73,15 @@ function prepareDeltas(n, ni, inputIndex)
         end
     end
     
+
+    
     network.deltas(layerIndex, layer) = (gprima + 0.1) * error;
+
      if (logging.enabled)
          % Store error history
          iSubIndex = mod(inputIndex - 1, 2^n) + 1;
+
+         network.gprimas(logging.errorIndexes(iSubIndex, ni), inputIndex) = gprima;
          logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = error;
          logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
      end
@@ -95,9 +100,9 @@ function fixWeights(n, ni, inputIndex, cancelAlpha)
     % Check this
     deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
 %     
-%     if (cancelAlpha == 0)
-%         deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
-%     end
+    if (cancelAlpha == 0)
+        deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
+    end
     
     network.lastDeltaWeights(ni,:) = deltaWeight;
     
