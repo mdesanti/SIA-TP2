@@ -94,10 +94,10 @@ function fixWeights(n, ni, inputIndex, cancelAlpha)
     % Step 6 on book
     % Check this
     deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
-    
-    if (cancelAlpha == 0)
-        deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
-    end
+%     
+%     if (cancelAlpha == 0)
+%         deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
+%     end
     
     network.lastDeltaWeights(ni,:) = deltaWeight;
     

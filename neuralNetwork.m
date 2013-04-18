@@ -47,6 +47,7 @@ function retrain(n)
     deltaErrors = [];
     noEtaUpdateTime = 2;
     oldLastError = 0;
+    network.weights
 
     while(~finished)
         weightsBeforeIteration = network.weights;
@@ -93,38 +94,38 @@ function retrain(n)
             logging.currentError = totalErr(length(totalErr));
 
             
-            if (length(totalErr) > 1)
-               deltaError = logging.currentError - logging.lastError;
-               currE = logging.currentError;
-               lastE = logging.lastError;
-               eta = network.eta;
-               if (deltaError > 0)    
-                deltaEta = -0.5 * network.eta;
-                network.eta = network.eta + deltaEta;
-                eta = network.eta;
-                network.weights = weightsBeforeIteration;
-                network.errorRepeats = 0;
-                logging.errorIndexes = logging.errorIndexes - 1;
-                logging.currentError = logging.lastError;
-                logging.lastError = oldLastError;
-                i = i - 1;
-                totalErr = oldTotalErr;
-                network.lastDeltaWeights = oldDeltaWeights;
-                cancelAlpha = 1;
-               else
-                network.errorRepeats = network.errorRepeats + 1;
-                if (network.errorRepeats > 10)
-                    deltaEta = 5;
-                    network.eta = network.eta * deltaEta;
-                    eta = network.eta;
-                    network.errorRepeats = 0;
-                    % noEtaUpdateTime = 10;
-                end
-                cancelAlpha = 0;
-               end
-               
-               deltaErrors = [deltaErrors deltaError];
-            end
+%             if (length(totalErr) > 1)
+%                deltaError = logging.currentError - logging.lastError;
+%                currE = logging.currentError;
+%                lastE = logging.lastError;
+%                eta = network.eta;
+%                if (deltaError > 0)    
+%                     deltaEta = -0.5 * network.eta;
+%                     network.eta = network.eta + deltaEta;
+%                     eta = network.eta;
+%                     network.weights = weightsBeforeIteration;
+%                     network.errorRepeats = 0;
+%                     logging.errorIndexes = logging.errorIndexes - 1;
+%                     logging.currentError = logging.lastError;
+%                     logging.lastError = oldLastError;
+%                     i = i - 1;
+%                     totalErr = oldTotalErr;
+%                     network.lastDeltaWeights = oldDeltaWeights;
+%                     cancelAlpha = 1;
+%                else
+%                 network.errorRepeats = network.errorRepeats + 1;
+%                 if (network.errorRepeats > 10)
+%                     deltaEta = 5;
+%                     network.eta = network.eta * deltaEta;
+%                     eta = network.eta;
+%                     network.errorRepeats = 0;
+%                     % noEtaUpdateTime = 10;
+%                 end
+%                 cancelAlpha = 0;
+%                end
+%                
+%                deltaErrors = [deltaErrors deltaError];
+%             end
             noEtaUpdateTime = noEtaUpdateTime - 1;
         
         oldEta = [oldEta network.eta];
