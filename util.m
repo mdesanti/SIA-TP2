@@ -124,3 +124,20 @@ function y = generateRandomInputs(n)
 	end
 	y = x;
 end
+
+
+function x = generateTrainingSets(n, from)
+    global network
+    allSets = zeros(length(from) - 1, n + 2);
+    trainingQty = length(from)*network.testPctg;
+    testQty = length(from)*(1 - network.testPctg);
+    
+    for i=1:length(from)-1
+        %input for neuralNetwork
+        allSets(i,2:n+1) = from(i:i+n);
+        %bias
+        allSets(i,1) = 1;
+        %expexted result
+        allSets(i,n+2) = from(i+n+1);
+    end
+end

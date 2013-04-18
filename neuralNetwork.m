@@ -58,7 +58,7 @@ function retrain(n)
 
         slice = randperm(2^n);
 
-        for inputIndex = 1:2^n%slice(1)
+        for inputIndex = slice(1)
             logging.enabled = false;
 			% Eval down-up...
 			for ni = 1:neuronCount
@@ -114,9 +114,9 @@ function retrain(n)
                     cancelAlpha = 1;
                else
                 network.errorRepeats = network.errorRepeats + 1;
-                if (network.errorRepeats > 10)
+                if (network.errorRepeats > 3)
                     deltaEta = 2;
-                    network.eta = network.eta * deltaEta;
+                    network.eta = network.eta + 1.2;
                     eta = network.eta;
                     network.errorRepeats = 0;
                     % noEtaUpdateTime = 10;
@@ -185,3 +185,8 @@ function train(n)
 	network.weights = [];
 	retrain(n);
 end
+
+
+
+
+

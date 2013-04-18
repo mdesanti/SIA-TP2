@@ -38,6 +38,9 @@ network.weights = [];
 network.inputGenerator = util.randomInput;
 network.problem = problem.xor(5, functs.sigmoide);
 
+network.testSet = [];
+network.trainPctg = 0.8;
+
 global logging
 
 logging.errors = [];
