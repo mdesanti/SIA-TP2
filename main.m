@@ -35,13 +35,21 @@ network.N = 10000;
 network.intervals = [-1 1];
 network.weights = [];
 
-network.inputGenerator = util.randomInput;
-network.problem = problem.xor(5, functs.sigmoide);
+network.inputGenerator = util.trainingSets;
+network.problem = problem.approximation(4, functs.exp);
 
 network.testSet = [];
 network.trainPctg = 0.8;
 
+load data
+
+x = x / 4;
+
+network.data = x;
+
 global logging
+
+
 
 logging.errors = [];
 logging.errorIndexes = [];

@@ -3,6 +3,7 @@ function problem = problem()
     problem.or = @buildOr;
     problem.xor = @buildXor;
     problem.simmetry = @buildSim;
+    problem.approximation = @buildLineal;
 end
 
 % Build the functions structs
@@ -11,6 +12,7 @@ function x = buildAnd(n, act)
 	x.learnF = @andF;
 	x.f = act.f;
 	x.df = act.df;
+	x.indexBased = false;
 
 	global network
 	network.neuronsPerLayer = [ n 1 ];
@@ -20,6 +22,7 @@ function x = buildOr(n, act)
 	x.learnF = @orF;
 	x.f = act.f;
 	x.df = act.df;
+	x.indexBased = false;
 
 	global network
 	network.neuronsPerLayer = [ n 1 ];
@@ -29,6 +32,7 @@ function x = buildXor(n, act)
 	x.learnF = @xorF;
 	x.f = act.f;
 	x.df = act.df;
+	x.indexBased = false;
 
 	global network
 	network.neuronsPerLayer = [ n 1 ];
@@ -38,6 +42,17 @@ function x = buildSim(n, act)
 	x.learnF = @simmetry;
 	x.f = act.f;
 	x.df = act.df;
+	x.indexBased = false;
+
+	global network
+	network.neuronsPerLayer = [ n 1 ];
+end
+
+function x = buildLineal(n, act)
+	x.learnF = @linealApproximation;
+	x.f = act.f;
+	x.df = act.df;
+	x.indexBased = true;
 
 	global network
 	network.neuronsPerLayer = [ n 1 ];
@@ -93,4 +108,10 @@ function x = simmetry(in)
 	else
 		x = network.intervals(2);
 	end
+end
+
+
+function x = linealApproximation(inputIndex)
+	global network
+	x = network.problem.expected(inputIndex);
 end
