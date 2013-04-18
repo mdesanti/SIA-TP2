@@ -77,7 +77,7 @@ function prepareDeltas(n, ni, inputIndex)
      if (logging.enabled)
          % Store error history
          iSubIndex = mod(inputIndex - 1, 2^n) + 1;
-         logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = (gprima + 0.1) * error;
+         logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = error;
          logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
      end
 end
