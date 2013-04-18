@@ -32,18 +32,18 @@ network.eta = 0.5;
 network.beta = 1;
 network.N = 10000;
 
-network.intervals = [-1 1];
+network.intervals = [-4 4];
 network.weights = [];
 
 network.inputGenerator = util.trainingSets;
-network.problem = problem.approximation(4, functs.exp);
+network.problem = problem.approximation(4, functs.tanh);
 
 network.testSet = [];
 network.trainPctg = 0.8;
 
 load data
 
-x = x / 4;
+% x = x;
 
 network.data = x;
 
