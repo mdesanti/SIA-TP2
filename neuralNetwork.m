@@ -61,6 +61,7 @@ function retrain(n)
     while(~finished)
         weightsBeforeIteration = network.weights;
         oldDeltaWeights = network.lastDeltaWeights;
+        oldOutputs = network.inputForLayer(:,2,3);
         % For every input
  
         slice = randperm(N);
@@ -117,6 +118,7 @@ function retrain(n)
                     logging.errorIndexes = logging.errorIndexes - 1;
                     logging.currentError = logging.lastError;
                     logging.lastError = oldLastError;
+                    network.inputForLayer(:,2,3) = oldOutputs;
                     i = i - 1;
                     totalErr = oldTotalErr;
                     network.lastDeltaWeights = oldDeltaWeights;
@@ -140,38 +142,24 @@ function retrain(n)
         oldEta = [oldEta network.eta];
 
             figure(1);
-            plot(logging.errors(:,:,neuronCount));
-            title('Error de cada input');
-
-            
-
-            figure(2);
             semilogy(totalErr);
             title('Error cuadratico medio');
 
         
 
-            figure(3);
+            figure(2);
             semilogy(oldEta);
             title('Eta');
 
-            figure(4);
+            figure(3);
             permuted = permute(network.oldWeights, [2 3 1]);
             plot(permuted(:,:,neuronCount)');
             title('Pesos de las aristas');
        
-
+            diff = network.data(6:length(network.data)) - network.inputForLayer(:,2,3)';
+            figure(4);
+            scatter(1:length(diff),diff);
         
-        if (length(deltaErrors) > 100) 
-            figure(5);
-            plot(deltaErrors(50:length(deltaErrors)));
-        end
-
-        
-            figure(6);
-            plot(network.gprimas);
-            title('GPrima');
-       
         
         if aux < network.delta
             aux
