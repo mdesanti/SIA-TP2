@@ -72,9 +72,9 @@ function x = orF(in)
 	global network
 	v = sum(in - network.intervals(1));
 	if v > 0
-		x = network.intervals(1);
-	else
 		x = network.intervals(2);
+	else
+		x = network.intervals(1);
 	end
 end
 

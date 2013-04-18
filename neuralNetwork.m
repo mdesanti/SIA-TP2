@@ -68,12 +68,12 @@ function retrain(n)
         for inputIndex = 1:N
             logging.enabled = false;
 			% Eval down-up...
-			for ni = 1:neuronCount
-				neuron.runInput(n, ni, inputIndex);
+			for layer = 1:length(network.neuronsPerLayer)
+				neuron.runInput(layer, inputIndex);
 			end
 			% Prepare up-down...
 			for ni = neuronCount:-1:1
-				neuron.prepareDeltas(n, ni, inputIndex);
+				neuron.prepareDeltas(ni, inputIndex);
 			end
 			% Fix weights up-down...
 			for ni = 1:neuronCount
@@ -87,10 +87,10 @@ function retrain(n)
 
             for subInputIndex = 1:N
                 % Eval down-up...
-                for ni = 1:neuronCount
-                    neuron.runInput(n, ni, subInputIndex);
+                for layer = 1:length(network.neuronsPerLayer)
+                    neuron.runInput(layer, subInputIndex);
                 end
-                neuron.prepareDeltas(n, neuronCount, subInputIndex);
+                neuron.prepareDeltas(neuronCount, subInputIndex);
             end
         
             oldTotalErr = totalErr;

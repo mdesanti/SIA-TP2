@@ -13,22 +13,29 @@ function x = neuronEval(in)
 end
 
 % Runs the input and stores the results for each neuron
-function runInput(n, ni, inputIndex)
+function runInput(layer, inputIndex)
     global network
-
-    network.neuronWeights = network.weights(ni, :);
+    global util
     
-	layer = network.layerForNeuron(ni);
-	layerIndex = network.layerIndexForNeuron(ni);
-	weightnum = network.weightsPerLayer(layer);
-	in = network.inputForLayer(inputIndex,1:weightnum,layer);
+    layerFirstNodeIndex = util.getIndexesForLayer(layer);
+    layerNodeCount = network.neuronsPerLayer(layer);
+    
+    from = layerFirstNodeIndex;
+    to = layerFirstNodeIndex + layerNodeCount-1;
 	
-	% Step 3 on book
-	% Pushes the evaluation to the next neurone
-	network.inputForLayer(inputIndex, layerIndex + 1, layer + 1) = neuronEval(in);
+	weightnum = network.weightsPerLayer(layer);
+    thisLayerWeights = network.weights(from:to,1:weightnum);
+	in = network.inputForLayer(inputIndex,1:weightnum,layer);
+    
+    aux = thisLayerWeights * in';
+	
+    for i=1:length(aux)
+        layerIndex = network.layerIndexForNeuron(i + layerFirstNodeIndex - 1);
+        network.inputForLayer(inputIndex, layerIndex + 1, layer + 1) = network.problem.f(aux(i));
+    end
 end
 
-function prepareDeltas(n, ni, inputIndex)
+function prepareDeltas(ni, inputIndex)
     global funcs
     global util
     global network
