@@ -28,8 +28,8 @@ network = networkFile
 
 % Control variables
 network.delta = 0.01;
-network.eta = 0.001;
-network.beta = 0.5;
+network.startEta = 1;
+network.beta = 1;
 network.N = 10000;
 
 network.intervals = [-1 1];
