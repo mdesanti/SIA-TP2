@@ -33,8 +33,9 @@ function networkPrepare(n)
     if ~network.problem.indexBased
     	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
 		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
-	else
-		network.inputForLayer = zeros(length(network.data) - n, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+    else
+        num = ceil((length(network.data) - n) * network.trainPctg);
+		network.inputForLayer = zeros(num, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
 		network.inputForLayer(:,:,1) = network.inputGenerator(n);
 	end
 	for i = 2:length(network.neuronsPerLayer) + 1
@@ -136,21 +137,42 @@ end
 
 function x = generateTrainingSets(n)
     global network
+    network.problem.originalSet = n;
     from = network.data;
-    allSets = zeros(length(from) - n, n + 1);
+    allSets = zeros(length(from) - n, n + 2);
     trainingQty = length(from)*network.trainPctg;
     testQty = length(from)*(1 - network.trainPctg);
     
 
     network.problem.expected = zeros(1);
+    %construimos todos los sets posibles y sus respuestas
     for i=1:length(from)-n
         %input for neuralNetwork
         allSets(i,2:n+1) = from(i:i+n-1);
         %bias
         allSets(i,1) = 1;
         %expexted result
-        network.problem.expected(i) = from(i+n);
+        allSets(i, n+2) = from(i+n);
     end
-
-    x = allSets;
+    % mezclamos los sets que generamos anteriormente
+    for i=1:10000
+        rand1 = randi(length(allSets));
+        rand2 = randi(length(allSets));
+        aux = allSets(rand1,:);
+        allSets(rand1, :) = allSets(rand2, :);
+        allSets(rand2, :) = aux;
+    end
+    to = ceil(length(allSets) * network.trainPctg);
+    %ponemos la respuesta en network.problem.expected
+    for i=1:to
+        network.trainingSet(i, :) = allSets(i,1:n+1);
+        network.problem.expected(i) = allSets(i, n+2);
+    end
+    for i=to+1:length(allSets)
+        network.testSet(i, :) = allSets(i,1:n+1);
+        network.problem.expected(i) = allSets(i, n+2);
+    end
+    
+    
+    x = network.trainingSet;
 end

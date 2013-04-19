@@ -50,7 +50,7 @@ function retrain(n)
     network.weights;
 
     if (network.problem.indexBased)
-        N = length(network.data) - n;
+        N = ceil((length(network.data) - n) * network.trainPctg);
     else
         N = 2^n;
     end

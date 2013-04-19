@@ -39,7 +39,8 @@ network.inputGenerator = util.trainingSets;
 network.problem = problem.approximation(4, functs.tanh);
 
 network.testSet = [];
-network.trainPctg = 0.8;
+network.trainingSet = [];
+network.trainPctg = 0.3;
 
 load data
 
