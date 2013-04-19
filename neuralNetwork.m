@@ -66,7 +66,7 @@ function retrain(n)
  
         slice = randperm(N);
 
-        for inputIndex = slice(1)
+        for inputIndex = 1:slice
             logging.enabled = false;
 			% Eval down-up...
 			for layer = 1:length(network.neuronsPerLayer)
@@ -150,7 +150,6 @@ function retrain(n)
         title('Error cuadratico medio');
 
     
-
         figure(2);
         semilogy(oldEta);
         title('Eta');
