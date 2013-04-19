@@ -95,7 +95,6 @@ function retrain(n)
             end
         
             oldTotalErr = totalErr;
-            network.err
             aux = sum(network.err.^2)./length(network.err);
             totalErr = [totalErr;aux];
 
@@ -161,17 +160,18 @@ function retrain(n)
    
         try
             network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
+            network.problem.result'
             diff = network.problem.expected - network.problem.result;
             figure(4);
             length(diff);
             scatter(1:length(diff),diff);
+
         catch
             
         end
         
         
         if aux < network.delta
-            aux
             finished = 1;
         end
         if (i > 1)
