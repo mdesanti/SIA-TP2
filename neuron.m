@@ -64,7 +64,6 @@ function prepareDeltas(ni, inputIndex)
         if (abs(error) < 0.0001) 
            error = 0;
         end
-        error
         network.err(inputIndex) = error;
     else
         nextLayerNodeCount = network.neuronsPerLayer(layer + 1);
@@ -90,9 +89,8 @@ function prepareDeltas(ni, inputIndex)
 
      if (logging.enabled)
          % Store error history
-         iSubIndex = mod(inputIndex - 1, N) + 1;
+         iSubIndex = mod(inputIndex - 1, 1) + 1;
 
-         network.gprimas(logging.errorIndexes(iSubIndex, ni), inputIndex) = gprima;
          logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = error;
          logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
      end
@@ -111,7 +109,7 @@ function fixWeights(n, ni, inputIndex, cancelAlpha)
     % Check this
     deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
 %     
-    if (cancelAlpha == 0)
+    if (cancelAlpha == 0 && network.momentum)
         deltaWeight = network.lastDeltaWeights(ni,:) * 0.9 + deltaWeight;
     end
     

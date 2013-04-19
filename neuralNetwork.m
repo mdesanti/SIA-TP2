@@ -55,6 +55,7 @@ function retrain(n)
         N = 2^n;
     end
 
+    network.eta = network.startEta;
     network.N = N;
     network.gprimas = zeros(1, N);
 
@@ -66,7 +67,7 @@ function retrain(n)
  
         slice = randperm(N);
 
-        for inputIndex = 1:slice
+        for inputIndex = slice
             logging.enabled = false;
 			% Eval down-up...
 			for layer = 1:length(network.neuronsPerLayer)
@@ -83,7 +84,7 @@ function retrain(n)
          end
         
          
-            logging.enabled = false;
+            logging.enabled = true;
 
 
             for subInputIndex = 1:N
@@ -95,8 +96,9 @@ function retrain(n)
             end
         
             oldTotalErr = totalErr;
-            aux = sum(network.err.^2)./min(i,length(network.err));
+            aux = sum(network.err.^2)./length(network.err);
             totalErr = [totalErr;aux];
+
 
 
             oldLastError = logging.lastError;
@@ -104,13 +106,14 @@ function retrain(n)
             logging.currentError = totalErr(length(totalErr));
 
             
+            if (network.adaptive)
             if (length(totalErr) > 1)
                deltaError = logging.currentError - logging.lastError;
                currE = logging.currentError;
                lastE = logging.lastError;
                eta = network.eta;
                if (deltaError > 0)    
-                    deltaEta = -0.9 * network.eta;
+                    deltaEta = -0.5 * network.eta;
                     network.eta = network.eta + deltaEta;
                     eta = network.eta;
                     network.weights = weightsBeforeIteration;
@@ -123,10 +126,14 @@ function retrain(n)
                     totalErr = oldTotalErr;
                     network.lastDeltaWeights = oldDeltaWeights;
                     cancelAlpha = 1;
+
+                    if (network.eta < 0.0001)
+                        network.eta = 0.0001;
+                    end
                else
                 network.errorRepeats = network.errorRepeats + 1;
                 if (network.errorRepeats > 3)
-                    deltaEta = 1.2;
+                    deltaEta = 2;
                     network.eta = network.eta + deltaEta;
                     eta = network.eta;
                     network.errorRepeats = 0;
@@ -138,31 +145,38 @@ function retrain(n)
                deltaErrors = [deltaErrors deltaError];
             end
             noEtaUpdateTime = noEtaUpdateTime - 1;
+        end
         
         oldEta = [oldEta network.eta];
 
-            figure(1);
-            semilogy(totalErr);
-            title('Error cuadratico medio');
+        figure(1);
+        semilogy(totalErr);
+        title('Error cuadratico medio');
 
-        
+    
+        figure(2);
+        semilogy(oldEta);
+        title('Eta');
 
-            figure(2);
-            semilogy(oldEta);
-            title('Eta');
+        figure(3);
+        permuted = permute(network.oldWeights, [2 3 1]);
+        plot(permuted(:,:,neuronCount)');
+        title('Pesos de las aristas');
+   
+        try
+            network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
+            diff = network.problem.expected - network.problem.result;
+            diff
+            figure(4);
+            length(diff);
+            scatter(1:length(diff),diff);
 
-            figure(3);
-            permuted = permute(network.oldWeights, [2 3 1]);
-            plot(permuted(:,:,neuronCount)');
-            title('Pesos de las aristas');
-       
-%             diff = network.data(6:length(network.data)) - network.inputForLayer(:,2,3)';
-%             figure(4);
-%             scatter(1:length(diff),diff);
+        catch
+            
+        end
         
         
         if aux < network.delta
-            aux
             finished = 1;
         end
         if (i > 1)
@@ -171,6 +185,7 @@ function retrain(n)
         % end
         i = i + 1;
     end
+
 end
 
 
