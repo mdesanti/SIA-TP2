@@ -32,7 +32,7 @@ network.eta = 0.5;
 network.beta = 1;
 network.N = 10000;
 
-network.intervals = [-4 4];
+network.intervals = [-1 1];
 network.weights = [];
 
 network.inputGenerator = util.trainingSets;
