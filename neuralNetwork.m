@@ -128,8 +128,8 @@ function retrain(n)
                else
                 network.errorRepeats = network.errorRepeats + 1;
                 if (network.errorRepeats > 3)
-                    deltaEta = 3;
-                    network.eta = network.eta * deltaEta;
+                    deltaEta = 0.1;
+                    network.eta = network.eta + deltaEta;
                     eta = network.eta;
                     network.errorRepeats = 0;
                     % noEtaUpdateTime = 10;
