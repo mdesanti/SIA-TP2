@@ -26,27 +26,23 @@ end
 
 function x = tanhf(in)
 	global network
-	%intervalDiff = abs(network.intervals(1) - network.intervals(2));
-	x = tanh(network.beta * in) * network.intervals(2);
+	x = tanh(network.beta * in) * 1;
 end
 
 function x = tanhdf(in)
 	global beta
 	global network
-    %intervalDiff = abs(network.intervals(1) - network.intervals(2));
-	x = network.beta * sech(in).^2 * network.intervals(2); %intervalDiff * (y * (1 - y)) - 0.5;
+	x = network.beta * sech(in).^2 * 1;
 end
 
 function x = expf(in)
     global network
-    intervalDiff = abs(network.intervals(1) - network.intervals(2));
-    x = (1./(1+exp(-in)) - 0.5) .* intervalDiff;
+    x = (1./(1+exp(-in)) - 0.5) .* 2;
 end
 
 function x = expdf(in)
     global network
-    intervalDiff = abs(network.intervals(1) - network.intervals(2));
-    x = intervalDiff * exp(in) / (exp(in) + 1)^2;
+    x = 2 * exp(in) / (exp(in) + 1)^2;
 end
 
 function x = lineal(in)

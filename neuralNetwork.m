@@ -66,7 +66,7 @@ function retrain(n)
  
         slice = randperm(N);
 
-        for inputIndex = 1:slice(1)
+        for inputIndex = 1:slice
             logging.enabled = false;
 			% Eval down-up...
 			for layer = 1:length(network.neuronsPerLayer)
