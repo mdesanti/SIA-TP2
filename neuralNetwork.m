@@ -156,9 +156,9 @@ function retrain(n)
             plot(permuted(:,:,neuronCount)');
             title('Pesos de las aristas');
        
-            diff = network.data(6:length(network.data)) - network.inputForLayer(:,2,3)';
-            figure(4);
-            scatter(1:length(diff),diff);
+%             diff = network.data(6:length(network.data)) - network.inputForLayer(:,2,3)';
+%             figure(4);
+%             scatter(1:length(diff),diff);
         
         
         if aux < network.delta
