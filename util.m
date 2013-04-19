@@ -16,7 +16,11 @@ function networkPrepare(n)
   global network
   global logging
 
-  network.err = zeros(2^n,1);
+	if ~network.problem.indexBased
+  	network.err = zeros(2^n,1);
+  else
+  	network.err = length(network.data) - n;
+  end
     
 	network.neuronCount = sum(network.neuronsPerLayer);
 

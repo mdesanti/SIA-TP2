@@ -15,7 +15,9 @@ function x = buildAnd(n, act)
 	x.indexBased = false;
 
 	global network
+	global util
 	network.neuronsPerLayer = [ n 1 ];
+	network.inputGenerator = util.randomInput;
 end
 
 function x = buildOr(n, act)
@@ -25,7 +27,9 @@ function x = buildOr(n, act)
 	x.indexBased = false;
 
 	global network
+	global util
 	network.neuronsPerLayer = [ n 1 ];
+	network.inputGenerator = util.randomInput;
 end
 
 function x = buildXor(n, act)
@@ -34,8 +38,11 @@ function x = buildXor(n, act)
 	x.df = act.df;
 	x.indexBased = false;
 
+
 	global network
+	global util
 	network.neuronsPerLayer = [ n 1 ];
+	network.inputGenerator = util.randomInput;
 end
 
 function x = buildSim(n, act)
@@ -45,7 +52,9 @@ function x = buildSim(n, act)
 	x.indexBased = false;
 
 	global network
+	global util
 	network.neuronsPerLayer = [ n 1 ];
+	network.inputGenerator = util.randomInput;
 end
 
 function x = buildLineal(n, act)
@@ -55,7 +64,9 @@ function x = buildLineal(n, act)
 	x.indexBased = true;
 
 	global network
+	global util
 	network.neuronsPerLayer = [ n 1 ];
+	network.inputGenerator = util.trainingSets;
 end
 
 function x = andF(in)

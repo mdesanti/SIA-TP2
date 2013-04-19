@@ -27,29 +27,28 @@ global network
 network = networkFile
 
 % Control variables
-network.delta = 0.001;
-network.eta = 0.5;
-network.beta = 1;
+network.delta = 0.01;
+network.eta = 0.001;
+network.beta = 0.5;
 network.N = 10000;
 
-network.intervals = [-4 4];
+network.intervals = [-1 1];
 network.weights = [];
 
-network.inputGenerator = util.trainingSets;
 network.problem = problem.approximation(4, functs.tanh);
 
 network.testSet = [];
 network.trainPctg = 0.8;
 
+network.adaptive = true;
+network.momentum = true;
+
 load data
 
-% x = x;
-
-network.data = x;
+network.origData = x / 4;
+network.data = x / 4;
 
 global logging
-
-
 
 logging.errors = [];
 logging.errorIndexes = [];
