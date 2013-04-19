@@ -16,14 +16,18 @@ function networkPrepare(n)
   global network
   global logging
 
-  network.err = zeros(2^n,1);
+	if ~network.problem.indexBased
+  	network.err = zeros(2^n,1);
+  else
+  	network.err = length(network.data) - n;
+  end
     
 	network.neuronCount = sum(network.neuronsPerLayer);
 
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
 	if isempty(network.weights)
-    network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)./2);
+    network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1));
   end
 
 	% Makes matrix containing the inputs for each layer.
