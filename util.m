@@ -27,7 +27,7 @@ function networkPrepare(n)
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
 	if isempty(network.weights)
-    network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)./20);
+    network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)./2);
   end
 
 	% Makes matrix containing the inputs for each layer.
@@ -38,7 +38,7 @@ function networkPrepare(n)
     	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
 		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
     else
-        num = ceil((length(network.data) - n) * network.trainPctg);
+        num = ceil((length(network.data)) * network.trainPctg);
 		network.inputForLayer = zeros(num, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
 		network.inputForLayer(:,:,1) = network.inputGenerator(n);
 	end
@@ -144,8 +144,7 @@ function x = generateTrainingSets(n)
     network.problem.originalSet = n;
     from = network.data;
     allSets = zeros(length(from) - n, n + 2);
-    trainingQty = length(from)*network.trainPctg;
-    testQty = length(from)*(1 - network.trainPctg);
+    trainingQty = ceil(length(from)*network.trainPctg);
     
 
     network.problem.expected = zeros(1);
