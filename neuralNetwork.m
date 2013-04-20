@@ -8,15 +8,15 @@ function x = eval(in)
     global neuron
     global network
     
-    n = length(network.weights(1,:));
+    n = length(in);
     
     neuronCount = sum(network.neuronsPerLayer);
     network.inputForLayer = zeros(1, n + 1, length(network.neuronsPerLayer)+1);
-    network.inputForLayer(1,2:n,1) = in;
+    network.inputForLayer(1,2:n+1,1) = in;
     network.inputForLayer(:,1,:) = 1;
     
-    for ni = 1:neuronCount
-        neuron.runInput(n, ni, 1);
+    for layer = 1:length(network.neuronsPerLayer)
+        neuron.runInput(layer, 1);
     end
     
     x = network.inputForLayer(1,2,length(network.neuronsPerLayer) + 1);
