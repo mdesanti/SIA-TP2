@@ -49,3 +49,20 @@ Cantidad de puntos con error por debajo de 0.1 => 77
 Cantidad de puntos con error por debajo de 0.2 => 150
 Cantidad de puntos con error por debajo de 0.3 => 213
 Cantidad de puntos con error por debajo de 0.4 => 251
+
+D)
+Screen Shot 2013-04-20 at 19.26.54
+Arquitectura = [20 1]
+Cantidad de puntos tomados para el cálculo => 2
+Función de transferencia => tanh
+Tamaño del conjunto de entrenamiento => 200
+Tamaño del conjunto de testeo => 798
+Beta => 0.5
+Conjunto de testeo...
+Máximo error => 3.2847
+Mínimo error => 4.7230e-04
+Error cuadrático medio => 1.3406
+Cantidad de puntos con error por debajo de 0.1 => 72
+Cantidad de puntos con error por debajo de 0.2 => 136
+Cantidad de puntos con error por debajo de 0.3 => 193
+Cantidad de puntos con error por debajo de 0.4 => 256
