@@ -67,7 +67,7 @@ function retrain(n)
  
         slice = randperm(N);
 
-        for inputIndex = slice
+        for inputIndex = slice(1)
             logging.enabled = false;
 			% Eval down-up...
 			for layer = 1:length(network.neuronsPerLayer)
@@ -108,7 +108,7 @@ function retrain(n)
             
             if (network.adaptive)
             if (length(totalErr) > 1)
-               deltaError = logging.currentError - logging.lastError;
+               deltaError = logging.currentError - logging.lastError
                currE = logging.currentError;
                lastE = logging.lastError;
                eta = network.eta;
@@ -132,8 +132,8 @@ function retrain(n)
                     end
                else
                 network.errorRepeats = network.errorRepeats + 1;
-                if (network.errorRepeats > 3)
-                    deltaEta = 2;
+                if (network.errorRepeats > 2)
+                    deltaEta = 1.2;
                     network.eta = network.eta + deltaEta;
                     eta = network.eta;
                     network.errorRepeats = 0;

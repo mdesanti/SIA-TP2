@@ -37,12 +37,14 @@ end
 
 function x = expf(in)
     global network
-    x = (1./(1+exp(-in)) - 0.5) .* 2;
+    global beta
+    x = (2/(1+exp((-1)*network.beta*in)) - 1);
 end
 
 function x = expdf(in)
     global network
-    x = 2 * exp(in) / (exp(in) + 1)^2;
+    global beta
+    x = 2 * network.beta * exp(network.beta * in) / ((exp(network.beta * in) + 1)^2);
 end
 
 function x = lineal(in)
