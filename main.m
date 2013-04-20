@@ -27,7 +27,7 @@ global network
 network = networkFile
 
 % Control variables
-network.delta = 0.01;
+network.delta = 0.001;
 network.startEta = 1;
 network.beta = 1;
 network.N = 10000;

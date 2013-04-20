@@ -67,7 +67,7 @@ function retrain(n)
  
         slice = randperm(N);
 
-        for inputIndex = slice(1)
+        for inputIndex = slice
             logging.enabled = false;
 			% Eval down-up...
 			for layer = 1:length(network.neuronsPerLayer)
@@ -108,7 +108,7 @@ function retrain(n)
             
             if (network.adaptive)
             if (length(totalErr) > 1)
-               deltaError = logging.currentError - logging.lastError
+               deltaError = logging.currentError - logging.lastError;
                currE = logging.currentError;
                lastE = logging.lastError;
                eta = network.eta;
@@ -127,8 +127,8 @@ function retrain(n)
                     network.lastDeltaWeights = oldDeltaWeights;
                     cancelAlpha = 1;
 
-                    if (network.eta < 0.0001)
-                        network.eta = 0.0001;
+                    if (network.eta < 0.001)
+                        network.eta = 0.001;
                     end
                else
                 network.errorRepeats = network.errorRepeats + 1;
@@ -150,7 +150,7 @@ function retrain(n)
         oldEta = [oldEta network.eta];
 
         figure(1);
-        semilogy(totalErr);
+        plot(totalErr);
         title('Error cuadratico medio');
 
     
@@ -162,11 +162,16 @@ function retrain(n)
         permuted = permute(network.oldWeights, [2 3 1]);
         plot(permuted(:,:,neuronCount)');
         title('Pesos de las aristas');
+        
+        figure(4)
+        l2 = length(network.inputForLayer(1,1,:));
+        l = length(network.inputForLayer(:,2,l2));        
+        scatter(1:l,network.problem.expected(1:l)'- network.inputForLayer(:,2,l2))
+        title('Diferencia');
    
         try
             network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
             diff = network.problem.expected - network.problem.result;
-            diff
             figure(4);
             length(diff);
             scatter(1:length(diff),diff);
