@@ -39,7 +39,7 @@ network.problem = problem.approximation(4, functs.tanh);
 
 network.testSet = [];
 network.trainingSet = [];
-network.trainPctg = 0.3;
+network.trainPctg = 0.5;
 
 network.adaptive = true;
 network.momentum = true;

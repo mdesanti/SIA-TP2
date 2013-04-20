@@ -17,7 +17,12 @@ function runInput(layer, inputIndex)
     global network
     global util
     
-    layerFirstNodeIndex = util.getIndexesForLayer(layer);
+    if (layer == 1)
+        layerFirstNodeIndex = 1;
+    else
+        layerFirstNodeIndex = sum(network.neuronsPerLayer(1:layer - 1)) + 1;
+    end
+
     layerNodeCount = network.neuronsPerLayer(layer);
     
     from = layerFirstNodeIndex;
@@ -36,10 +41,7 @@ function runInput(layer, inputIndex)
 end
 
 function prepareDeltas(ni, inputIndex)
-    global funcs
-    global util
     global network
-    global logging
     
 	network.neuronWeights = network.weights(ni, :);
 
@@ -68,7 +70,11 @@ function prepareDeltas(ni, inputIndex)
     else
         nextLayerNodeCount = network.neuronsPerLayer(layer + 1);
         % gets the indexes of the nodes in the upper layer
-        nextLayerFirstNodeIndex = util.getIndexesForLayer(layer+1);
+        if (layer + 1 == 1)
+            nextLayerFirstNodeIndex = 1;
+        else
+            nextLayerFirstNodeIndex = sum(network.neuronsPerLayer(1:layer)) + 1;
+        end
         
 		% Step 5 on book
         added = 0;
@@ -83,17 +89,7 @@ function prepareDeltas(ni, inputIndex)
         end
     end
     
-
-    
     network.deltas(layerIndex, layer) = (gprima + 0.1) * error;
-
-     if (logging.enabled)
-         % Store error history
-         iSubIndex = mod(inputIndex - 1, 1) + 1;
-
-         logging.errors(logging.errorIndexes(iSubIndex, ni),iSubIndex, ni) = error;
-         logging.errorIndexes(iSubIndex, ni) = logging.errorIndexes(iSubIndex, ni) + 1;
-     end
 end
 
 
