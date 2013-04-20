@@ -30,20 +30,17 @@ function x = tanhf(in)
 end
 
 function x = tanhdf(in)
-	global beta
 	global network
 	x = network.beta * sech(in).^2 * 1;
 end
 
 function x = expf(in)
     global network
-    global beta
     x = (2/(1+exp((-1)*network.beta*in)) - 1);
 end
 
 function x = expdf(in)
     global network
-    global beta
     x = 2 * network.beta * exp(network.beta * in) / ((exp(network.beta * in) + 1)^2);
 end
 
