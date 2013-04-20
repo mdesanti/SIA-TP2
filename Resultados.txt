@@ -66,3 +66,54 @@ Cantidad de puntos con error por debajo de 0.1 => 72
 Cantidad de puntos con error por debajo de 0.2 => 136
 Cantidad de puntos con error por debajo de 0.3 => 193
 Cantidad de puntos con error por debajo de 0.4 => 256
+
+E)
+Screen Shot 2013-04-20 at 20.23.36
+Arquitectura = [20 1]
+Cantidad de puntos tomados para el cálculo => 3
+Función de transferencia => tanh
+Tamaño del conjunto de entrenamiento => 797
+Tamaño del conjunto de testeo => 203
+Beta => 0.5
+Conjunto de testeo...
+Máximo error => 5.6835
+Mínimo error => 5.2934e-04
+Error cuadrático medio =>  1.3927
+Cantidad de puntos con error por debajo de 0.1 => 83
+Cantidad de puntos con error por debajo de 0.2 => 163
+Cantidad de puntos con error por debajo de 0.3 => 218
+Cantidad de puntos con error por debajo de 0.4 => 280
+
+F)
+Screen Shot 2013-04-20 at 20.31.47
+Arquitectura = [20 1]
+Cantidad de puntos tomados para el cálculo => 3
+Función de transferencia => tanh
+Tamaño del conjunto de entrenamiento => 597
+Tamaño del conjunto de testeo => 403
+Beta => 0.5
+Conjunto de testeo...
+Máximo error =>  3.4091
+Mínimo error => 8.5670e-04
+Error cuadrático medio =>  0.7627
+Cantidad de puntos con error por debajo de 0.1 => 79
+Cantidad de puntos con error por debajo de 0.2 => 151
+Cantidad de puntos con error por debajo de 0.3 => 205
+Cantidad de puntos con error por debajo de 0.4 => 249
+
+G)
+Screen Shot 2013-04-20 at 20.36.29
+Arquitectura = [20 1]
+Cantidad de puntos tomados para el cálculo => 3
+Función de transferencia => tanh
+Tamaño del conjunto de entrenamiento => 400
+Tamaño del conjunto de testeo => 603
+Beta => 0.5
+Conjunto de testeo...
+Máximo error => 5.5119
+Mínimo error =>  0.0013
+Error cuadrático medio =>  2.2852
+Cantidad de puntos con error por debajo de 0.1 => 30
+Cantidad de puntos con error por debajo de 0.2 => 66
+Cantidad de puntos con error por debajo de 0.3 => 87
+Cantidad de puntos con error por debajo de 0.4 => 107
