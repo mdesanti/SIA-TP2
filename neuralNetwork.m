@@ -113,7 +113,7 @@ function retrain(n)
                lastE = logging.lastError;
                eta = network.eta;
                if (deltaError > 0 && network.eta > 0.001)    
-                    deltaEta = -0.9 * network.eta;
+                    deltaEta = -0.5 * network.eta;
                     network.eta = network.eta + deltaEta;
                     eta = network.eta;
                     network.weights = weightsBeforeIteration;

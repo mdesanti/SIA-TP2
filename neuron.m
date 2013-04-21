@@ -63,9 +63,9 @@ function prepareDeltas(ni, inputIndex)
           expected = network.problem.learnF(inputIndex);
         end
 		error = (expected - result); % Check This
-        if (abs(error) < 0.0001) 
-           error = 0;
-        end
+%         if (abs(error) < 0.0001) 
+%            error = 0;
+%         end
         network.err(inputIndex) = error;
     else
         nextLayerNodeCount = network.neuronsPerLayer(layer + 1);
