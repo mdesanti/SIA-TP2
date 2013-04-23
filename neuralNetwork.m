@@ -150,7 +150,7 @@ function retrain(n)
         
         oldEta = [oldEta network.eta];
         
-        if aux < network.delta || i > 20
+        if aux < network.delta || i > 200
             finished = 1;
         end
         if (i > 1)
@@ -163,26 +163,26 @@ function retrain(n)
     figure(1);
     plot(totalErr);
     title('Error cuadratico medio');
-    print([pwd, '/','ecm.png']);
+    print([logging.pwd, '/','ecm.png']);
 
 
     figure(2);
     plot(oldEta);
     title('Eta');
-    print([pwd, '/','eta.png']);
+    print([logging.pwd, '/','eta.png']);
 
     figure(3);
     permuted = permute(network.oldWeights, [2 3 1]);
     plot(permuted(:,:,neuronCount)');
     title('Pesos de las aristas');
-    print([pwd, '/','aristas.png']);
+    print([logging.pwd, '/','aristas.png']);
     
     figure(4)
     l2 = length(network.inputForLayer(1,1,:));
     l = length(network.inputForLayer(:,2,l2));        
     scatter(1:l,network.problem.expected(1:l)'- network.inputForLayer(:,2,l2))
     title('Diferencia');
-    print([pwd, '/','diferencia_final.png']);
+    print([logging.pwd, '/','diferencia_final.png']);
 end
 
 

@@ -54,3 +54,4 @@ global logging
 logging.errors = [];
 logging.errorIndexes = [];
 logging.modes = [1 0];
+logging.pwd = pwd;
