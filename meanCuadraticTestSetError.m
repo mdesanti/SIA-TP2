@@ -1,7 +1,8 @@
+global network;
 result = [];
 total = length(network.testSet(:,2:3)) - length(network.trainingSet(:,2:3))
-from = 1000-total-2;
-for i=from+1:1000-2
+from = 1000-total-network.n;
+for i=from+1:1000-network.n
     aux = network.eval(network.testSet(i,2:3))*3.8;
     result(i-from) = aux - network.problem.expected(i)*3.8;
 end

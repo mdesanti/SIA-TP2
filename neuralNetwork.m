@@ -48,6 +48,7 @@ function retrain(n)
     noEtaUpdateTime = 2;
     oldLastError = 0;
     network.weights;
+    network.n = n;
 
     if (network.problem.indexBased)
         N = ceil((length(network.data) - n) * network.trainPctg);
@@ -162,33 +163,26 @@ function retrain(n)
     figure(1);
     plot(totalErr);
     title('Error cuadratico medio');
-    print('ecm.png');
+    print([pwd, '/','ecm.png']);
 
 
     figure(2);
     plot(oldEta);
     title('Eta');
+    print([pwd, '/','eta.png']);
 
     figure(3);
     permuted = permute(network.oldWeights, [2 3 1]);
     plot(permuted(:,:,neuronCount)');
     title('Pesos de las aristas');
+    print([pwd, '/','aristas.png']);
     
     figure(4)
     l2 = length(network.inputForLayer(1,1,:));
     l = length(network.inputForLayer(:,2,l2));        
     scatter(1:l,network.problem.expected(1:l)'- network.inputForLayer(:,2,l2))
     title('Diferencia');
-
-    try
-        network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
-        diff = network.problem.expected - network.problem.result;
-        figure(4);
-        length(diff);
-        scatter(1:length(diff),diff);
-    catch
-        
-    end
+    print([pwd, '/','diferencia_final.png']);
 end
 
 
