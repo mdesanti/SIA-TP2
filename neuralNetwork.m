@@ -148,40 +148,8 @@ function retrain(n)
         end
         
         oldEta = [oldEta network.eta];
-
-        figure(1);
-        plot(totalErr);
-        title('Error cuadratico medio');
-
-    
-        figure(2);
-        plot(oldEta);
-        title('Eta');
-
-        figure(3);
-        permuted = permute(network.oldWeights, [2 3 1]);
-        plot(permuted(:,:,neuronCount)');
-        title('Pesos de las aristas');
         
-        figure(4)
-        l2 = length(network.inputForLayer(1,1,:));
-        l = length(network.inputForLayer(:,2,l2));        
-        scatter(1:l,network.problem.expected(1:l)'- network.inputForLayer(:,2,l2))
-        title('Diferencia');
-   
-        try
-            network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
-            diff = network.problem.expected - network.problem.result;
-            figure(4);
-            length(diff);
-            scatter(1:length(diff),diff);
-
-        catch
-            
-        end
-        
-        
-        if aux < network.delta
+        if aux < network.delta || i > 200
             finished = 1;
         end
         if (i > 1)
@@ -191,6 +159,36 @@ function retrain(n)
         i = i + 1;
     end
 
+    figure(1);
+    plot(totalErr);
+    title('Error cuadratico medio');
+    print('ecm.png');
+
+
+    figure(2);
+    plot(oldEta);
+    title('Eta');
+
+    figure(3);
+    permuted = permute(network.oldWeights, [2 3 1]);
+    plot(permuted(:,:,neuronCount)');
+    title('Pesos de las aristas');
+    
+    figure(4)
+    l2 = length(network.inputForLayer(1,1,:));
+    l = length(network.inputForLayer(:,2,l2));        
+    scatter(1:l,network.problem.expected(1:l)'- network.inputForLayer(:,2,l2))
+    title('Diferencia');
+
+    try
+        network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
+        diff = network.problem.expected - network.problem.result;
+        figure(4);
+        length(diff);
+        scatter(1:length(diff),diff);
+    catch
+        
+    end
 end
 
 
