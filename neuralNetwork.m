@@ -132,8 +132,8 @@ function retrain(n)
                     end
                else
                 network.errorRepeats = network.errorRepeats + 1;
-                if (network.errorRepeats > 2)
-                    deltaEta = 1.2;
+                if (network.errorRepeats > 3)
+                    deltaEta = 0.1;
                     network.eta = network.eta + deltaEta;
                     eta = network.eta;
                     network.errorRepeats = 0;
@@ -155,7 +155,7 @@ function retrain(n)
 
     
         figure(2);
-        semilogy(oldEta);
+        plot(oldEta);
         title('Eta');
 
         figure(3);
