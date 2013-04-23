@@ -159,8 +159,8 @@ function x = generateTrainingSets(n)
     end
     % mezclamos los sets que generamos anteriormente
     for i=1:10000
-        rand1 = randi(length(allSets));
-        rand2 = randi(length(allSets));
+        rand1 = ceil(rand() * length(allSets));
+        rand2 = ceil(rand() * length(allSets));
         aux = allSets(rand1,:);
         allSets(rand1, :) = allSets(rand2, :);
         allSets(rand2, :) = aux;
