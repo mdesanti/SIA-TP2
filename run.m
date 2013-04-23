@@ -1,9 +1,14 @@
 clear
 clc
 main
-network.n = 2
-network.problem = problem.approximation(network.n, functs.tanh)
-network.trainPctg = 0.8
-network.beta = 0.5
-network.neuronsPerLayer = [9 6 1];
-network.train(network.n)
+network.n = 3;
+network.problem = problem.approximation(network.n, functs.tanh);
+network.startEta = 0.005;
+network.iterLimit = 200;
+network.trainPctg = 0.4;
+network.momentum = true;
+network.adaptive = true;
+network.beta = 0.5;
+network.neuronsPerLayer = [20 1];
+network.train(network.n);
+save([logging.pwd,'/','network'],'network');

@@ -150,7 +150,7 @@ function retrain(n)
         
         oldEta = [oldEta network.eta];
         
-        if aux < network.delta || i > 200
+        if aux < network.delta || i > network.iterLimit
             finished = 1;
         end
         if (i > 1)

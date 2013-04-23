@@ -44,6 +44,8 @@ network.trainPctg = 0.5;
 network.adaptive = true;
 network.momentum = true;
 
+network.iterLimit = 200;
+
 load data
 
 network.origData = x / 4;
