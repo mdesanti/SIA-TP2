@@ -1,9 +1,9 @@
 global network;
 result = [];
-total = length(network.testSet(:,2:2)) - length(network.trainingSet(:,2:2))
-from = 1000-total-1;
-for i=from+1:1000-1
-    aux = network.eval(network.testSet(i,2:2))*3.8;
+total = length(network.testSet(:,2:3)))
+from = 1000-total-2;
+for i=from+1:1000-2
+    aux = network.eval(network.testSet(i,2:3))*3.8;
     result(i-from) = aux - network.problem.expected(i)*3.8;
 end
 disp('Máximo error..');
