@@ -1,0 +1,66 @@
+% initPopulation();
+% juail not ended
+%     evaluateIndividuals();
+%     seleccionar, aparear
+%     recombinar, mutar
+%     reemplazar
+function genetic = genetic()
+    genetic.run = @run
+end
+
+
+function x = run()
+    networks = initPopulation(10, [3 2 1], 10);
+end
+    
+function x = initPopulation(size, neuronsPerLayer, n)
+    neuronCount = sum(neuronsPerLayer);
+    networks(1:size) = struct('x',[]);
+    for k=1:size
+        networks(k).data = initNetwork(neuronsPerLayer);
+    end
+    x = networks;
+end
+
+
+function m = evaluateIndividuals(individuals) 
+    
+end
+
+
+function net = initNetwork(neuronsPerLayer)
+    global problem;
+    global functs;
+    global util;
+    global initNetwork;
+    global network;
+
+    network = initNetwork;
+    % Control variables
+    network.delta = 0.001;
+    network.startEta = 1;
+    network.beta = 1;
+    network.N = 10000;
+
+    network.intervals = [-1 1];
+    network.weights = [];
+
+    
+    network.neuronsPerLayer = neuronsPerLayer;
+    network.problem = problem.approximation(4, functs.tanh);
+
+    network.testSet = [];
+    network.trainingSet = [];
+    network.trainPctg = 0.5;
+
+    network.adaptive = true;
+    network.momentum = true;
+
+    network.iterLimit = 200;
+    
+    network = util.setNetwork(100, network);
+        
+    util.networkPrepare(100);
+    
+    net = network;
+end

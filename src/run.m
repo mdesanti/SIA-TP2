@@ -13,6 +13,6 @@ if network.adaptive
 else
 	network.startEta = 0.01;
 end
-network.neuronsPerLayer = [5 4 1];
+network.neuronsPerLayer = [9 6 1];
 network.train(network.n);
 save([logging.pwd,'/','network'],'network');

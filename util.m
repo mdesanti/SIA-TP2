@@ -1,5 +1,4 @@
 function util = util()
-    util.setNetwork = @setNetwork;
     util.networkPrepare = @networkPrepare;
     util.binary2vector = @binary2vector;
     util.randomInput = @generateRandomInputs;
@@ -9,13 +8,6 @@ function util = util()
 end
 
 
-function net = setNetwork(n, newNetwork)
-    global network
-    network = newNetwork;
-    networkPrepare(n);
-    net = network;
-end
-
 % Initializes Weights
 % Initializes Inputs
 % Models the network
@@ -24,7 +16,7 @@ function networkPrepare(n)
   global network
   global logging
 
-  if ~network.problem.indexBased
+	if ~network.problem.indexBased
   	network.err = zeros(2^n,1);
   else
   	network.err = length(network.data) - n;
@@ -77,12 +69,12 @@ function networkPrepare(n)
             i = i + 1;
 		end
     end
-%     
-%     logging.errors = zeros(1,2^n,network.neuronCount);
-%     logging.errorIndexes = ones(2^n,network.neuronCount);
-%     logging.lastError = 0;
-%     logging.currentError = 0;
-%     logging.errorRepetition = 0;
+    
+    logging.errors = zeros(1,2^n,network.neuronCount);
+    logging.errorIndexes = ones(2^n,network.neuronCount);
+    logging.lastError = 0;
+    logging.currentError = 0;
+    logging.errorRepetition = 0;
 end
 
 % Retunrs the index of the node in the layer
@@ -152,7 +144,7 @@ function x = generateTrainingSets(n)
     network.problem.originalSet = n;
     from = network.data;
     allSets = zeros(length(from) - n, n + 2);
-    trainingQty = ceil(length(from)*network.trainPctg);
+    trainingQty = ceil(length(from)*network.trainPctg)
     
 
     network.problem.expected = zeros(1);
