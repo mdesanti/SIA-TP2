@@ -11,6 +11,25 @@ end
 
 function x = run()
     networks = initPopulation(10, [3 2 1], 10);
+    ended = 0;
+    evaluations = [];
+    total = length(network.testSet(:,2:3));
+    from = 1000-total-2;
+    while(~ended)
+        %evaluateIndividuals()
+        for i=1:length(networks)
+            for i=from+1:1000-2
+                result = [];
+                aux = network.eval(network.testSet(i,2:3))*3.8;
+                result(i-from) = aux - network.problem.expected(i)*3.8;
+            end
+            %revisar esto!
+            evaluations(i) = 36-sum(result.^2)/length(result);
+        end
+        %select
+        selection = select(evaluations);
+        
+    end
 end
     
 function x = initPopulation(size, neuronsPerLayer, n)
