@@ -1,20 +1,68 @@
+function c = crossover()
+    c.getWeightsArray = @getWeightsArray;
+    c.getWeightsMatrix = @getWeightsMatrix;
+    c.onePointCrossover = @onePointCrossover;
+    c.twoPointCrossover = @twoPointCrossover;
+    c.anularCrossOver = @anularCrossOver;
+    c.uniformParametrizedCrossOver = @uniformParametrizedCrossOver;
+    c.mutate = @mutate;
+    c.test= @test;
+end
+
+function test()
+    global crossover;
+    global genetic;
+    global networks;
+    global mutationProbability;
+    c = crossover;
+    networks = genetic.init(10, [3 2 1], 10);
+    
+    
+    % Tests mutations
+    
+    mutationProbability = 1;
+    oldWeights = networks(1).data.weights;
+    networks(1).data = c.mutate(networks(1).data);
+    newWeights = networks(1).data.weights;
+    if (sum(oldWeights - newWeights) > 0)
+       disp('Mutation OK');
+    else
+       disp('Mutation FAILED');
+    end
+    
+    % Tests single crossover
+    oldWeights = [networks(1).data.weights, networks(2).data.weights];
+    res = c.onePointCrossover(networks(1).data, networks(2).data);
+    [networks(1).data networks(2).data] = res;
+    netWeights = [networks(1).data.weights, networks(2).data.weights];
+    
+    if (prod(oldWeights == newWeights) == 0)
+       disp('Crossover simple OK');
+    else
+       disp('Crossover simple FAILED');
+    end
+end
+
+
 %Paso de una matriz de pesos a un array.
 %Deberíamos recibir la cantidad de bits de entrada.
 function weightsArray = getWeightsArray(network, n)
     neuronsPerLayer = network.neuronsPerLayer;
     weights = network.weights;
-    weightsArray = [];
+    weightsArray = zeros(1,1);
     length = 1;
-    for i=1:length(network.weights)
+    len = size(network.weights);
+    weightQty = 0;
+    for i=1:len(1)
         layer = network.layerIndexForNeuron(i);
         %va hasta + 1 por el peso del bias
         if (layer > 1)
             weightQty = neuronsPerLayer(layer-1)+1;
         else
-            weigthQty = n + 1;
+            weightQty = n + 1;
         end
-        weightsArray(length:weightQty) = weights(i,1:weightQty);
-        length = length + weigthQty;
+        weightsArray(length:length + weightQty - 1) = weights(i,1:weightQty);
+        length = length + weightQty;
     end
 end
 
@@ -22,23 +70,25 @@ function weightsMatrix = getWeightsMatrix(network, weightsArray, n)
     neuronsPerLayer = network.neuronsPerLayer;
     weightsMatrix = [];
     length = 1;
-    for i=1:length(network.weights)
+    len = size(network.weights);
+    weightQty = 0;
+    for i=1:len(1)
         layer = network.layerIndexForNeuron(i);
         %va hasta + 1 por el peso del bias
         if (layer > 1)
-            weightQty = neuronsPerLayer(layer-1)+1;
+            weigthQty = neuronsPerLayer(layer-1)+1;
         else
             weigthQty = n + 1;
         end
-        network.weights(i,1:weigthQty) = weightsArray(length:length + weightQty);
+        network.weights(i,1:weigthQty) = weightsArray(length:length + weigthQty - 1);
         length = length + weigthQty;
     end
     weightsMatrix = network.weights;
 end
 
 function children = onePointCrossover(network1, network2)
-    weights1 = getWeightsArray(network1, n);
-    weights2 = getWeightsArray(network2, n);
+    weights1 = getWeightsArray(network1, network1.n);
+    weights2 = getWeightsArray(network2, network2.n);
     
     swapPoint = randi([1 length(weights1)]);
     
@@ -125,19 +175,15 @@ function children = uniformParametrizedCrossOver(network1, network2)
     children(2) = network2;
 end
 
-
 function child = mutate(network) 
     global mutationProbability;
-    weights = getWeightsArray(network, n);
-    
+    weights = getWeightsArray(network, network.n);
     for i=1:length(weights)
         randomNr = rand();
         if(randomNr < mutationProbability)
             weights(i) = rand()/2 -1;
         end
     end
-    getWeightsMatrix(network, weights, n);
+    network.weights = getWeightsMatrix(network, weights, network.n);
     child = network;
 end
-
-
