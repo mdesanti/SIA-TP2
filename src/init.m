@@ -32,7 +32,12 @@ genetic = geneticFile
 global crossover;
 crossover = crossoverFile
 
+global networkData;
+
 load data
 
-initNetwork.origData = x / 4;
-initNetwork.data = x / 4;
+networkData.origData = x / 4;
+networkData.data = x / 4;
+
+genetic.crossoverMethod = crossover.onePointCrossover;
+% genetic.selectionMethod = crossover.onePointCrossover;
