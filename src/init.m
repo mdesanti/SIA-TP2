@@ -5,6 +5,7 @@ neuronFile = neuron;
 geneticFile = genetic;
 crossoverFile = crossover;
 networkFile = neuralNetwork;
+selectionFile = selection;
 
 % Utility methods
 global util;
@@ -31,6 +32,9 @@ genetic = geneticFile
 
 global crossover;
 crossover = crossoverFile
+
+global selection;
+selection = selectionFile;
 
 load data
 
