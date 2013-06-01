@@ -20,27 +20,125 @@ function test()
     
     % Tests mutations
     
+    old = networks(1).data;
+    
     mutationProbability = 1;
     oldWeights = networks(1).data.weights;
     networks(1).data = c.mutate(networks(1).data);
     newWeights = networks(1).data.weights;
-    if (sum(oldWeights - newWeights) > 0)
+    if (sum(sum(oldWeights - newWeights)) ~= 0)
        disp('Mutation OK');
     else
        disp('Mutation FAILED');
     end
     
-    % Tests single crossover
-    oldWeights = [networks(1).data.weights, networks(2).data.weights];
-    res = c.onePointCrossover(networks(1).data, networks(2).data);
-    [networks(1).data networks(2).data] = res;
-    netWeights = [networks(1).data.weights, networks(2).data.weights];
+    networks(1).data = old;
     
-    if (prod(oldWeights == newWeights) == 0)
-       disp('Crossover simple OK');
+    % Tests single crossover
+    
+    old1 = networks(1).data;
+    old2 = networks(2).data;
+    
+    o1 = networks(1).data.weights;
+    o2 = networks(2).data.weights;
+    [ networks(1).data, networks(2).data ] = c.onePointCrossover(networks(1).data, networks(2).data);
+    n1 = networks(1).data.weights;
+    n2 = networks(2).data.weights;
+    
+    if (min((o1(:) == n1(:))) == 0)
+        if (min((o2(:) == n2(:))) == 0)
+           disp('Crossover simple OK');
+        else
+           disp('Crossover simple FAILED');
+        end
     else
        disp('Crossover simple FAILED');
     end
+    
+    networks(1).data = old1;
+    networks(2).data = old2;
+    
+    
+    
+    % Tests two point crossover
+    
+    old1 = networks(1).data;
+    old2 = networks(2).data;
+
+    
+    o1 = networks(1).data.weights;
+    o2 = networks(2).data.weights;
+    [ networks(1).data, networks(2).data ] = c.twoPointCrossover(networks(1).data, networks(2).data);
+    n1 = networks(1).data.weights;
+    n2 = networks(2).data.weights;
+    
+    if (min((o1(:) == n1(:))) == 0)
+        if (min((o2(:) == n2(:))) == 0)
+           disp('Crossover 2p OK');
+        else
+           disp('Crossover 2p FAILED');
+        end
+    else
+       disp('Crossover 2p FAILED');
+    end
+    
+    networks(1).data = old1;
+    networks(2).data = old2;
+    
+
+    % Tests anular crossover
+
+    old1 = networks(1).data;
+    old2 = networks(2).data;    
+    
+    o1 = networks(1).data.weights;
+    o2 = networks(2).data.weights;
+    [ networks(1).data, networks(2).data ] = c.anularCrossOver(networks(1).data, networks(2).data);
+    n1 = networks(1).data.weights;
+    n2 = networks(2).data.weights;
+    
+    if (min((o1(:) == n1(:))) == 0)
+        if (min((o2(:) == n2(:))) == 0)
+           disp('Crossover anular OK');
+        else
+           disp('Crossover anular FAILED');
+        end
+    else
+       disp('Crossover anular FAILED');
+    end
+    
+    networks(1).data = old1;
+    networks(2).data = old2;
+    
+    % Tests uniform crossover
+
+    global crossOverProbability;
+    
+    crossOverProbability = 1;
+    
+    old1 = networks(1).data;
+    old2 = networks(2).data;    
+    
+    o1 = networks(1).data.weights;
+    o2 = networks(2).data.weights;
+    [ networks(1).data, networks(2).data ] = c.uniformParametrizedCrossOver(networks(1).data, networks(2).data);
+    n1 = networks(1).data.weights;
+    n2 = networks(2).data.weights;
+    
+    if (min((o1(:) == n1(:))) == 0)
+        if (min((o2(:) == n2(:))) == 0)
+           disp('Crossover uniform OK');
+        else
+           disp('Crossover uniform FAILED');
+        end
+    else
+       disp('Crossover uniform FAILED');
+    end
+    
+    networks(1).data = old1;
+    networks(2).data = old2;
+
+    
 end
 
 
@@ -86,47 +184,50 @@ function weightsMatrix = getWeightsMatrix(network, weightsArray, n)
     weightsMatrix = network.weights;
 end
 
-function children = onePointCrossover(network1, network2)
+function [ c1, c2 ] = onePointCrossover(network1, network2)
     weights1 = getWeightsArray(network1, network1.n);
     weights2 = getWeightsArray(network2, network2.n);
     
     swapPoint = randi([1 length(weights1)]);
     
     for i=swapPoint:length(weights1)
-        aux = weights1(i);
-        weights1(i) = weights2(i);
-        weights2(i) = aux;
+        aux1 = weights1(i);
+        aux2 = weights2(i);
+        weights1(i) = aux2;
+        weights2(i) = aux1;
     end
-    network1.weights = weights1;
-    network2.weights = weights2;
-    children(1) = network1;
-    children(2) = network2;
+    network1.weights = getWeightsMatrix(network1, weights1, network1.n);
+    network2.weights = getWeightsMatrix(network2, weights2, network2.n);
+    c1 = network1;
+    c2 = network2;
 end
 
-function children = twoPointCrossover(network1, network2)
-    weights1 = getWeightsArray(network1, n);
-    weights2 = getWeightsArray(network2, n);
+function [ c1, c2 ]= twoPointCrossover(network1, network2)
+    weights1 = getWeightsArray(network1, network1.n);
+    weights2 = getWeightsArray(network2, network2.n);
     
     swapPoint = randi([1 length(weights1)]);
-    endSwapPoint = rand([1 length(weights1)]);
-    while (endSwapPoint < swapPoint)
-        endSwapPoint = rand([1 length(weights1)]);
-    end
+    endSwapPoint = randi([1 length(weights1)]);
+    
+    aux = endSwapPoint;
+    endSwapPoint = swapPoint;
+    swapPoint = aux;
     
     for i=swapPoint:endSwapPoint
-        aux = weights1(i);
-        weights1(i) = weights2(i);
-        weights2(i) = aux;
+        aux1 = weights1(i);
+        aux2 = weights2(i);
+        weights1(i) = aux2;
+        weights2(i) = aux1;
     end
-    network1.weights = weights1;
-    network2.weights = weights2;
-    children(1) = network1;
-    children(2) = network2;
+    network1.weights = getWeightsMatrix(network1, weights1, network1.n);
+    network2.weights = getWeightsMatrix(network2, weights2, network2.n);
+    c1 = network1;
+    c2 = network2;
 end
 
-function children = anularCrossOver(network1, network2)
-    weights1 = getWeightsArray(network1, n);
-    weights2 = getWeightsArray(network2, n);
+function [ c1, c2 ] = anularCrossOver(network1, network2)
+    weights1 = getWeightsArray(network1, network1.n);
+    weights2 = getWeightsArray(network2, network2.n);
     
     swapPoint = randi([1 length(weights1)]);
     endSwapPoint = rand([1 length(weights1)]);
@@ -143,47 +244,47 @@ function children = anularCrossOver(network1, network2)
     
     if (endSwapPoint < swapPoint)
         for i=1:endSwapPoint
-        aux = weights1(i);
-        weights1(i) = weights2(i);
-        weights2(i) = aux;
-    end
+            aux = weights1(i);
+            weights1(i) = weights2(i);
+            weights2(i) = aux;
+        end
     end
     
-    network1.weights = weights1;
-    network2.weights = weights2;
-    children(1) = network1;
-    children(2) = network2;
+    network1.weights = getWeightsMatrix(network1, weights1, network1.n);
+    network2.weights = getWeightsMatrix(network2, weights2, network2.n);
+    c1 = network1;
+    c2 = network2;
 end
 
-function children = uniformParametrizedCrossOver(network1, network2)
+function [c1, c2] = uniformParametrizedCrossOver(network1, network2)
     global crossOverProbability;
-    weights1 = getWeightsArray(network1, n);
-    weights2 = getWeightsArray(network2, n);
+    weights1 = getWeightsArray(network1, network1.n);
+    weights2 = getWeightsArray(network2, network2.n);
     
     for i=1:length(weights1)
         randomNr = rand();
         if(rand < crossOverProbability) 
             aux = weights1(i);
-            weights1(i) = weights2;
+            weights1(i) = weights2(i);
             weights2(i) = aux;
         end
     end
     
-    getWeightsMatrix(network1, weights1, n);
-    getWeightsMatrix(network2, weights2, n);
-    children(1) = network1;
-    children(2) = network2;
+    network1.weights = getWeightsMatrix(network1, weights1, network1.n);
+    network2.weights = getWeightsMatrix(network2, weights2, network2.n);
+    c1 = network1;
+    c2 = network2;
 end
 
 function child = mutate(network) 
     global mutationProbability;
     weights = getWeightsArray(network, network.n);
-    max = max(weights);
-    min = min(weights);
+    high = max(weights);
+    low = min(weights);
     for i=1:length(weights)
         randomNr = rand();
         if(randomNr < mutationProbability)
-            weights(i) = rand() * ( abs(max) + abs(min) ) - abs(min);
+            weights(i) = rand() * ( abs(high) + abs(low) ) - abs(low);
         end
     end
     network.weights = getWeightsMatrix(network, weights, network.n);
