@@ -43,4 +43,6 @@ networkData.origData = x / 4;
 networkData.data = x / 4;
 
 genetic.crossoverMethod = crossover.onePointCrossover;
-% genetic.selectionMethod = crossover.onePointCrossover;
+genetic.firstSelectionMethod = selection.rouleteSelection;
+genetic.secondSelectionMethod = selection.rouleteSelection;
+genetic.mutation = crossover.rouleteSelection;
