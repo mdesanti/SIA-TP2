@@ -75,8 +75,8 @@ end
 
 function selection = tournamentSelection(evaluations, n) 
     for i=1:n
-        a = randi([1 n]);
-        b = randi([1, n]);
+        a = ceil(rand() * n);
+        b = ceil(rand() * n);
         randomNr = rand();
         if(randomNr < 0.75) 
             %selecciono al mas apto

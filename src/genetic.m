@@ -16,7 +16,7 @@ function x = run()
     global genetic
     global util
     global allErrors
-    networks = initPopulation(100, [3 2 1]);
+    networks = initPopulation(20, [3 2 1]);
     theTestSets = networks(1).data.testSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;

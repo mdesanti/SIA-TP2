@@ -188,7 +188,7 @@ function [ c1, c2 ] = onePointCrossover(network1, network2)
     weights1 = getWeightsArray(network1, network1.n);
     weights2 = getWeightsArray(network2, network2.n);
     
-    swapPoint = randi([1 length(weights1)]);
+    swapPoint = ceil(rand() * length(weights1));
     
     for i=swapPoint:length(weights1)
         aux1 = weights1(i);
@@ -206,8 +206,8 @@ function [ c1, c2 ]= twoPointCrossover(network1, network2)
     weights1 = getWeightsArray(network1, network1.n);
     weights2 = getWeightsArray(network2, network2.n);
     
-    swapPoint = randi([1 length(weights1)]);
-    endSwapPoint = randi([1 length(weights1)]);
+    swapPoint = ceil(rand() * length(weights1));
+    endSwapPoint = ceil(rand() * length(weights1));
     
     aux = endSwapPoint;
     endSwapPoint = swapPoint;
@@ -229,8 +229,8 @@ function [ c1, c2 ] = anularCrossOver(network1, network2)
     weights1 = getWeightsArray(network1, network1.n);
     weights2 = getWeightsArray(network2, network2.n);
     
-    swapPoint = randi([1 length(weights1)]);
-    endSwapPoint = rand([1 length(weights1)]);
+    swapPoint = ceil(rand() * length(weights1));
+    endSwapPoint = ceil(rand() * length(weights1));
     finish = endSwapPoint;
     if (endSwapPoint < swapPoint) 
         finish = length(weights1);
