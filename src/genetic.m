@@ -23,11 +23,9 @@ function x = run()
                 aux = network.eval(network.testSet(i,2:3))*3.8;
                 result(i-from) = aux - network.problem.expected(i)*3.8;
             end
-            %revisar esto!
-            evaluations(i) = 36-sum(result.^2)/length(result);
+            evaluations(i) = 1/sum(result.^2)/length(result);
         end
-        %select
-        selection = select(evaluations);
+        networks = replacementMethod(networks, evaluations)
         
     end
 end
