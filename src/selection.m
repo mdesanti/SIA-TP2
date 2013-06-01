@@ -14,9 +14,9 @@ end
 
 function selection = rouleteSelection(evaluations, n)
     %suma de todos los elementos de evaluations
-    sum = sum(evaluations);
+    suma = sum(evaluations);
     %para cada valor, ev/sum
-    evaluations = evaluations./sum;
+    evaluations = evaluations./suma;
     cumSum = 0;
     %en cada lugar de evaluations queda la probabilidad acumulada de cada
     %valor
@@ -41,9 +41,9 @@ end
 
 function selection = universalEstocasticSelection(evaluations, n)
     %suma de todos los elementos de evaluations
-    sum = sum(evaluations);
+    suma = sum(evaluations);
     %para cada valor, ev/sum
-    evaluations = evaluations./sum;
+    evaluations = evaluations./suma;
     cumSum = 0;
     %en cada lugar de evaluations queda la probabilidad acumulada de cada
     %valor
@@ -78,7 +78,7 @@ function selection = tournamentSelection(evaluations, n)
         a = randi([1 n]);
         b = randi([1, n]);
         randomNr = rand();
-        if(randomNr < 0.75) {
+        if(randomNr < 0.75) 
             %selecciono al mas apto
             if (evaluations(a) > evaluations(b))
                 selection(i) = a;

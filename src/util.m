@@ -9,8 +9,8 @@ function util = util()
 end
 
 
-function net = setNetwork(n, newNetwork)
-    global network
+function net = setNetwork(newNetwork)
+    global network;
     network = newNetwork;
     net = network;
 end
@@ -23,12 +23,6 @@ function networkPrepare(n)
   global network
   global logging
 
-  if ~network.problem.indexBased
-  	network.err = zeros(2^n,1);
-  else
-  	network.err = length(network.data) - n;
-  end
-    
 	network.neuronCount = sum(network.neuronsPerLayer);
 
 	% Initializes the weight only if its the first time.
@@ -73,9 +67,9 @@ function networkPrepare(n)
     	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
 		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
     else
-        num = ceil((length(network.data)) * network.trainPctg);
+        num = network.trainSize;
 		network.inputForLayer = zeros(num, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-		network.inputForLayer(:,:,1) = network.inputGenerator(n);
+        network.inputForLayer(:,:,1) = network.inputGenerator(n);
 	end
 	for i = 2:length(network.neuronsPerLayer) + 1
 		network.inputForLayer(:,1,i) = 1;
@@ -177,10 +171,11 @@ end
 
 function x = generateTrainingSets(n)
     global network
+    global networkData
     network.problem.originalSet = n;
-    from = network.data;
+    from = networkData.data;
     allSets = zeros(length(from) - n, n + 2);
-    trainingQty = ceil(length(from)*network.trainPctg);
+    trainingQty = network.trainSize;
     
 
     network.problem.expected = zeros(1);

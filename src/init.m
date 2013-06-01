@@ -6,6 +6,7 @@ geneticFile = genetic;
 crossoverFile = crossover;
 networkFile = neuralNetwork;
 selectionFile = selection;
+replacementFile = replacement;
 
 % Utility methods
 global util;
@@ -42,7 +43,12 @@ load data
 networkData.origData = x / 4;
 networkData.data = x / 4;
 
+global replacement;
+
+replacement = replacementFile;
+
+genetic.replacementMethod = replacement.method1;
 genetic.crossoverMethod = crossover.onePointCrossover;
-genetic.firstSelectionMethod = selection.rouleteSelection;
-genetic.secondSelectionMethod = selection.rouleteSelection;
-genetic.mutation = crossover.rouleteSelection;
+genetic.firstSelectionMethod = selection.roulette;
+genetic.secondSelectionMethod = selection.roulette;
+genetic.mutate = crossover.mutate;

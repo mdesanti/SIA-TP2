@@ -11,23 +11,41 @@ end
 
 
 function x = run()
-    networks = initPopulation(10, [3 2 1], 10);
+    global networks
+    global network
+    global genetic
+    global util
+    networks = initPopulation(20, [3 2 1], 10);
     ended = 0;
     evaluations = [];
-    total = length(network.testSet(:,2:3));
-    from = 1000-total-2;
-    while(~ended)
-        %evaluateIndividuals()
+%     total = length(networks(1).data.testSet(:,2:3));
+    from = network.trainSize;
+    k = 100;
+    while(k > 0)
         for i=1:length(networks)
-            for i=from+1:1000-2
-                result = [];
-                aux = network.eval(network.testSet(i,2:3))*3.8;
-                result(i-from) = aux - network.problem.expected(i)*3.8;
+            result = [];
+            for j=from+1:600-2
+                util.setNetwork(networks(i).data);
+                aux = network.eval(network.testSet(j,2:3))*3.8;
+                result(j-from) = aux - network.problem.expected(j)*3.8;
             end
-            evaluations(i) = 1/sum(result.^2)/length(result);
+            evaluations(i) = 1/(sum(result.^2)/length(result));
         end
-        networks = replacementMethod(networks, evaluations)
+        e1 = evaluations;
         
+        networks =  genetic.replacementMethod(networks, evaluations);
+        
+        for i=1:length(networks)
+            result = [];
+            for j=from+1:600-2
+                util.setNetwork(networks(i).data);
+                aux = network.eval(network.testSet(j,2:3))*3.8;
+                result(j-from) = aux - network.problem.expected(j)*3.8;
+            end
+            evaluations(i) = 1/(sum(result.^2)/length(result));
+        end
+        mean(evaluations)
+        k = k - 1;
     end
 end
     
@@ -74,9 +92,10 @@ function net = initNetwork(neuronsPerLayer)
     network.momentum = true;
 
     network.iterLimit = 200;
+    network.trainSize = 400;
     network.n = 2;
     
-    network = util.setNetwork(2, network);
+    network = util.setNetwork(network);
         
     util.networkPrepare(2);
     
