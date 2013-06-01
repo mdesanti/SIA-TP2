@@ -59,7 +59,6 @@ function selection = universalEstocasticSelection(evaluations, n)
 end
 
 %no se como calcular el valor medio temporal
-
 function selection = boltzmanSelection(evaluations, n)
     
 end
@@ -88,11 +87,44 @@ function selection = tournamentSelection(evaluations, n)
 end
 
 function selection = rankSelection(evaluations, n)
+    sorted = [];
+    indexes = [];
+    [sorted indexes] = sort(evaluations, 2, 'descend');
+    probabilities = [];
+    N = length(sorted);
+    for i=1:length(sorted)
+        probabilities = (N-(i-1))/ (N*(N+1)/2);
+    end
     
+    cumSum = 0;
+    %en cada lugar de evaluations queda la probabilidad acumulada de cada
+    %valor
+    for i=1:length(probabilities)
+        cumSum = cumSum + probabilities(i);
+        probabilities(i) = cumSum;
+    end
+    %selecciono n elementos
+    for j=1:n
+        randomNr = rand();
+        selected = 0;
+        for k=1:length(probabilities)
+            selected = k;
+            if (randomNr < probabilities(k))
+                break;
+            end
+        end
+        selection(j) = indexes(selected);
+    end
 end
 
 
-function selection = elitSelection(evaluations, n)
-
+function selection = eliteSelection(evaluations, n)
+    sorted = [];
+    indexes = [];
+    [sorted indexes] = sort(evaluations, 2);
+    
+    for i=1:n
+        selection(i) = indexes(i);
+    end
 end
 

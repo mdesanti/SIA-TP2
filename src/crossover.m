@@ -94,7 +94,7 @@ function children = onePointCrossover(network1, network2)
     
     for i=swapPoint:length(weights1)
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     network1.weights = weights1;
@@ -115,7 +115,7 @@ function children = twoPointCrossover(network1, network2)
     
     for i=swapPoint:endSwapPoint
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     network1.weights = weights1;
@@ -137,14 +137,14 @@ function children = anularCrossOver(network1, network2)
     
     for i=swapPoint:finish
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     
     if (endSwapPoint < swapPoint)
         for i=1:endSwapPoint
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     end
@@ -178,10 +178,12 @@ end
 function child = mutate(network) 
     global mutationProbability;
     weights = getWeightsArray(network, network.n);
+    max = max(weights);
+    min = min(weights);
     for i=1:length(weights)
         randomNr = rand();
         if(randomNr < mutationProbability)
-            weights(i) = rand()/2 -1;
+            weights(i) = rand() * ( abs(max) + abs(min) ) - abs(min);
         end
     end
     network.weights = getWeightsMatrix(network, weights, network.n);
