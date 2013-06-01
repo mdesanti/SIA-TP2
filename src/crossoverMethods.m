@@ -129,11 +129,12 @@ end
 function child = mutate(network) 
     global mutationProbability;
     weights = getWeightsArray(network, n);
-    
+    max = max(weights);
+    min = min(weights);
     for i=1:length(weights)
         randomNr = rand();
         if(randomNr < mutationProbability)
-            weights(i) = rand()/2 -1;
+            weights(i) = rand() * ( abs(max) + abs(min) ) - abs(min);
         end
     end
     getWeightsMatrix(network, weights, n);
