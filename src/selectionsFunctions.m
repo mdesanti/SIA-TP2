@@ -89,7 +89,7 @@ end
 function selection = rankSelection(evaluations, n)
     sorted = [];
     indexes = [];
-    [sorted indexes] = sort(evaluations, 2);
+    [sorted indexes] = sort(evaluations, 2, 'descend');
     probabilities = [];
     N = length(sorted);
     for i=1:length(sorted)
