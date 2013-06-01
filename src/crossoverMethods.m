@@ -30,8 +30,7 @@ function weightsMatrix = getWeightsMatrix(network, weightsArray, n)
         else
             weigthQty = n + 1;
         end
-        network.weights(i,1:weigthQty) = weightsArray(length, length + weightQty);
-        weightsArray(length:weightQty) = weights(i,1:weightQty);
+        network.weights(i,1:weigthQty) = weightsArray(length:length + weightQty);
         length = length + weigthQty;
     end
     weightsMatrix = network.weights;
