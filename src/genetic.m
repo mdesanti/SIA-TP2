@@ -15,6 +15,7 @@ function x = run()
     global network
     global genetic
     global util
+    global allErrors
     networks = initPopulation(100, [3 2 1]);
     theTestSets = networks(1).data.testSet;
     theExpected = networks(1).data.problem.expected;
@@ -23,6 +24,7 @@ function x = run()
 %     total = length(networks(1).data.testSet(:,2:3));
     from = network.trainSize;
     k = 100;
+    allErrors = [];
     while(k > 0)
         for i=1:length(networks)
             result = [];
@@ -36,6 +38,7 @@ function x = run()
         end
         e1 = evaluations;
         error
+        allErrors(k) = mean(error);
         mean(evaluations)
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
