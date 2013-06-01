@@ -3,6 +3,7 @@ functsFile = functs;
 problemFile = problem;
 neuronFile = neuron;
 geneticFile = genetic;
+crossoverFile = crossover;
 networkFile = neuralNetwork;
 
 % Utility methods
@@ -27,6 +28,9 @@ initNetwork = networkFile
 
 global genetic
 genetic = geneticFile
+
+global crossover;
+crossover = crossoverFile
 
 load data
 

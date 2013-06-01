@@ -12,7 +12,6 @@ end
 function net = setNetwork(n, newNetwork)
     global network
     network = newNetwork;
-    networkPrepare(n);
     net = network;
 end
 
@@ -35,8 +34,36 @@ function networkPrepare(n)
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
 	if isempty(network.weights)
-    network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)./1.2);
-  end
+        network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)./1.2);
+        
+        % Helps to know for a given node index to which layer it belongs.
+        i = 1;
+        for layer = 1:length(network.neuronsPerLayer)
+            for k = 1:network.neuronsPerLayer(layer)
+                network.layerIndexForNeuron(i) = k;
+                network.layerForNeuron(i) = layer;
+                i = i + 1;
+            end
+        end
+        
+        neuronsPerLayer = network.neuronsPerLayer;
+        len = size(network.weights);
+        l = 1;
+        weigthQty = 1;
+        for i=1:len(1)
+            layer = network.layerForNeuron(i);
+            %va hasta + 1 por el peso del bias
+            if (layer > 1)
+                weigthQty = neuronsPerLayer(layer-1)+1;
+            else
+                weigthQty = n + 1;
+            end
+            if (len(2) - weigthQty > 0) 
+                network.weights(i,weigthQty:len(2)) = zeros(len(2) - weigthQty);
+            end
+            l = l + weigthQty;
+        end
+    end
 
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
@@ -66,17 +93,18 @@ function networkPrepare(n)
 		else
 			network.weightsPerLayer(layer) = 1 + network.neuronsPerLayer(layer - 1);
 		end
-	end
-
-	% Helps to know for a given node index to which layer it belongs.
-	i = 1;
-	for layer = 1:length(network.neuronsPerLayer)
-		for k = 1:network.neuronsPerLayer(layer)
-			network.layerIndexForNeuron(i) = k;
-			network.layerForNeuron(i) = layer;
-            i = i + 1;
-		end
     end
+    
+    % Helps to know for a given node index to which layer it belongs.
+    i = 1;
+    for layer = 1:length(network.neuronsPerLayer)
+        for k = 1:network.neuronsPerLayer(layer)
+            network.layerIndexForNeuron(i) = k;
+            network.layerForNeuron(i) = layer;
+            i = i + 1;
+        end
+    end
+
 %     
 %     logging.errors = zeros(1,2^n,network.neuronCount);
 %     logging.errorIndexes = ones(2^n,network.neuronCount);

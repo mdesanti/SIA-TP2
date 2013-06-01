@@ -6,6 +6,7 @@
 %     reemplazar
 function genetic = genetic()
     genetic.run = @run
+    genetic.init = @initPopulation
 end
 
 
@@ -62,10 +63,9 @@ function net = initNetwork(neuronsPerLayer)
     network.intervals = [-1 1];
     network.weights = [];
 
-    
+    network.problem = problem.approximation(neuronsPerLayer(1), functs.tanh);
     network.neuronsPerLayer = neuronsPerLayer;
-    network.problem = problem.approximation(4, functs.tanh);
-
+    
     network.testSet = [];
     network.trainingSet = [];
     network.trainPctg = 0.5;
@@ -74,10 +74,11 @@ function net = initNetwork(neuronsPerLayer)
     network.momentum = true;
 
     network.iterLimit = 200;
+    network.n = 2;
     
-    network = util.setNetwork(100, network);
+    network = util.setNetwork(2, network);
         
-    util.networkPrepare(100);
+    util.networkPrepare(2);
     
     net = network;
 end
