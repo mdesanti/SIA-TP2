@@ -44,7 +44,7 @@ function children = onePointCrossover(network1, network2)
     
     for i=swapPoint:length(weights1)
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     network1.weights = weights1;
@@ -65,7 +65,7 @@ function children = twoPointCrossover(network1, network2)
     
     for i=swapPoint:endSwapPoint
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     network1.weights = weights1;
@@ -87,14 +87,14 @@ function children = anularCrossOver(network1, network2)
     
     for i=swapPoint:finish
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     
     if (endSwapPoint < swapPoint)
         for i=1:endSwapPoint
         aux = weights1(i);
-        weights1 = weights2(i);
+        weights1(i) = weights2(i);
         weights2(i) = aux;
     end
     end
