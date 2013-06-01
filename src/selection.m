@@ -1,3 +1,13 @@
+function s = selection()
+    s.roulette = @rouleteSelection;
+    s.universal = @universalEstocasticSelection;
+    s.boltzsman = @boltzmanSelection;
+    s.tournament = @tournamentSelection;
+    s.rank = @rankSelection;
+    s.elite = @eliteSelection;
+end
+
+
 % These functions select n individuals depending on the method
 % They return an array of ints that represent which individual was selected
 % from the evaluations array.
