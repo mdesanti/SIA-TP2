@@ -278,7 +278,6 @@ end
 
 function child = mutate(network) 
     global mutationProbability;
-    mutationProbability = 0.5;
     weights = getWeightsArray(network, network.n);
     high = max(weights);
     low = min(weights);

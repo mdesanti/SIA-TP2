@@ -15,7 +15,9 @@ function x = run()
     global network
     global genetic
     global util
-    networks = initPopulation(20, [3 2 1], 10);
+    networks = initPopulation(100, [3 2 1]);
+    theTestSets = networks(1).data.testSet;
+    theExpected = networks(1).data.problem.expected;
     ended = 0;
     evaluations = [];
 %     total = length(networks(1).data.testSet(:,2:3));
@@ -26,30 +28,21 @@ function x = run()
             result = [];
             for j=from+1:600-2
                 util.setNetwork(networks(i).data);
-                aux = network.eval(network.testSet(j,2:3))*3.8;
-                result(j-from) = aux - network.problem.expected(j)*3.8;
+                aux = network.eval(theTestSets(j,2:3))*3.8;
+                result(j-from) = aux - theExpected(j)*3.8;
             end
+            error(i) = (sum(result.^2)/length(result));
             evaluations(i) = 1/(sum(result.^2)/length(result));
         end
         e1 = evaluations;
-        
-        networks =  genetic.replacementMethod(networks, evaluations);
-        
-        for i=1:length(networks)
-            result = [];
-            for j=from+1:600-2
-                util.setNetwork(networks(i).data);
-                aux = network.eval(network.testSet(j,2:3))*3.8;
-                result(j-from) = aux - network.problem.expected(j)*3.8;
-            end
-            evaluations(i) = 1/(sum(result.^2)/length(result));
-        end
+        error
         mean(evaluations)
+        networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
     end
 end
     
-function x = initPopulation(size, neuronsPerLayer, n)
+function x = initPopulation(size, neuronsPerLayer)
     neuronCount = sum(neuronsPerLayer);
     networks(1:size) = struct('x',[]);
     for k=1:size
@@ -70,7 +63,10 @@ function net = initNetwork(neuronsPerLayer)
     global util;
     global initNetwork;
     global network;
-
+    global mutationProbability;
+    
+    mutationProbability = 0.2;
+    
     network = initNetwork;
     % Control variables
     network.delta = 0.001;
@@ -81,7 +77,7 @@ function net = initNetwork(neuronsPerLayer)
     network.intervals = [-1 1];
     network.weights = [];
 
-    network.problem = problem.approximation(neuronsPerLayer(1), functs.tanh);
+    network.problem = problem.approximation(2, functs.tanh);
     network.neuronsPerLayer = neuronsPerLayer;
     
     network.testSet = [];
@@ -98,6 +94,8 @@ function net = initNetwork(neuronsPerLayer)
     network = util.setNetwork(network);
         
     util.networkPrepare(2);
+    
+    
     
     net = network;
 end

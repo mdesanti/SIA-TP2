@@ -15,7 +15,7 @@ function x = rmethods1(networks, evaluations)
        winner2 = networks(selection(2)).data;
        [child1 child2] = genetic.crossoverMethod(winner1, winner2);
        nextGeneration(2 * i - 1).data = genetic.mutate(child1);
-       if (2 * i < length(networks))
+       if (2 * i <= length(networks))
            nextGeneration(2 * i).data = genetic.mutate(child2);
        end
     end
@@ -39,7 +39,7 @@ function x = rmethods2(networks, evaluations)
         p2 = networks(toChange(randi([1 genetic.method2K]))).data;
         [c1, c2] = genetic.crossoverMethod(p1,p2);
         resnextGeneration(M + j).data = genetic.mutate(c1);
-        if (M + j + 1 < N)
+        if (M + j + 1 <= N)
             resnextGeneration(M + j + 1).data = genetic.mutate(c2);
         end
     end
