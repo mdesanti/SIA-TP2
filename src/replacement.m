@@ -3,11 +3,7 @@ function r = replacement()
     r.r2 = @rmethods2;
 end
 
-function x = rmethod2(items, N)
-    iterations = N/2;
-end
-
-function x = rmethod1(networks, evaluations)
+function x = rmethods1(networks, evaluations)
     global genetic;
     selection = [];
     nextGeneration = networks;
@@ -23,4 +19,29 @@ function x = rmethod1(networks, evaluations)
        end
     end
     x = nextGeneration;
+end
+
+function x = rmethods2(networks, evaluations)
+    global genetic;
+    selection = [];
+    
+    N = (length(networks));
+    resnextGeneration = []
+    toChange = genetic.firstSelectionMethod(evaluations, floor(genetic.method2K / 2) * 2);
+    toStay = genetic.firstSelectionMethod(evaluations, N - floor(genetic.method2K / 2) * 2);
+    resnextGeneration(1:length(toStay)) = toStay;
+
+    M = length(toStay);
+
+    for j=1:floor(genetic.method2K / 2)
+        p1 = networks(toChange(randi([1 genetic.method2K])));
+        p2 = networks(toChange(randi([1 genetic.method2K])));
+        [c1, c2] = genetic.crossoverMethod(p1,p2);
+        resnextGeneration(M + j) = genetic.mutate(c1);
+        if (M + j + 1 < N)
+            resnextGeneration(M + j + 1) = genetic.mutate(c2);
+        end
+    end
+    
+    x = resnextGeneration;
 end
