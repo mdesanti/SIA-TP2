@@ -35,8 +35,8 @@ function x = rmethods2(networks, evaluations)
     M = length(toStay);
 
     for j=1:floor(genetic.method2K / 2)
-        p1 = networks(toChange(randi([1 genetic.method2K]))).data;
-        p2 = networks(toChange(randi([1 genetic.method2K]))).data;
+        p1 = networks(ceil(rand() * genetic.method2K)).data;
+        p2 = networks(toChange(ceil(rand() * genetic.method2K))).data;
         [c1, c2] = genetic.crossoverMethod(p1,p2);
         resnextGeneration(M + j).data = genetic.mutate(c1);
         if (M + j + 1 <= N)
