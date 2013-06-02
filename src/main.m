@@ -29,7 +29,7 @@ network = networkFile
 % Control variables
 network.delta = 0.001;
 network.startEta = 1;
-network.beta = 1;
+network.beta = 0.5;
 network.N = 10000;
 
 network.intervals = [-1 1];
@@ -42,7 +42,7 @@ network.trainingSet = [];
 network.trainPctg = 0.5;
 
 network.adaptive = true;
-network.momentum = true;
+network.momentum = false;
 
 network.iterLimit = 200;
 

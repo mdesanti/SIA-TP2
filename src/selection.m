@@ -131,7 +131,7 @@ end
 function selection = eliteSelection(evaluations, n)
     sorted = [];
     indexes = [];
-    [sorted indexes] = sort(evaluations, 2);
+    [sorted indexes] = sort(evaluations, 2, 'descend');
     
     for i=1:n
         selection(i) = indexes(i);

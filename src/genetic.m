@@ -16,19 +16,19 @@ function x = run()
     global genetic
     global util
     global allErrors
-    networks = initPopulation(100, [3 2 1]);
+    networks = initPopulation(20, [9 6 1]);
     theTestSets = networks(1).data.testSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;
     evaluations = [];
 %     total = length(networks(1).data.testSet(:,2:3));
     from = network.trainSize;
-    k = 100;
+    k = 1000000;
     allErrors = [];
     while(k > 0)
         for i=1:length(networks)
             result = [];
-            for j=from+1:600-2
+            for j=from+1:800
                 util.setNetwork(networks(i).data);
                 aux = network.eval(theTestSets(j,2:3))*3.8;
                 result(j-from) = aux - theExpected(j)*3.8;
@@ -68,13 +68,13 @@ function net = initNetwork(neuronsPerLayer)
     global network;
     global mutationProbability;
     
-    mutationProbability = 0.2;
+    mutationProbability = 0.6;
     
     network = initNetwork;
     % Control variables
     network.delta = 0.001;
     network.startEta = 1;
-    network.beta = 1;
+    network.beta = 0.5;
     network.N = 10000;
 
     network.intervals = [-1 1];
@@ -88,7 +88,7 @@ function net = initNetwork(neuronsPerLayer)
     network.trainPctg = 0.5;
 
     network.adaptive = true;
-    network.momentum = true;
+    network.momentum = false;
 
     network.iterLimit = 200;
     network.trainSize = 400;
