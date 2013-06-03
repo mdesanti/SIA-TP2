@@ -17,7 +17,7 @@ function x = run()
     global genetic
     global util
     global allErrors
-    networks = initPopulation(30, [9 6 1]);
+    networks = initPopulation(30, [3 2 1]);
     theTestSets = networks(1).data.testSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;
@@ -29,8 +29,8 @@ function x = run()
     while(k > 0)
         for i=1:length(networks)
             result = [];
+            util.setNetwork(networks(i).data);
             for j=1:15
-                util.setNetwork(networks(i).data);
                 aux = network.eval(theTestSets(j,2:3))*3.8;
                 result(j) = aux - theExpected(j)*3.8;
             end
@@ -38,7 +38,7 @@ function x = run()
 %             comparisson(:,2) = result;
 %             comparisson(:,3) = comparisson(:,1)-comparisson(:,2)
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = 1/(sum(result.^2)/length(result));
+            evaluations(i) = 1/error(i);
         end
         error
         e1 = evaluations;

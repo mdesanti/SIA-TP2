@@ -40,8 +40,8 @@ selection = selectionFile;
 
 load data
 
-networkData.origData = x / 4;
-networkData.data = x / 4;
+networkData.origData = x / 3.8;
+networkData.data = x / 3.8;
 
 global replacement;
 
