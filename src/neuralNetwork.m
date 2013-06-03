@@ -27,6 +27,7 @@ function retrain(n)
     global util
     global logging
     global network
+    global networkData
     
     util.networkPrepare(n);
 
@@ -47,10 +48,17 @@ function retrain(n)
     deltaErrors = [];
     noEtaUpdateTime = 2;
     oldLastError = 0;
+    
+    logging.errors = zeros(1,2^n,network.neuronCount);
+     logging.errorIndexes = ones(2^n,network.neuronCount);
+     logging.lastError = 0;
+     logging.currentError = 0;
+     logging.errorRepetition = 0;
+
     network.weights;
 
     if (network.problem.indexBased)
-        N = ceil((length(network.data) - n) * network.trainPctg);
+        N = network.trainSize;
     else
         N = 2^n;
     end

@@ -36,6 +36,8 @@ crossover = crossoverFile
 
 global networkData;
 global selection;
+global network;
+network = []; % dummy
 selection = selectionFile;
 
 load data

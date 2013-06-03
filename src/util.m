@@ -40,6 +40,9 @@ function networkPrepare(n)
             end
         end
         
+        
+        
+        
 %         neuronsPerLayer = network.neuronsPerLayer;
 %         len = size(network.weights);
 %         l = 1;
@@ -100,11 +103,11 @@ function networkPrepare(n)
     end
 
 %     
-%     logging.errors = zeros(1,2^n,network.neuronCount);
-%     logging.errorIndexes = ones(2^n,network.neuronCount);
-%     logging.lastError = 0;
-%     logging.currentError = 0;
-%     logging.errorRepetition = 0;
+     logging.errors = zeros(1,2^n,network.neuronCount);
+     logging.errorIndexes = ones(2^n,network.neuronCount);
+     logging.lastError = 0;
+     logging.currentError = 0;
+     logging.errorRepetition = 0;
 end
 
 % Retunrs the index of the node in the layer
