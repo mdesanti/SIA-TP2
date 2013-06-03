@@ -288,7 +288,7 @@ function child = mutate(network)
             factor = -1;
         end
         if(randomNr < mutationProbability)
-            weights(i) = weights(i) + factor * (weights(i)*0.01);
+            weights(i) = weights(i) + factor * (weights(i)*0.02);
         end
     end
     network.weights = getWeightsMatrix(network, weights, network.n);

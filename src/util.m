@@ -53,7 +53,7 @@ function networkPrepare(n)
                  weigthQty = n + 1;
              end
              if (len(2) - weigthQty > 0) 
-                 network.weights(i,weigthQty+1:len(2)) = zeros(len(2) - weigthQty);
+                 network.weights(i,weigthQty+1:len(2)) = zeros(1,len(2) - (weigthQty));
              end
              l = l + weigthQty;
          end

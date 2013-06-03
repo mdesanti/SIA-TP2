@@ -6,6 +6,7 @@ end
 
 function x = rmethods1(networks, evaluations)
     global genetic;
+    global crossOverProbability;
     selection = [];
     nextGeneration = networks;
     N = ceil(length(networks)/2);
@@ -13,7 +14,13 @@ function x = rmethods1(networks, evaluations)
        selection = genetic.firstSelectionMethod(evaluations, 2);
        winner1 = networks(selection(1)).data;
        winner2 = networks(selection(2)).data;
-       [child1 child2] = genetic.crossoverMethod(winner1, winner2);
+       randomNr = rand;
+       if(randomNr < crossOverProbability)
+           [child1 child2] = genetic.crossoverMethod(winner1, winner2);
+       else
+           child1 = winner1;
+           child2 = winner2;
+       end
        nextGeneration(2 * i - 1).data = genetic.mutate(child1);
        if (2 * i <= length(networks))
            nextGeneration(2 * i).data = genetic.mutate(child2);

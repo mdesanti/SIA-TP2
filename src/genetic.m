@@ -17,7 +17,7 @@ function x = run()
     global genetic
     global util
     global allErrors
-    networks = initPopulation(30, [3 2 1]);
+    networks = initPopulation(30, [9 6 1]);
     theTestSets = networks(1).data.testSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;
@@ -30,16 +30,19 @@ function x = run()
         for i=1:length(networks)
             result = [];
             util.setNetwork(networks(i).data);
+            comparisson = [];
             for j=1:15
                 aux = network.eval(theTestSets(j,2:3))*3.8;
                 result(j) = aux - theExpected(j)*3.8;
+                comparisson(j,1) = aux;
+                comparisson(j,2) = theExpected(j)*3.8;
+                comparisson(j,3) = result(j);
             end
-%             comparisson(:,1) = theExpected(401:800);
-%             comparisson(:,2) = result;
-%             comparisson(:,3) = comparisson(:,1)-comparisson(:,2)
+            comparisson;
             error(i) = (sum(result.^2)/length(result));
             evaluations(i) = 1/error(i);
         end
+        error;
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
         mean(evaluations)
@@ -72,14 +75,16 @@ function net = initNetwork(neuronsPerLayer)
     global initNetwork;
     global network;
     global mutationProbability;
+    global crossOverProbability;
     
-    mutationProbability = 0.005;
+    crossOverProbability = 0.7;
+    mutationProbability = 0.01;
     
     network = initNetwork;
     % Control variables
     network.delta = 0.001;
     network.startEta = 1;
-    network.beta = 0.5;
+    network.beta = 0.6;
     network.N = 10000;
 
     network.intervals = [-1 1];

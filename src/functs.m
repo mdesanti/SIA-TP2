@@ -26,7 +26,7 @@ end
 
 function x = tanhf(in)
 	global network
-	x = tanh(network.beta * in) * 1;
+	x = tanh(network.beta * in);
 end
 
 function x = tanhdf(in)
