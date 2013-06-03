@@ -7,6 +7,7 @@
 function genetic = genetic()
     genetic.run = @run
     genetic.init = @initPopulation
+    genetic.k = 24;
 end
 
 
@@ -16,7 +17,7 @@ function x = run()
     global genetic
     global util
     global allErrors
-    networks = initPopulation(20, [9 6 1]);
+    networks = initPopulation(30, [3 2 1]);
     theTestSets = networks(1).data.testSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;
@@ -28,13 +29,16 @@ function x = run()
     while(k > 0)
         for i=1:length(networks)
             result = [];
-            for j=from+1:800
-                util.setNetwork(networks(i).data);
+            util.setNetwork(networks(i).data);
+            for j=1:15
                 aux = network.eval(theTestSets(j,2:3))*3.8;
-                result(j-from) = aux - theExpected(j)*3.8;
+                result(j) = aux - theExpected(j)*3.8;
             end
+%             comparisson(:,1) = theExpected(401:800);
+%             comparisson(:,2) = result;
+%             comparisson(:,3) = comparisson(:,1)-comparisson(:,2)
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = 1/(sum(result.^2)/length(result));
+            evaluations(i) = 1/error(i);
         end
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
@@ -69,7 +73,7 @@ function net = initNetwork(neuronsPerLayer)
     global network;
     global mutationProbability;
     
-    mutationProbability = 0.6;
+    mutationProbability = 0.005;
     
     network = initNetwork;
     % Control variables
@@ -86,19 +90,22 @@ function net = initNetwork(neuronsPerLayer)
     
     network.testSet = [];
     network.trainingSet = [];
-    network.trainPctg = 0.5;
+    network.trainPctg = 0;
 
     network.adaptive = true;
     network.momentum = false;
 
     network.iterLimit = 200;
-    network.trainSize = 400;
+    network.trainSize = 0;
     network.n = 2;
     
     network = util.setNetwork(network);
         
     util.networkPrepare(2);
-    
+%     
+%     aux = load('weightsBackup');
+%     network.weights = aux;
+%     
     
     
     net = network;

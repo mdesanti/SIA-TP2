@@ -40,43 +40,40 @@ function networkPrepare(n)
             end
         end
         
-        
-        
-        
-%         neuronsPerLayer = network.neuronsPerLayer;
-%         len = size(network.weights);
-%         l = 1;
-%         weigthQty = 1;
-%         for i=1:len(1)
-%             layer = network.layerForNeuron(i);
-%             %va hasta + 1 por el peso del bias
-%             if (layer > 1)
-%                 weigthQty = neuronsPerLayer(layer-1)+1;
-%             else
-%                 weigthQty = n + 1;
-%             end
-%             if (len(2) - weigthQty > 0) 
-%                 network.weights(i,weigthQty:len(2)) = zeros(len(2) - weigthQty);
-%             end
-%             l = l + weigthQty;
-%         end
+         neuronsPerLayer = network.neuronsPerLayer;
+         len = size(network.weights);
+         l = 1;
+         weigthQty = 1;
+         for i=1:len(1)
+             layer = network.layerForNeuron(i);
+             %va hasta + 1 por el peso del bias
+             if (layer > 1)
+                 weigthQty = neuronsPerLayer(layer-1)+1;
+             else
+                 weigthQty = n + 1;
+             end
+             if (len(2) - weigthQty > 0) 
+                 network.weights(i,weigthQty+1:len(2)) = zeros(len(2) - weigthQty);
+             end
+             l = l + weigthQty;
+         end
     end
 
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
 	
-    
-    if ~network.problem.indexBased
-    	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
-    else
-        num = network.trainSize;
-		network.inputForLayer = zeros(num, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-        network.inputForLayer(:,:,1) = network.inputGenerator(n);
-	end
-	for i = 2:length(network.neuronsPerLayer) + 1
-		network.inputForLayer(:,1,i) = 1;
-	end
+    network.inputGenerator(n);    
+%     if ~network.problem.indexBased
+%     	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+% 		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
+%     else
+%         num = network.trainSize;
+% 		network.inputForLayer = zeros(num, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+%         network.inputForLayer(:,:,1) = network.inputGenerator(n);
+% 	end
+% 	for i = 2:length(network.neuronsPerLayer) + 1
+% 		network.inputForLayer(:,1,i) = 1;
+% 	end
 
 	% Prepares the deltas matrix
 	network.deltas = zeros(max(network.neuronsPerLayer), sum(network.neuronsPerLayer));
@@ -192,13 +189,13 @@ function x = generateTrainingSets(n)
         allSets(i, n+2) = from(i+n);
     end
     % mezclamos los sets que generamos anteriormente
-    for i=1:10000
-        rand1 = ceil(rand() * length(allSets));
-        rand2 = ceil(rand() * length(allSets));
-        aux = allSets(rand1,:);
-        allSets(rand1, :) = allSets(rand2, :);
-        allSets(rand2, :) = aux;
-    end
+%     for i=1:10000
+%         rand1 = ceil(rand() * length(allSets));
+%         rand2 = ceil(rand() * length(allSets));
+%         aux = allSets(rand1,:);
+%         allSets(rand1, :) = allSets(rand2, :);
+%         allSets(rand2, :) = aux;
+%     end
     %ponemos la respuesta en network.problem.expected
     for i=1:trainingQty
         network.trainingSet(i, :) = allSets(i,1:n+1);

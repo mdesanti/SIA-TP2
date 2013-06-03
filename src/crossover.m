@@ -283,8 +283,12 @@ function child = mutate(network)
     low = min(weights);
     for i=1:length(weights)
         randomNr = rand();
+        factor = 1;
+        if(randomNr < 0.5)
+            factor = -1;
+        end
         if(randomNr < mutationProbability)
-            weights(i) = rand() * ( abs(high) + abs(low) ) - abs(low);
+            weights(i) = weights(i) + factor * (weights(i)*0.01);
         end
     end
     network.weights = getWeightsMatrix(network, weights, network.n);

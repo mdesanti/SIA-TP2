@@ -42,8 +42,8 @@ selection = selectionFile;
 
 load data
 
-networkData.origData = x / 4;
-networkData.data = x / 4;
+networkData.origData = x / 3.8;
+networkData.data = x / 3.8;
 
 global replacement;
 
@@ -51,6 +51,6 @@ replacement = replacementFile;
 
 genetic.replacementMethod = replacement.method1;
 genetic.crossoverMethod = crossover.onePointCrossover;
-genetic.firstSelectionMethod = selection.elite;
-genetic.secondSelectionMethod = selection.elite;
+genetic.firstSelectionMethod = selection.roulette;
+genetic.secondSelectionMethod = selection.roulette;
 genetic.mutate = crossover.mutate;
