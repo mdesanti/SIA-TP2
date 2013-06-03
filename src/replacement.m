@@ -49,22 +49,26 @@ end
 
 function x = rmethods3(networks, evaluations)
     global genetic;
+    global network;
+    global util;
     selection = [];
-    nextGeneration = networks;
+    nextGeneration = struct('x',[]);
     N = ceil(length(networks)/2);
     for i=1:genetic.k
-       selection = genetic.firstSelectionMethod(evaluations, 2)
-       winner1 = networks(selection(1));
-       winner2 = networks(selection(2));
+       selection = genetic.firstSelectionMethod(evaluations, 2);
+       winner1 = networks(selection(1)).data;
+       winner2 = networks(selection(2)).data;
        [child1 child2] = genetic.crossoverMethod(winner1, winner2);
-       nextGeneration(i) = genetic.mutate(child1);
+       nextGeneration(i).data = genetic.mutate(child1);
     end
     nexgGenerationEvaluations = [];
+    from = networks(1).data.trainSize;
     for i=1:length(nextGeneration)
-        for i=from+1:1000-2
-            result = [];
-            aux = network.eval(network.testSet(i,2:3))*3.8;
-            result(i-from) = aux - network.problem.expected(i)*3.8;
+        result = [];
+        for j=from+1:800
+            util.setNetwork(nextGeneration(i).data);
+            aux = network.eval(network.testSet(j,2:3))*3.8;
+            result(j-from) = aux - network.problem.expected(j)*3.8;
         end
         nextGenerationEvaluations(i) = 1/sum(result.^2)/length(result);
     end
@@ -75,11 +79,10 @@ function x = rmethods3(networks, evaluations)
     
     netLen = length(networks);
     for i=1:length(selection)
-        net;
         if (selection(i) <= netLen)
-            net = networks(i);
+            x(i) = networks(i);
         else
-            net = nextGeneration(i);
+            x(i) = nextGeneration(i);
         end
     end
     

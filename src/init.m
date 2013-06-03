@@ -49,6 +49,6 @@ replacement = replacementFile;
 
 genetic.replacementMethod = replacement.method1;
 genetic.crossoverMethod = crossover.onePointCrossover;
-genetic.firstSelectionMethod = selection.elite;
-genetic.secondSelectionMethod = selection.elite;
+genetic.firstSelectionMethod = selection.roulette;
+genetic.secondSelectionMethod = selection.roulette;
 genetic.mutate = crossover.mutate;
