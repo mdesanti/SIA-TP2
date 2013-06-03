@@ -40,12 +40,13 @@ function x = run()
             error(i) = (sum(result.^2)/length(result));
             evaluations(i) = 1/(sum(result.^2)/length(result));
         end
-        error
         e1 = evaluations;
-        allErrors(k) = mean(error);
+        allErrors = [allErrors mean(error)];
         mean(evaluations)
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
+        figure(1);
+        plot(allErrors);
     end
 end
     
