@@ -152,7 +152,7 @@ function weightsArray = getWeightsArray(network, n)
     len = size(network.weights);
     weightQty = 0;
     for i=1:len(1)
-        layer = network.layerIndexForNeuron(i);
+        layer = network.layerForNeuron(i);
         %va hasta + 1 por el peso del bias
         if (layer > 1)
             weightQty = neuronsPerLayer(layer-1)+1;
@@ -171,7 +171,7 @@ function weightsMatrix = getWeightsMatrix(network, weightsArray, n)
     len = size(network.weights);
     weightQty = 0;
     for i=1:len(1)
-        layer = network.layerIndexForNeuron(i);
+        layer = network.layerForNeuron(i);
         %va hasta + 1 por el peso del bias
         if (layer > 1)
             weigthQty = neuronsPerLayer(layer-1)+1;

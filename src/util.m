@@ -40,23 +40,23 @@ function networkPrepare(n)
             end
         end
         
-        neuronsPerLayer = network.neuronsPerLayer;
-        len = size(network.weights);
-        l = 1;
-        weigthQty = 1;
-        for i=1:len(1)
-            layer = network.layerForNeuron(i);
-            %va hasta + 1 por el peso del bias
-            if (layer > 1)
-                weigthQty = neuronsPerLayer(layer-1)+1;
-            else
-                weigthQty = n + 1;
-            end
-            if (len(2) - weigthQty > 0) 
-                network.weights(i,weigthQty:len(2)) = zeros(len(2) - weigthQty);
-            end
-            l = l + weigthQty;
-        end
+%         neuronsPerLayer = network.neuronsPerLayer;
+%         len = size(network.weights);
+%         l = 1;
+%         weigthQty = 1;
+%         for i=1:len(1)
+%             layer = network.layerForNeuron(i);
+%             %va hasta + 1 por el peso del bias
+%             if (layer > 1)
+%                 weigthQty = neuronsPerLayer(layer-1)+1;
+%             else
+%                 weigthQty = n + 1;
+%             end
+%             if (len(2) - weigthQty > 0) 
+%                 network.weights(i,weigthQty:len(2)) = zeros(len(2) - weigthQty);
+%             end
+%             l = l + weigthQty;
+%         end
     end
 
 	% Makes matrix containing the inputs for each layer.
