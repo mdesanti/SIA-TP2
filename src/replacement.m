@@ -21,9 +21,9 @@ function x = rmethods1(networks, evaluations)
            child1 = winner1;
            child2 = winner2;
        end
-       nextGeneration(2 * i - 1).data = genetic.mutate(child1);
+       nextGeneration(2 * i - 1).data = genetic.train(genetic.mutate(child1));
        if (2 * i <= length(networks))
-           nextGeneration(2 * i).data = genetic.mutate(child2);
+           nextGeneration(2 * i).data = genetic.train(genetic.mutate(child2));
        end
     end
     x = nextGeneration;
@@ -34,20 +34,22 @@ function x = rmethods2(networks, evaluations)
     selection = [];
     
     N = (length(networks));
-    resnextGeneration = []
     toChange = genetic.firstSelectionMethod(evaluations, floor(genetic.method2K / 2) * 2);
     toStay = genetic.firstSelectionMethod(evaluations, N - floor(genetic.method2K / 2) * 2);
-    resnextGeneration(1:length(toStay)) = toStay;
+    resnextGeneration(1:length(toChange) + length(toStay)) = struct('x',[]);
+    for i=1:length(toStay)
+        resnextGeneration(i).data = networks(toStay(i)).data;
+    end
 
     M = length(toStay);
 
-    for j=1:floor(genetic.method2K / 2)
-        p1 = networks(ceil(rand() * genetic.method2K)).data;
+    for j=1:length(toChange)
+        p1 = networks(toChange(ceil(rand() * genetic.method2K))).data;
         p2 = networks(toChange(ceil(rand() * genetic.method2K))).data;
         [c1, c2] = genetic.crossoverMethod(p1,p2);
-        resnextGeneration(M + j).data = genetic.mutate(c1);
+        resnextGeneration(M + j).data = genetic.train(genetic.mutate(c1));
         if (M + j + 1 <= N)
-            resnextGeneration(M + j + 1).data = genetic.mutate(c2);
+            resnextGeneration(M + j + 1).data = genetic.train(genetic.mutate(c2));
         end
     end
     
@@ -66,7 +68,7 @@ function x = rmethods3(networks, evaluations)
        winner1 = networks(selection(1)).data;
        winner2 = networks(selection(2)).data;
        [child1 child2] = genetic.crossoverMethod(winner1, winner2);
-       nextGeneration(i).data = genetic.mutate(child1);
+       nextGeneration(i).data = genetic.train(genetic.mutate(child1));
     end
     nexgGenerationEvaluations = [];
     from = networks(1).data.trainSize;

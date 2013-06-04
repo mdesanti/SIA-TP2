@@ -6,6 +6,7 @@ function c = crossover()
     c.anularCrossOver = @anularCrossOver;
     c.uniformParametrizedCrossOver = @uniformParametrizedCrossOver;
     c.mutate = @mutate;
+    c.train = @train;
     c.test= @test;
 end
 
@@ -288,9 +289,24 @@ function child = mutate(network)
             factor = -1;
         end
         if(randomNr < mutationProbability)
-            weights(i) = weights(i) + factor * (weights(i)*0.02);
+            weights(i) = weights(i) + factor * (weights(i)*0.1);
         end
     end
     network.weights = getWeightsMatrix(network, weights, network.n);
     child = network;
+end
+
+function child = train(net)
+    global trainProbability;
+    global util;
+    global iterationsN;
+    global network;
+    randomNr = rand();
+    if randomNr < trainProbability && false
+        util.setNetwork(network);
+        iterationsN = 20;
+        network.retrain(2);
+        trainProbability = trainProbability * 0.66;
+    end
+    child = net;
 end

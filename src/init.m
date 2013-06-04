@@ -37,6 +37,9 @@ crossover = crossoverFile
 global networkData;
 global selection;
 global network;
+global iterationsN;
+
+iterationsN = -1;
 network = []; % dummy
 selection = selectionFile;
 
@@ -46,11 +49,19 @@ networkData.origData = x / 3.8;
 networkData.data = x / 3.8;
 
 global replacement;
+global trainProbability;
+
+global ids;
+ids = 0;
 
 replacement = replacementFile;
 
+trainProbability = 0.001;
+
+genetic.method2K = 10;
 genetic.replacementMethod = replacement.method1;
 genetic.crossoverMethod = crossover.onePointCrossover;
-genetic.firstSelectionMethod = selection.roulette;
-genetic.secondSelectionMethod = selection.roulette;
+genetic.firstSelectionMethod = selection.rank;
+genetic.secondSelectionMethod = selection.rank;
 genetic.mutate = crossover.mutate;
+genetic.train = crossover.train;

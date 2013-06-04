@@ -22,9 +22,16 @@ function networkPrepare(n)
   global util
   global network
   global logging
-
+  global networkData
+  
 	network.neuronCount = sum(network.neuronsPerLayer);
-
+    
+    if ~network.problem.indexBased
+      network.err = zeros(2^n,1);
+    else
+      network.err = length(networkData.data) - n;
+    end
+    
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
 	if isempty(network.weights)
@@ -62,18 +69,18 @@ function networkPrepare(n)
 	% Makes matrix containing the inputs for each layer.
 	% !!! Inputs are stored based on the level of each layer.
 	
-    network.inputGenerator(n);    
-%     if ~network.problem.indexBased
-%     	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-% 		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
-%     else
-%         num = network.trainSize;
-% 		network.inputForLayer = zeros(num, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
-%         network.inputForLayer(:,:,1) = network.inputGenerator(n);
-% 	end
-% 	for i = 2:length(network.neuronsPerLayer) + 1
-% 		network.inputForLayer(:,1,i) = 1;
-% 	end
+%      network.inputGenerator(n);    
+     if ~network.problem.indexBased
+     	network.inputForLayer = zeros(2^n, max(network.neuronsPerLayer)+1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+ 		network.inputForLayer(:,1:n+1,1) = network.inputGenerator(n);
+     else
+         num = network.trainSize;
+  		 network.inputForLayer = zeros(num, n + 1, length(network.neuronsPerLayer) + 1); % TODO: n+1 is not a wire parameter, it should be the maximum size of inputs for all layers
+         network.inputForLayer(:,:,1) = network.inputGenerator(n);
+ 	end
+ 	for i = 2:length(network.neuronsPerLayer) + 1
+ 		network.inputForLayer(:,1,i) = 1;
+ 	end
 
 	% Prepares the deltas matrix
 	network.deltas = zeros(max(network.neuronsPerLayer), sum(network.neuronsPerLayer));

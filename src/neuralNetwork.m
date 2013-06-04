@@ -28,6 +28,7 @@ function retrain(n)
     global logging
     global network
     global networkData
+    global iterationsN
     
     util.networkPrepare(n);
 
@@ -66,6 +67,12 @@ function retrain(n)
     network.eta = network.startEta;
     network.N = N;
     network.gprimas = zeros(1, N);
+    
+    if (iterationsN ~= 0) 
+       iterations = iterationsN;
+    else
+       iterations = -1;
+    end
 
     while(~finished)
         weightsBeforeIteration = network.weights;
@@ -157,7 +164,7 @@ function retrain(n)
         
         oldEta = [oldEta network.eta];
 
-        figure(1);
+        figure(2);
         semilogy(totalErr, 'b');hold on;
         semilogy(oldEta, 'r');hold off;
         title('Error cuadratico medio');
@@ -180,19 +187,27 @@ function retrain(n)
 %         scatter(1:l,network.problem.expected(1:l)'- network.inputForLayer(:,2,l2))
 %         title('Diferencia');
    
-        try
-            network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
-            diff = network.problem.expected - network.problem.result;
-            figure(4);
-            length(diff);
-            scatter(1:length(diff),diff);
-
-        catch
-            
-        end
-        
+%         try
+%             network.problem.result = network.inputForLayer(:,2,length(network.neuronsPerLayer) + 1)';
+%             diff = network.problem.expected - network.problem.result;
+%             figure(4);
+%             length(diff);
+%             scatter(1:length(diff),diff);
+% 
+%         catch
+%             
+%         end
+%         
         
         if aux < network.delta
+            finished = 1;
+        end
+        
+        if iterations ~= -1
+           iterations = iterations - 1;
+        end
+        
+        if iterations == 0
             finished = 1;
         end
         if (i > 1)

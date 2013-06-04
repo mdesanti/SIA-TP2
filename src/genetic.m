@@ -27,11 +27,15 @@ function x = run()
     k = 1000000;
     allErrors = [];
     while(k > 0)
+        evaluations = [];
         for i=1:length(networks)
             result = [];
             util.setNetwork(networks(i).data);
+            
+            networks(i).data.id
+            
             comparisson = [];
-            for j=1:15
+            for j=1:50
                 aux = network.eval(theTestSets(j,2:3))*3.8;
                 result(j) = aux - theExpected(j)*3.8;
                 comparisson(j,1) = aux;
@@ -45,7 +49,7 @@ function x = run()
         error;
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
-        mean(evaluations)
+        mean(evaluations);
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
         figure(1);
@@ -76,13 +80,14 @@ function net = initNetwork(neuronsPerLayer)
     global network;
     global mutationProbability;
     global crossOverProbability;
+    global ids;
     
     crossOverProbability = 0.7;
     mutationProbability = 0.01;
     
     network = initNetwork;
     % Control variables
-    network.delta = 0.001;
+    network.delta = 0.001; 
     network.startEta = 1;
     network.beta = 0.6;
     network.N = 10000;
@@ -101,8 +106,10 @@ function net = initNetwork(neuronsPerLayer)
     network.momentum = false;
 
     network.iterLimit = 200;
-    network.trainSize = 0;
+    network.trainSize = 400;
     network.n = 2;
+    network.id = ids + 1;
+    ids = ids + 1;
     
     network = util.setNetwork(network);
         
