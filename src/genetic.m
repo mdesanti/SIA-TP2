@@ -40,7 +40,7 @@ function x = run()
                 result(j) = theExpected(j) - aux;
             end
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = (1/error(i));
+            evaluations(i) = sqrt(1/error(i));
         end
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
