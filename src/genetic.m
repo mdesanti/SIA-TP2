@@ -40,7 +40,7 @@ function x = run()
                 result(j) = theExpected(j) - aux;
             end
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = sqrt(1/error(i));
+            evaluations(i) = (1 - (1/error(i)) .^ (log(error(i)) / log(100000))) / (2 * 2* error(i).^2);
         end
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
@@ -48,6 +48,7 @@ function x = run()
         maxErrors = [maxErrors max(error)];
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
+        evaluations
         figure(1);
         semilogy(allErrors, 'b');
         hold on;
