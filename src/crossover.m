@@ -289,7 +289,7 @@ function child = mutate(network)
             factor = -1;
         end
         if(randomNr < mutationProbability)
-            weights(i) = weights(i) + factor * (weights(i)*0.1);
+            weights(i) = rand() * 20 - 10;
         end
     end
     network.weights = getWeightsMatrix(network, weights, network.n);
@@ -299,14 +299,18 @@ end
 function child = train(net)
     global trainProbability;
     global util;
-    global iterationsN;
     global network;
-    randomNr = rand();
-    if randomNr < trainProbability && false
-        util.setNetwork(network);
-        iterationsN = 20;
+    global iterationsN;
+    randN = rand();
+    if randN < trainProbability;
+        disp('train');
+        util.setNetwork(net);
+        iterationsN = 100;
+        stepAmount = 25;
         network.retrain(2);
-        trainProbability = trainProbability * 0.66;
+        trainProbability = trainProbability * 0.8;
+        child = network;
+    else
+        child = net;
     end
-    child = net;
 end

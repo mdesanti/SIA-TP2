@@ -38,12 +38,15 @@ global networkData;
 global selection;
 global network;
 global iterationsN;
+global stepAmount;
+
 
 iterationsN = -1;
 network = []; % dummy
 selection = selectionFile;
 
 load data
+
 
 networkData.origData = x / 3.8;
 networkData.data = x / 3.8;
@@ -56,12 +59,18 @@ ids = 0;
 
 replacement = replacementFile;
 
-trainProbability = 0.001;
 
-genetic.method2K = 10;
-genetic.replacementMethod = replacement.method1;
-genetic.crossoverMethod = crossover.onePointCrossover;
-genetic.firstSelectionMethod = selection.rank;
-genetic.secondSelectionMethod = selection.rank;
+global mutationProbability;
+global crossOverProbability;
+crossOverProbability = 0.2;
+mutationProbability = 0.0005;
+trainProbability = 0.01;
+
+genetic.trainSize = 10;
+genetic.method2K = 14;
+genetic.replacementMethod = replacement.method2;
+genetic.crossoverMethod = crossover.anularCrossOver;
+genetic.firstSelectionMethod = selection.roulette;
+genetic.secondSelectionMethod = selection.roulette;
 genetic.mutate = crossover.mutate;
 genetic.train = crossover.train;

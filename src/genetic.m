@@ -17,8 +17,9 @@ function x = run()
     global genetic
     global util
     global allErrors
+    global stepAmount
     networks = initPopulation(30, [9 6 1]);
-    theTestSets = networks(1).data.testSet;
+    theTestSets = networks(1).data.trainingSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;
     evaluations = [];
@@ -26,34 +27,33 @@ function x = run()
     from = network.trainSize;
     k = 1000000;
     allErrors = [];
+    minErrors = [];
+    maxErrors = [];
     while(k > 0)
         evaluations = [];
+        ids = [];
         for i=1:length(networks)
             result = [];
             util.setNetwork(networks(i).data);
-            
-            networks(i).data.id
-            
-            comparisson = [];
-            for j=1:50
-                aux = network.eval(theTestSets(j,2:3))*3.8;
-                result(j) = aux - theExpected(j)*3.8;
-                comparisson(j,1) = aux;
-                comparisson(j,2) = theExpected(j)*3.8;
-                comparisson(j,3) = result(j);
+            for j=1:network.trainSize
+                aux = network.eval(theTestSets(j,2:3));
+                result(j) = theExpected(j) - aux;
             end
-            comparisson;
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = 1/error(i);
+            evaluations(i) = (1/error(i));
         end
-        error;
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
-        mean(evaluations);
+        minErrors = [minErrors min(error)];
+        maxErrors = [maxErrors max(error)];
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
         figure(1);
-        plot(allErrors);
+        semilogy(allErrors, 'b');
+        hold on;
+        semilogy(minErrors, 'g');
+        semilogy(maxErrors, 'r');
+        hold off;
     end
 end
     
@@ -77,19 +77,15 @@ function net = initNetwork(neuronsPerLayer)
     global functs;
     global util;
     global initNetwork;
+    global genetic;
     global network;
-    global mutationProbability;
-    global crossOverProbability;
     global ids;
-    
-    crossOverProbability = 0.7;
-    mutationProbability = 0.01;
     
     network = initNetwork;
     % Control variables
     network.delta = 0.001; 
-    network.startEta = 1;
-    network.beta = 0.6;
+    network.startEta = 0.001;
+    network.beta = 0.5;
     network.N = 10000;
 
     network.intervals = [-1 1];
@@ -103,17 +99,17 @@ function net = initNetwork(neuronsPerLayer)
     network.trainPctg = 0;
 
     network.adaptive = true;
-    network.momentum = false;
+    network.momentum = true;
 
     network.iterLimit = 200;
-    network.trainSize = 400;
+    network.trainSize = genetic.trainSize;
     network.n = 2;
     network.id = ids + 1;
     ids = ids + 1;
     
     network = util.setNetwork(network);
         
-    util.networkPrepare(2);
+    util.networkPrepare(2, 1);
 %     
 %     aux = load('weightsBackup');
 %     network.weights = aux;

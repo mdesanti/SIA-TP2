@@ -25,13 +25,12 @@ function x = derivStep(in)
 end
 
 function x = tanhf(in)
-	global network
-	x = tanh(network.beta * in);
+	x = tanh(0.6 * in);
 end
 
 function x = tanhdf(in)
-	global network
-	x = network.beta * sech(in).^2 * 1;
+
+	x = 0.6 * sech(in).^2 * 1;
 end
 
 function x = expf(in)

@@ -16,8 +16,9 @@ function x = eval(in)
     network.inputForLayer(:,1,:) = 1;
     
     for layer = 1:length(network.neuronsPerLayer)
-        neuron.runInput(layer, 1);
+            neuron.runInput(layer, 1);
     end
+%     neuron.runFastInput(1:length(network.neuronsPerLayer), 1);
     
     x = network.inputForLayer(1,2,length(network.neuronsPerLayer) + 1);
 end
@@ -29,8 +30,10 @@ function retrain(n)
     global network
     global networkData
     global iterationsN
+   
+    util.networkPrepare(n, 0);
     
-    util.networkPrepare(n);
+    
 
     neuronCount = sum(network.neuronsPerLayer);
     finished = 0;
@@ -51,7 +54,7 @@ function retrain(n)
     oldLastError = 0;
     
     logging.errors = zeros(1,2^n,network.neuronCount);
-     logging.errorIndexes = ones(2^n,network.neuronCount);
+     logging.errorIndexes = zeros(2^n,network.neuronCount);
      logging.lastError = 0;
      logging.currentError = 0;
      logging.errorRepetition = 0;
@@ -73,52 +76,58 @@ function retrain(n)
     else
        iterations = -1;
     end
-
+    
+    network.id
+ 
     while(~finished)
         weightsBeforeIteration = network.weights;
         oldDeltaWeights = network.lastDeltaWeights;
         %oldOutputs = network.inputForLayer(:,2,3);
         % For every input
  
-        slice = randperm(N);
+ 
+            slice = randperm(N);
 
-        for inputIndex = slice
-            logging.enabled = false;
-			% Eval down-up...
-			for layer = 1:length(network.neuronsPerLayer)
-				neuron.runInput(layer, inputIndex);
-			end
-			% Prepare up-down...
-			for ni = neuronCount:-1:1
-				neuron.prepareDeltas(ni, inputIndex);
-			end
-			% Fix weights up-down...
-			for ni = 1:neuronCount
-				neuron.fixWeights(n, ni, inputIndex, cancelAlpha);
+            for inputIndex = slice
+                logging.enabled = false;
+                % Eval down-up...
+                for layer = 1:length(network.neuronsPerLayer)
+                        neuron.runInput(layer, inputIndex);
+                end
+%                 neuron.runFastInput(1:length(network.neuronsPerLayer), inputIndex);
+                % Prepare up-down...
+                for ni = neuronCount:-1:1
+                    neuron.prepareDeltas(ni, inputIndex);
+                end
+                % Fix weights up-down...
+                for ni = 1:neuronCount
+                    neuron.fixWeights(n, ni, inputIndex, cancelAlpha);
+                end
             end
-         end
-        
          
             logging.enabled = true;
 
 
             for subInputIndex = 1:N
                 % Eval down-up...
-                for layer = 1:length(network.neuronsPerLayer)
-                    neuron.runInput(layer, subInputIndex);
-                end
+                 for layer = 1:length(network.neuronsPerLayer)
+                     neuron.runInput(layer, subInputIndex);
+                 end
+%                 neuron.runFastInput(1:length(network.neuronsPerLayer), subInputIndex);
                 neuron.prepareDeltas(neuronCount, subInputIndex);
             end
         
             oldTotalErr = totalErr;
             aux = sum(network.err.^2)./length(network.err);
-            totalErr = [totalErr;aux];
-
-
-
+            
+            totalErr = [totalErr;aux];    
             oldLastError = logging.lastError;
             logging.lastError = sum(logging.currentError);
             logging.currentError = totalErr(length(totalErr));
+            
+
+
+
 
             
             if (network.adaptive)
@@ -160,15 +169,17 @@ function retrain(n)
                deltaErrors = [deltaErrors deltaError];
             end
             noEtaUpdateTime = noEtaUpdateTime - 1;
-        end
+            end
         
-        oldEta = [oldEta network.eta];
+        if (i > 1)
+            oldEta = [oldEta network.eta];
 
-        figure(2);
-        semilogy(totalErr, 'b');hold on;
-        semilogy(oldEta, 'r');hold off;
-        title('Error cuadratico medio');
-        xlabel('Épocas');
+            figure(2);
+            semilogy(totalErr, 'b');hold on;
+            semilogy(oldEta, 'r');hold off;
+            title('Error cuadratico medio');
+            xlabel('Épocas');
+        end
 
     
 %         figure(2);

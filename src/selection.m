@@ -13,6 +13,7 @@ end
 % from the evaluations array.
 
 function selection = rouleteSelection(evaluations, n)
+    selection = [];
     %suma de todos los elementos de evaluations
     suma = sum(evaluations);
     %para cada valor, ev/sum
@@ -26,16 +27,18 @@ function selection = rouleteSelection(evaluations, n)
     end
     %selecciono n elementos
     for j=1:n
-        randomNr = rand();
+        randomNr = rand() * max(evaluations);
         selected = 0;
         for k=1:length(evaluations)
-            selected = k;
             if (randomNr < evaluations(k))
+                evaluations(k) = -1;
+                selected = k;
                 break;
             end
         end
         selection(j) = selected;
     end
+    
 end
 
 
@@ -103,7 +106,7 @@ function selection = rankSelection(evaluations, n)
     probabilities = [];
     N = length(sorted);
     for i=1:length(sorted)
-        probabilities = (N-(i-1))/ (N*(N+1)/2);
+        probabilities(i) = (N-(i-1))/ (N*(N+1)/2);
     end
     
     cumSum = 0;
@@ -115,16 +118,18 @@ function selection = rankSelection(evaluations, n)
     end
     %selecciono n elementos
     for j=1:n
-        randomNr = rand();
+        randomNr = rand() * max(probabilities);
         selected = 0;
         for k=1:length(probabilities)
             selected = k;
             if (randomNr < probabilities(k))
+                probabilities(k) = -1;
                 break;
             end
         end
         selection(j) = indexes(selected);
     end
+    
 end
 
 

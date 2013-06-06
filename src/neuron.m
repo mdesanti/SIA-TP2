@@ -1,6 +1,7 @@
 function neuron = neuron()
 	neuron.eval = @neuronEval;
 	neuron.runInput = @runInput;
+    neuron.runFastInput = @runFastInput;
 	neuron.prepareDeltas = @prepareDeltas;
 	neuron.fixWeights = @fixWeights;
 end
@@ -12,10 +13,40 @@ function x = neuronEval(in)
 	x = network.problem.f(result);
 end
 
+
+% Runs the input and stores the results for each neuron
+function runFastInput(layers, inputIndex)
+    global network
+    
+    for layer=layers
+        if (layer == 1)
+            layerFirstNodeIndex = 1;
+        else
+            layerFirstNodeIndex = sum(network.neuronsPerLayer(1:layer - 1)) + 1;
+        end
+
+        layerNodeCount = network.neuronsPerLayer(layer);
+
+        from = layerFirstNodeIndex;
+        to = layerFirstNodeIndex + layerNodeCount-1;
+
+        weightnum = network.weightsPerLayer(layer);
+        thisLayerWeights = network.weights(from:to,1:weightnum);
+        in = network.inputForLayer(inputIndex,1:weightnum,layer);
+
+        aux = thisLayerWeights * in';
+
+        
+    %     for i=1:length(aux)
+    %         layerIndex = network.layerIndexForNeuron(i + layerFirstNodeIndex - 1);
+        network.inputForLayer(inputIndex, (2:(length(aux) + 1)), layer + 1) = network.problem.f(aux);
+    %     end
+    end
+end
+
 % Runs the input and stores the results for each neuron
 function runInput(layer, inputIndex)
     global network
-    global util
     
     if (layer == 1)
         layerFirstNodeIndex = 1;
@@ -34,10 +65,14 @@ function runInput(layer, inputIndex)
     
     aux = thisLayerWeights * in';
 	
-    for i=1:length(aux)
-        layerIndex = network.layerIndexForNeuron(i + layerFirstNodeIndex - 1);
-        network.inputForLayer(inputIndex, layerIndex + 1, layer + 1) = network.problem.f(aux(i));
-    end
+     for i=1:length(aux)
+             layerIndex = network.layerIndexForNeuron(i + layerFirstNodeIndex - 1);
+             network.inputForLayer(inputIndex, layerIndex + 1, layer + 1) = network.problem.f(aux(i));
+         end
+%     for i=1:length(aux)
+%         layerIndex = network.layerIndexForNeuron(i + layerFirstNodeIndex - 1);
+%      network.inputForLayer(inputIndex, (2:(length(aux) + 1)), layer + 1) = network.problem.f(aux);
+%     end
 end
 
 function prepareDeltas(ni, inputIndex)
@@ -62,10 +97,11 @@ function prepareDeltas(ni, inputIndex)
         else
           expected = network.problem.learnF(inputIndex);
         end
+        
 		error = (expected - result); % Check This
-%         if (abs(error) < 0.0001) 
-%            error = 0;
-%         end
+        if (abs(error) < 0.0001) 
+           error = 0;
+        end
         network.err(inputIndex) = error;
     else
         nextLayerNodeCount = network.neuronsPerLayer(layer + 1);
@@ -84,9 +120,7 @@ function prepareDeltas(ni, inputIndex)
             added = added + network.weights(i,layerIndex + 1) * network.deltas(li, layer + 1);
         end
 		error = added; % Check This
-        if (abs(error) < 0.0001) 
-           error = 0;
-        end
+
     end
     
     network.deltas(layerIndex, layer) = (gprima + 0.1) * error;
@@ -105,7 +139,7 @@ function fixWeights(n, ni, inputIndex, cancelAlpha)
     % Check this
     deltaWeight = network.eta .* network.deltas(niOnLayer, layer) .* network.inputForLayer(inputIndex, :, layer);
 %     
-    if (cancelAlpha == 0 && network.momentum)
+    if (cancelAlpha == 0)
         deltaWeight = network.lastDeltaWeights(ni,:) * 0.1 + deltaWeight;
     end
     

@@ -18,7 +18,7 @@ end
 % Initializes Weights
 % Initializes Inputs
 % Models the network
-function networkPrepare(n)
+function networkPrepare(n, initWeights)
   global util
   global network
   global logging
@@ -34,8 +34,9 @@ function networkPrepare(n)
     
 	% Initializes the weight only if its the first time.
 	% !!! Weights are stored based on the index of each node.
-	if isempty(network.weights)
-        network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)./1.2);
+	if initWeights == 1
+        disp('new weights yay!')
+        network.weights = ((2*rand(network.neuronCount,max(max(network.neuronsPerLayer)+1, n+1))-1)./1.2) * 10;
         
         % Helps to know for a given node index to which layer it belongs.
         i = 1;
@@ -83,8 +84,10 @@ function networkPrepare(n)
  	end
 
 	% Prepares the deltas matrix
-	network.deltas = zeros(max(network.neuronsPerLayer), sum(network.neuronsPerLayer));
-	network.lastDeltaWeights = zeros(network.neuronCount, max(max(network.neuronsPerLayer)+1, n+1)); 
+    if initWeights == 1
+        network.deltas = zeros(max(network.neuronsPerLayer), sum(network.neuronsPerLayer));
+        network.lastDeltaWeights = zeros(network.neuronCount, max(max(network.neuronsPerLayer)+1, n+1)); 
+    end
 	
 	% Generates an index to know how many weights has each layer
 	network.weightsPerLayer = zeros(network.neuronCount);
@@ -211,8 +214,6 @@ function x = generateTrainingSets(n)
     for i=trainingQty+1:length(allSets)
         network.testSet(i, :) = allSets(i,1:n+1);
         network.problem.expected(i) = allSets(i, n+2);
-    end
-    
-    
+    end    
     x = network.trainingSet;
 end
