@@ -40,11 +40,10 @@ end
 function x = rmethods2(networks, evaluations)
     global genetic;
     global ids;
-    global crossOverProbability;
     
     N = (length(networks));
     toChange = genetic.firstSelectionMethod(evaluations, floor(genetic.method2K / 2) * 2);
-    toStay = genetic.firstSelectionMethod(evaluations, N - floor(genetic.method2K / 2) * 2);
+    toStay = genetic.secondSelectionMethod(evaluations, N - floor(genetic.method2K / 2) * 2);
     resnextGeneration(1:length(toChange) + length(toStay)) = struct('x',[]);
     for i=1:length(toStay)
         resnextGeneration(i).data = networks(toStay(i)).data;
@@ -99,14 +98,13 @@ function x = rmethods3(networks, evaluations)
        nextGeneration(i).data = genetic.train(genetic.mutate(child1));
     end
     nextGenerationEvaluations = [];
-    from = networks(1).data.trainSize;
     error=[];
     for i=1:length(nextGeneration)
         result = [];
-        for j=from+1:800
+        for j=1:genetic.trainSize
             util.setNetwork(nextGeneration(i).data);
-            aux = network.eval(network.testSet(j,2:3))*3.8;
-            result(j-from) = aux - network.problem.expected(j)*3.8;
+            aux = network.eval(network.trainingSet(j,2:3))*3.8;
+            result(j) = aux - network.problem.expected(j)*3.8;
         end
         error(i) = sum(result.^2)/length(result);
         nextGenerationEvaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + 2.71^error(i).^2); 
@@ -117,11 +115,14 @@ function x = rmethods3(networks, evaluations)
     selection = genetic.secondSelectionMethod(evaluations, length(networks));
     
     netLen = length(networks);
+    
+    selection
+    
     for i=1:length(selection)
         if (selection(i) <= netLen)
-            x(i) = networks(i);
+            x(i) = networks(selection(i));
         else
-            x(i) = nextGeneration(i);
+            x(i) = nextGeneration(selection(i) - netLen);
         end
     end
     

@@ -182,38 +182,50 @@ end
 function x = generateTrainingSets(n)
     global network
     global networkData
-    network.problem.originalSet = n;
-    from = networkData.data;
-    allSets = zeros(length(from) - n, n + 2);
-    trainingQty = network.trainSize;
     
+    if networkData.loaded == false
+        network.problem.originalSet = n;
+        from = networkData.data;
+        allSets = zeros(length(from) - n, n + 2);
+        trainingQty = network.trainSize;
 
-    network.problem.expected = zeros(1);
-    %construimos todos los sets posibles y sus respuestas
-    for i=1:length(from)-n
-        %input for neuralNetwork
-        allSets(i,2:n+1) = from(i:i+n-1);
-        %bias
-        allSets(i,1) = 1;
-        %expexted result
-        allSets(i, n+2) = from(i+n);
+
+        network.problem.expected = zeros(1);
+        %construimos todos los sets posibles y sus respuestas
+        for i=1:length(from)-n
+            %input for neuralNetwork
+            allSets(i,2:n+1) = from(i:i+n-1);
+            %bias
+            allSets(i,1) = 1;
+            %expexted result
+            allSets(i, n+2) = from(i+n);
+        end
+        % mezclamos los sets que generamos anteriormente
+         for i=1:10000
+             rand1 = ceil(rand() * length(allSets));
+             rand2 = ceil(rand() * length(allSets));
+             aux = allSets(rand1,:);
+             allSets(rand1, :) = allSets(rand2, :);
+             allSets(rand2, :) = aux;
+         end
+        %ponemos la respuesta en network.problem.expected
+        for i=1:trainingQty
+            network.trainingSet(i, :) = allSets(i,1:n+1);
+            network.problem.expected(i) = allSets(i, n+2);
+        end
+        for i=trainingQty+1:length(allSets)
+            network.testSet(i, :) = allSets(i,1:n+1);
+            network.problem.expected(i) = allSets(i, n+2);
+        end    
+        x = network.trainingSet;
+        networkData.loaded = true;
+        networkData.expected = network.problem.expected;
+        networkData.trainingSet = network.trainingSet;
+        networkData.testSet = network.testSet;
+    else
+        network.problem.expected = networkData.expected;
+        network.trainingSet = networkData.trainingSet;
+        network.testSet = networkData.testSet;
+        x = network.trainingSet;
     end
-    % mezclamos los sets que generamos anteriormente
-%     for i=1:10000
-%         rand1 = ceil(rand() * length(allSets));
-%         rand2 = ceil(rand() * length(allSets));
-%         aux = allSets(rand1,:);
-%         allSets(rand1, :) = allSets(rand2, :);
-%         allSets(rand2, :) = aux;
-%     end
-    %ponemos la respuesta en network.problem.expected
-    for i=1:trainingQty
-        network.trainingSet(i, :) = allSets(i,1:n+1);
-        network.problem.expected(i) = allSets(i, n+2);
-    end
-    for i=trainingQty+1:length(allSets)
-        network.testSet(i, :) = allSets(i,1:n+1);
-        network.problem.expected(i) = allSets(i, n+2);
-    end    
-    x = network.trainingSet;
 end

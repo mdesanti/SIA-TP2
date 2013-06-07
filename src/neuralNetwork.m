@@ -33,8 +33,6 @@ function retrain(n)
    
     util.networkPrepare(n, 0);
     
-    
-
     neuronCount = sum(network.neuronsPerLayer);
     finished = 0;
     i = 1;
@@ -76,8 +74,6 @@ function retrain(n)
     else
        iterations = -1;
     end
-    
-    network.id
  
     while(~finished)
         weightsBeforeIteration = network.weights;
@@ -173,7 +169,6 @@ function retrain(n)
         
         if (i > 1)
             oldEta = [oldEta network.eta];
-
             figure(2);
             semilogy(totalErr, 'b');hold on;
             semilogy(oldEta, 'r');hold off;

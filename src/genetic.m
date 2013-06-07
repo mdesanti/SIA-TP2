@@ -7,9 +7,62 @@
 function genetic = genetic()
     genetic.run = @run
     genetic.init = @initPopulation
-    genetic.k = 24;
+    genetic.generationCount = @generationCount
+    genetic.generationBest = @generationBest
+    genetic.generationContent = @generationContent
+    genetic.best = @best
 end
 
+function x = generationBest(varargin)
+    global genetic
+    if genetic.bestError < genetic.bestTargetError
+        x = 1;
+    else
+        x = 0;
+    end
+end
+
+function x = generationCount(varargin)
+    global genetic
+    if genetic.counter == -1
+        genetic.counter = genetic.generations;
+    end
+    if genetic.counter == 0
+        x = 1;
+    else
+        genetic.counter = genetic.counter - 1;
+        x = 0;
+    end
+end
+
+function x = generationContent(varargin)
+    global genetic
+    if genetic.contentCounter == -1
+        genetic.contentCounter = genetic.contentLimit;
+        genetic.lastBest = 10;
+    end
+    if genetic.bestError < genetic.lastBest
+        genetic.lastBest = genetic.bestError;
+        genetic.contentCounter = genetic.contentLimit;
+    else
+        genetic.contentCounter = genetic.contentCounter - 1;
+    end
+    
+    if genetic.contentCounter == 0
+        x = 1;
+    else
+        x = 0;
+    end
+end
+
+function x = best(varargin)
+    vals = [];
+    for i=1:length(varargin{1})
+      val = varargin{1}{i};
+      vals(i) = val();
+    end
+    x = max(vals)
+end
 
 function x = run()
     global networks
@@ -19,11 +72,13 @@ function x = run()
     global allErrors
     global stepAmount
     networks = initPopulation(genetic.networkCount, genetic.arch);
+    genetic.counter = -1;
+    genetic.contentCounter = -1;
+    genetic.bestError = 10;
     theTestSets = networks(1).data.trainingSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;
     evaluations = [];
-%     total = length(networks(1).data.testSet(:,2:3));
     from = network.trainSize;
     k = 1000000;
     allErrors = [];
@@ -35,41 +90,45 @@ function x = run()
         for i=1:length(networks)
             result = [];
             util.setNetwork(networks(i).data);
-            for j=1:(network.trainSize/10)
+            
+            for j=1:(genetic.checkSize)
                 aux = network.eval(theTestSets(j,2:3));
                 result(j) = theExpected(j) - aux;
             end
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + 2.71^error(i).^2);
+            evaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + exp(error(i)));
         end
+        
+        if (min(error) < genetic.bestError) 
+            [genetic.bestError ind] = min(error);
+            genetic.best = networks(ind).data.weights;
+        end
+        
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
         minErrors = [minErrors min(error)];
         maxErrors = [maxErrors max(error)];
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
-        sort(evaluations)
         figure(1);
         semilogy(allErrors, 'b');
         hold on;
         semilogy(minErrors, 'g');
         semilogy(maxErrors, 'r');
         hold off;
+        
+        if genetic.endMethod(genetic.endMethods)
+           break;
+        end
     end
 end
     
 function x = initPopulation(size, neuronsPerLayer)
-    neuronCount = sum(neuronsPerLayer);
     networks(1:size) = struct('x',[]);
     for k=1:size
         networks(k).data = initNetwork(neuronsPerLayer);
     end
     x = networks;
-end
-
-
-function m = evaluateIndividuals(individuals) 
-    
 end
 
 
@@ -85,7 +144,7 @@ function net = initNetwork(neuronsPerLayer)
     network = initNetwork;
     % Control variables
     network.delta = 0.001; 
-    network.startEta = 0.001;
+    network.startEta = 1;
     network.beta = 0.5;
     network.N = 10000;
 

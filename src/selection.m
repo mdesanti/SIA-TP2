@@ -1,7 +1,7 @@
 function s = selection()
     s.roulette = @rouleteSelection;
     s.universal = @universalEstocasticSelection;
-    s.boltzsman = @boltzmanSelection;
+    s.boltzman = @boltzmanSelection;
     s.tournament = @tournamentSelection;
     s.rank = @rankSelection;
     s.elite = @eliteSelection;
@@ -56,7 +56,7 @@ function selection = universalEstocasticSelection(evaluations, n)
     end
     selection = [];
     %selecciono n elementos
-    randomNr = rand('unif',0,1/n);
+    randomNr = unifrnd(0,1/n);
     previous = 1;
     for j=1:n
         selected = 0;
@@ -73,7 +73,34 @@ end
 
 %no se como calcular el valor medio temporal
 function selection = boltzmanSelection(evaluations, n)
+    global boltzman
+    if boltzman.mean == 0
+        boltzman.mean = ones(1000,1);
+        boltzman.t = 1;
+        boltzman.count = 0;
+    end
     
+    vals = [];
+    for i=1:length(evaluations)
+        vals(i) = exp(evaluations(i) / boltzman.t) / boltzman.mean(i);
+        boltzman.mean(i) = (boltzman.count * boltzman.mean(i) + vals(i)) / (1 + boltzman.count);
+    end
+    
+   for j=1:n
+        randomNr = rand() * max(vals);
+        selected = 0;
+        for k=1:length(vals)
+            if (randomNr < vals(k))
+                vals(k) = -1;
+                selected = k;
+                break;
+            end
+        end
+        selection(j) = selected;
+    end
+    
+    boltzman.count = boltzman.count + 1;
+    boltzman.t = boltzman.t * 0.9999;
 end
 
 function selection = tournamentSelection(evaluations, n) 

@@ -38,7 +38,6 @@ global networkData;
 global selection;
 global network;
 global iterationsN;
-global stepAmount;
 
 
 iterationsN = -1;
@@ -50,6 +49,7 @@ load data
 
 networkData.origData = x / 3.8;
 networkData.data = x / 3.8;
+networkData.loaded = false;
 
 global replacement;
 global trainProbability;
@@ -62,18 +62,59 @@ replacement = replacementFile;
 
 global mutationProbability;
 global crossOverProbability;
-crossOverProbability = 0.01;
-mutationProbability = 0.01;
+crossOverProbability = 0.8;
+mutationProbability = 0.001;
 trainProbability = 0.005;
 
-genetic.arch = [10 6 1];
-genetic.networkCount = 20;
-genetic.method2K = 18;
-genetic.trainSize = 50;
-genetic.iterations = 20;
+
+global boltzman
+
+boltzman.mean = 0;
+
+% Arquitectura de la red.
+genetic.arch = [9 6 1];
+
+% Cantidad de redes
+genetic.networkCount = 30;
+
+% Cantidad de elementos a tomar en el metodo 2
+genetic.method2K = 20;
+
+% Cantidad de elementos a tomer en el metodo 1.
+genetic.k = 10;
+
+% Cantidad de patrones de entrenamiento de backpropagation
+genetic.trainSize = 400;
+
+% Cantidad de iteraciones en el backpropagation
+genetic.iterations = 50;
+
+% Cantidad de patrones de entrenamiento del AG.
+genetic.checkSize = 400;
+
+% Parametros de finalizacion
+
+% Limite de iteraciones con el mismo error minimo
+genetic.contentLimit = 100;                  
+% Limite de generacinoes global
+genetic.generations = 200;
+% Error minimo a obtener
+genetic.bestTargetError = 0.01;
+
+% Metodos de finalizacion a combinar
+genetic.endMethods = {genetic.generationContent, genetic.generationCount};
+% Metodo best = combinacion de otros.
+genetic.endMethod = genetic.best;
+
+% Metodo de reemplazo
 genetic.replacementMethod = replacement.method2;
+% Metodo de crossover
 genetic.crossoverMethod = crossover.onePointCrossover;
+% Metodo de seleccion
 genetic.firstSelectionMethod = selection.roulette;
+% Segundo metodo de seleccion (para el metodo 2)
 genetic.secondSelectionMethod = selection.roulette;
+
+
 genetic.mutate = crossover.mutate;
 genetic.train = crossover.train;
