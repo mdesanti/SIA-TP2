@@ -300,15 +300,15 @@ function child = train(net)
     global trainProbability;
     global util;
     global network;
+    global genetic;
     global iterationsN;
     randN = rand();
     if randN < trainProbability;
         disp('train');
         util.setNetwork(net);
-        iterationsN = 100;
-        stepAmount = 25;
+        iterationsN = genetic.iterations;
         network.retrain(2);
-        trainProbability = trainProbability * 0.8;
+        trainProbability = trainProbability * 0.5;
         child = network;
     else
         child = net;

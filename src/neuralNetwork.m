@@ -15,10 +15,10 @@ function x = eval(in)
     network.inputForLayer(1,2:n+1,1) = in;
     network.inputForLayer(:,1,:) = 1;
     
-    for layer = 1:length(network.neuronsPerLayer)
-            neuron.runInput(layer, 1);
-    end
-%     neuron.runFastInput(1:length(network.neuronsPerLayer), 1);
+%     for layer = 1:length(network.neuronsPerLayer)
+%             neuron.runInput(layer, 1);
+%     end
+     neuron.runFastInput(1:length(network.neuronsPerLayer), 1);
     
     x = network.inputForLayer(1,2,length(network.neuronsPerLayer) + 1);
 end
@@ -91,10 +91,10 @@ function retrain(n)
             for inputIndex = slice
                 logging.enabled = false;
                 % Eval down-up...
-                for layer = 1:length(network.neuronsPerLayer)
-                        neuron.runInput(layer, inputIndex);
-                end
-%                 neuron.runFastInput(1:length(network.neuronsPerLayer), inputIndex);
+%                 for layer = 1:length(network.neuronsPerLayer)
+%                         neuron.runInput(layer, inputIndex);
+%                 end
+                 neuron.runFastInput(1:length(network.neuronsPerLayer), inputIndex);
                 % Prepare up-down...
                 for ni = neuronCount:-1:1
                     neuron.prepareDeltas(ni, inputIndex);
@@ -110,10 +110,10 @@ function retrain(n)
 
             for subInputIndex = 1:N
                 % Eval down-up...
-                 for layer = 1:length(network.neuronsPerLayer)
-                     neuron.runInput(layer, subInputIndex);
-                 end
-%                 neuron.runFastInput(1:length(network.neuronsPerLayer), subInputIndex);
+%                  for layer = 1:length(network.neuronsPerLayer)
+%                      neuron.runInput(layer, subInputIndex);
+%                  end
+                 neuron.runFastInput(1:length(network.neuronsPerLayer), subInputIndex);
                 neuron.prepareDeltas(neuronCount, subInputIndex);
             end
         

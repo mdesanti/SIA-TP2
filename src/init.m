@@ -62,14 +62,17 @@ replacement = replacementFile;
 
 global mutationProbability;
 global crossOverProbability;
-crossOverProbability = 0.1;
-mutationProbability = 0.005;
-trainProbability = 0.01;
+crossOverProbability = 0.01;
+mutationProbability = 0.01;
+trainProbability = 0.005;
 
-genetic.trainSize = 500;
-genetic.method2K = 20;
+genetic.arch = [10 6 1];
+genetic.networkCount = 20;
+genetic.method2K = 18;
+genetic.trainSize = 50;
+genetic.iterations = 20;
 genetic.replacementMethod = replacement.method2;
-genetic.crossoverMethod = crossover.anularCrossOver;
+genetic.crossoverMethod = crossover.onePointCrossover;
 genetic.firstSelectionMethod = selection.roulette;
 genetic.secondSelectionMethod = selection.roulette;
 genetic.mutate = crossover.mutate;

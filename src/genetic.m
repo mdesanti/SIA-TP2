@@ -18,7 +18,7 @@ function x = run()
     global util
     global allErrors
     global stepAmount
-    networks = initPopulation(30, [9 6 1]);
+    networks = initPopulation(genetic.networkCount, genetic.arch);
     theTestSets = networks(1).data.trainingSet;
     theExpected = networks(1).data.problem.expected;
     ended = 0;
@@ -35,12 +35,12 @@ function x = run()
         for i=1:length(networks)
             result = [];
             util.setNetwork(networks(i).data);
-            for j=1:network.trainSize
+            for j=1:(network.trainSize/10)
                 aux = network.eval(theTestSets(j,2:3));
                 result(j) = theExpected(j) - aux;
             end
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = (1 - (1/error(i)) .^ (log(error(i)) / log(100000))) / (2 * 2* error(i).^2);
+            evaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + 2.71^error(i).^2);
         end
         e1 = evaluations;
         allErrors = [allErrors mean(error)];
@@ -48,7 +48,7 @@ function x = run()
         maxErrors = [maxErrors max(error)];
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
-        evaluations
+        sort(evaluations)
         figure(1);
         semilogy(allErrors, 'b');
         hold on;

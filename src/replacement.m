@@ -100,6 +100,7 @@ function x = rmethods3(networks, evaluations)
     end
     nextGenerationEvaluations = [];
     from = networks(1).data.trainSize;
+    error=[];
     for i=1:length(nextGeneration)
         result = [];
         for j=from+1:800
@@ -107,7 +108,8 @@ function x = rmethods3(networks, evaluations)
             aux = network.eval(network.testSet(j,2:3))*3.8;
             result(j-from) = aux - network.problem.expected(j)*3.8;
         end
-        nextGenerationEvaluations(i) = 1/sum(result.^2)/length(result);
+        error(i) = sum(result.^2)/length(result);
+        nextGenerationEvaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + 2.71^error(i).^2); 
     end
     len = length(evaluations);
     newLen = length(nextGenerationEvaluations);
