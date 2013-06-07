@@ -63,7 +63,7 @@ replacement = replacementFile;
 global mutationProbability;
 global crossOverProbability;
 crossOverProbability = 0.8;
-mutationProbability = 0.001;
+mutationProbability = 0.003;
 trainProbability = 0.005;
 
 
@@ -87,7 +87,7 @@ genetic.k = 10;
 genetic.trainSize = 400;
 
 % Cantidad de iteraciones en el backpropagation
-genetic.iterations = 50;
+genetic.iterations = 100;
 
 % Cantidad de patrones de entrenamiento del AG.
 genetic.checkSize = 400;
@@ -97,7 +97,7 @@ genetic.checkSize = 400;
 % Limite de iteraciones con el mismo error minimo
 genetic.contentLimit = 100;                  
 % Limite de generacinoes global
-genetic.generations = 200;
+genetic.generations = 500;
 % Error minimo a obtener
 genetic.bestTargetError = 0.01;
 
@@ -109,7 +109,7 @@ genetic.endMethod = genetic.best;
 % Metodo de reemplazo
 genetic.replacementMethod = replacement.method2;
 % Metodo de crossover
-genetic.crossoverMethod = crossover.onePointCrossover;
+genetic.crossoverMethod = crossover.uniformParametrizedCrossOver;
 % Metodo de seleccion
 genetic.firstSelectionMethod = selection.roulette;
 % Segundo metodo de seleccion (para el metodo 2)

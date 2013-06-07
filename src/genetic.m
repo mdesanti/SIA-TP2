@@ -144,7 +144,7 @@ function net = initNetwork(neuronsPerLayer)
     network = initNetwork;
     % Control variables
     network.delta = 0.001; 
-    network.startEta = 1;
+    network.startEta = 0.01;
     network.beta = 0.5;
     network.N = 10000;
 
