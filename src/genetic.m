@@ -144,11 +144,11 @@ function x = run()
         end
     end
     figure(1);
-    ecm = semilogy(allErrors, 'b');
+    ecm = semilogy(allErrors, ':b');
     hold on;
     low = semilogy(minErrors, 'g');
-    high = semilogy(maxErrors, 'r');
-    legend([ecm, high, low], {'Promedio', 'Maximo', 'Minimo'});
+    high = semilogy(maxErrors, '--r');
+    #legend([ecm, high, low], {'Promedio', 'Maximo', 'Minimo'});
     xlabel('Épocas');
     ylabel('Error Cuadratico Medio');
     hold off;
