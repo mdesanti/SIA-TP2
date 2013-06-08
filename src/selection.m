@@ -5,6 +5,7 @@ function s = selection()
     s.tournament = @tournamentSelection;
     s.rank = @rankSelection;
     s.elite = @eliteSelection;
+    s.mix = @mixSelection;
 end
 
 
@@ -159,6 +160,16 @@ function selection = rankSelection(evaluations, n)
     
 end
 
+function selection = mixSelection(evaluations, n)
+    % Pecados, pecados y más pecados...
+    % Pero anda en matlab y octave
+    % Esto se resolvería *mucho* mejor con nested functions
+    % Pero octave no lo tiene
+    global mix_i
+    global genetic
+    functs = genetic.mixes{mix_i};
+    selection = [functs{1}(evaluations, genetic.mixK(mix_i)), functs{2}(evaluations, n-genetic.mixK(mix_i))];
+end
 
 function selection = eliteSelection(evaluations, n)
     sorted = [];

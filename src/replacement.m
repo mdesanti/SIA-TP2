@@ -40,9 +40,12 @@ end
 function x = rmethods2(networks, evaluations)
     global genetic;
     global ids;
+    global mix_i;
     
     N = (length(networks));
+    mix_i = 1; % ugly
     toChange = genetic.firstSelectionMethod(evaluations, floor(genetic.method2K / 2) * 2);
+    mix_i = 2;
     toStay = genetic.secondSelectionMethod(evaluations, N - floor(genetic.method2K / 2) * 2);
     resnextGeneration(1:length(toChange) + length(toStay)) = struct('x',[]);
     for i=1:length(toStay)

@@ -10,6 +10,7 @@ function genetic = genetic()
     genetic.generationCount = @generationCount
     genetic.generationBest = @generationBest
     genetic.generationContent = @generationContent
+    genetic.generationStructure = @generationStructure
     genetic.best = @best
 end
 
@@ -55,11 +56,34 @@ function x = generationContent(varargin)
     end
 end
 
+
+
+function x = generationStructure(varargin)
+    global genetic
+    errors = varargin{1}{2};
+    if genetic.olderrors == -1
+        genetic.olderrors = zeros(length(errors),1);
+        genetic.structureCounter = genetic.structureLimit;
+    end
+    if mean(genetic.olderrors) ~= mean(errors)
+        genetic.olderrors = errors;
+        genetic.structureCounter = genetic.structureLimit;
+    else
+        genetic.structureCounter = genetic.structureCounter - 1;
+    end
+    
+    if genetic.structureCounter == 0
+        x = 1;
+    else
+        x = 0;
+    end
+end
+
 function x = best(varargin)
     vals = [];
     for i=1:length(varargin{1})
       val = varargin{1}{i};
-      vals(i) = val();
+      vals(i) = val(varargin);
     end
     x = max(vals)
 end
@@ -73,6 +97,7 @@ function x = run()
     global stepAmount
     networks = initPopulation(genetic.networkCount, genetic.arch);
     genetic.counter = -1;
+    genetic.olderrors = -1;
     genetic.contentCounter = -1;
     genetic.bestError = 10;
     theTestSets = networks(1).data.trainingSet;
@@ -117,7 +142,7 @@ function x = run()
         semilogy(maxErrors, 'r');
         hold off;
         
-        if genetic.endMethod(genetic.endMethods)
+        if genetic.endMethod(genetic.endMethods, error)
            break;
         end
     end
