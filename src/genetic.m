@@ -152,7 +152,7 @@ function x = run()
     xlabel('Épocas');
     ylabel('Error Cuadratico Medio');
     hold off;
-    print(figure(1),'graph', '-dpng');
+    print(figure(1),'result.png', '-dpng');
     
     
     result = [];
