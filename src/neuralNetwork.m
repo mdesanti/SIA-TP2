@@ -167,14 +167,14 @@ function retrain(n)
             noEtaUpdateTime = noEtaUpdateTime - 1;
             end
         
-        if (i > 1)
-            oldEta = [oldEta network.eta];
-            figure(2);
-            semilogy(totalErr, 'b');hold on;
-            semilogy(oldEta, 'r');hold off;
-            title('Error cuadratico medio');
-            xlabel('Épocas');
-        end
+%         if (i > 1)
+%             oldEta = [oldEta network.eta];
+%             figure(2);
+%             semilogy(totalErr, 'b');hold on;
+%             semilogy(oldEta, 'r');hold off;
+%             title('Error cuadratico medio');
+%             xlabel('Épocas');
+%         end
 
     
 %         figure(2);

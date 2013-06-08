@@ -89,9 +89,9 @@ genetic.checkSize = 400;
 
 genetic.mixK = [ 5, 5 ];
 
-mix1 = { selection.roulette, selection.elite }
+mix1 = { selection.roulette, selection.elite };
 
-mix2 = { selection.roulette, selection.elite }
+mix2 = { selection.roulette, selection.elite };
 
 genetic.mixes = { mix1, mix2 };
 
