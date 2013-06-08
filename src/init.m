@@ -48,6 +48,10 @@ networkData.origData = x / 3.8;
 networkData.data = x / 3.8;
 networkData.loaded = false;
 
+load TimeSerie_G1
+
+networkData.otherData = x / 3.8;
+
 ids = 0;
 
 replacement = replacementFile;
@@ -63,7 +67,7 @@ global boltzman
 boltzman.mean = 0;
 
 % Arquitectura de la red.
-genetic.arch = [20 1];
+genetic.arch = [9 6 1];
 
 % Cantidad de redes
 genetic.networkCount = 30;
@@ -94,15 +98,15 @@ genetic.mixes = { mix1, mix2 };
 % Parametros de finalizacion
 
 % Limite de iteraciones con el mismo error minimo
-genetic.structureLimit = 1;                  
-genetic.contentLimit = 100;                  
+genetic.structureLimit = 100;                  
+genetic.contentLimit = 250;                  
 % Limite de generacinoes global
-genetic.generations = 500;
+genetic.generations = 1000;
 % Error minimo a obtener
-genetic.bestTargetError = 0.01;
+genetic.bestTargetError = 0.001;
 
 % Metodos de finalibazacion a combinar
-genetic.endMethods = {genetic.generationContent, genetic.generationCount, genetic.generationStructure};
+genetic.endMethods = {genetic.generationContent, genetic.generationCount};
 % Metodo best = combinacion de otros.
 genetic.endMethod = genetic.best;
 

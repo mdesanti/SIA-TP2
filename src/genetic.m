@@ -92,9 +92,9 @@ function x = run()
     global networks
     global network
     global genetic
+    global networkData
     global util
     global allErrors
-    global stepAmount
     networks = initPopulation(genetic.networkCount, genetic.arch);
     genetic.counter = -1;
     genetic.olderrors = -1;
@@ -109,6 +109,7 @@ function x = run()
     allErrors = [];
     minErrors = [];
     maxErrors = [];
+    bestNet = {};
     while(k > 0)
         evaluations = [];
         ids = [];
@@ -127,6 +128,7 @@ function x = run()
         if (min(error) < genetic.bestError) 
             [genetic.bestError ind] = min(error);
             genetic.best = networks(ind).data.weights;
+            bestNet = networks(ind).data;
         end
         
         e1 = evaluations;
@@ -135,17 +137,42 @@ function x = run()
         maxErrors = [maxErrors max(error)];
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
-        figure(1);
-        semilogy(allErrors, 'b');
-        hold on;
-        semilogy(minErrors, 'g');
-        semilogy(maxErrors, 'r');
-        hold off;
+        
         
         if genetic.endMethod(genetic.endMethods, error)
            break;
         end
     end
+    figure(1);
+    ecm = semilogy(allErrors, 'b');
+    hold on;
+    low = semilogy(minErrors, 'g');
+    high = semilogy(maxErrors, 'r');
+    legend([ecm, high, low], {'Promedio', 'Maximo', 'Minimo'});
+    xlabel('Épocas');
+    ylabel('Error Cuadratico Medio');
+    hold off;
+    print(figure(1),'graph', '-dpng');
+    
+    
+    result = [];
+    util.setNetwork(bestNet);
+    for j=(genetic.checkSize + 1):998
+        aux = network.eval(bestNet.testSet(j,2:3));
+        result(j) = theExpected(j) - aux;
+    end
+    disp('ECM Testeo');
+    (sum(result.^2)/length(result))
+    
+    
+    result = [];
+    for j=(genetic.checkSize + 1):998
+        aux = network.eval(networkData.otherInput(j,2:3));
+        result(j) = networkData.otherExpected(j) - aux;
+    end
+    disp('ECM G6');
+    (sum(result.^2)/length(result))
+    
 end
     
 function x = initPopulation(size, neuronsPerLayer)

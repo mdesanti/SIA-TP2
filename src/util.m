@@ -186,11 +186,31 @@ function x = generateTrainingSets(n)
     if networkData.loaded == false
         network.problem.originalSet = n;
         from = networkData.data;
+        other = networkData.otherData;
         allSets = zeros(length(from) - n, n + 2);
+        otherSets = zeros(length(other) - n, n + 2);
         trainingQty = network.trainSize;
 
 
         network.problem.expected = zeros(1);
+        network.problem.otherExpected = zeros(1);
+        
+        for i=1:length(other)-n
+            %input for neuralNetwork
+            otherSets(i,2:n+1) = other(i:i+n-1);
+            %bias
+            otherSets(i,1) = 1;
+            %expexted result
+            otherSets(i, n+2) = other(i+n);
+        end
+        
+        
+        for i=1:length(otherSets)
+            networkData.otherInput(i, :) = otherSets(i,1:n+1);
+            networkData.otherExpected(i) = otherSets(i, n+2);
+        end
+        
+        
         %construimos todos los sets posibles y sus respuestas
         for i=1:length(from)-n
             %input for neuralNetwork
@@ -200,6 +220,7 @@ function x = generateTrainingSets(n)
             %expexted result
             allSets(i, n+2) = from(i+n);
         end
+        
         % mezclamos los sets que generamos anteriormente
          for i=1:10000
              rand1 = ceil(rand() * length(allSets));
