@@ -8,8 +8,10 @@ function x = rmethods1(networks, evaluations)
     global genetic;
     global crossOverProbability;
     global ids;
+    global mix_i;
     nextGeneration = networks;
     N = ceil(length(networks)/2);
+    mix_i = 1;
     selection = genetic.firstSelectionMethod(evaluations, 2 * N);
     for i=1:N
        winner1 = networks(selection(2 * i - 1)).data;
@@ -83,10 +85,12 @@ function x = rmethods3(networks, evaluations)
     global network;
     global util;
     global ids;
+    global mix_i;
     selection = [];
     nextGeneration = struct('x',[]);
     N = ceil(length(networks)/2);
     for i=1:genetic.k
+       mix_i = 1;
        selection = genetic.firstSelectionMethod(evaluations, 2);
        winner1 = networks(selection(1)).data;
        winner2 = networks(selection(2)).data;
@@ -104,22 +108,23 @@ function x = rmethods3(networks, evaluations)
     error=[];
     for i=1:length(nextGeneration)
         result = [];
-        for j=1:genetic.trainSize
-            util.setNetwork(nextGeneration(i).data);
-            aux = network.eval(network.trainingSet(j,2:3))*3.8;
-            result(j) = aux - network.problem.expected(j)*3.8;
+        util.setNetwork(nextGeneration(i).data);
+        for j=1:genetic.checkSize
+            aux = network.eval(network.trainingSet(j,2:3));
+            result(j) = aux - network.problem.expected(j);
         end
         error(i) = sum(result.^2)/length(result);
-        nextGenerationEvaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + 2.71^error(i).^2); 
+        nextGenerationEvaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + exp(error(i)));
     end
     len = length(evaluations);
     newLen = length(nextGenerationEvaluations);
     evaluations(len:len+newLen-1) = nextGenerationEvaluations(1:newLen);
+    mix_i = 2;
+    
+    evaluations
     selection = genetic.secondSelectionMethod(evaluations, length(networks));
     
     netLen = length(networks);
-    
-    selection
     
     for i=1:length(selection)
         if (selection(i) <= netLen)

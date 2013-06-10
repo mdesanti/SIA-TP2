@@ -138,6 +138,17 @@ function x = run()
         networks =  genetic.replacementMethod(networks, evaluations);
         k = k - 1;
         
+        figure(1);
+        ecm = semilogy(allErrors, ':b');
+        hold on;
+        low = semilogy(minErrors, 'g');
+        high = semilogy(maxErrors, '--r');
+        %legend([ecm, high, low], {'Promedio', 'Maximo', 'Minimo'});
+        xlabel('Épocas');
+        ylabel('Error Cuadratico Medio');
+        hold off;
+%         print(figure(1),'result.png', '-dpng');
+        
         
         if genetic.endMethod(genetic.endMethods, error)
            break;
@@ -148,30 +159,30 @@ function x = run()
     hold on;
     low = semilogy(minErrors, 'g');
     high = semilogy(maxErrors, '--r');
-    #legend([ecm, high, low], {'Promedio', 'Maximo', 'Minimo'});
+    %legend([ecm, high, low], {'Promedio', 'Maximo', 'Minimo'});
     xlabel('Épocas');
     ylabel('Error Cuadratico Medio');
     hold off;
     print(figure(1),'result.png', '-dpng');
     
     
-    result = [];
     util.setNetwork(bestNet);
-    for j=(genetic.checkSize + 1):998
-        aux = network.eval(bestNet.testSet(j,2:3));
-        result(j) = theExpected(j) - aux;
-    end
-    disp('ECM Testeo');
-    (sum(result.^2)/length(result))
     
-    
-    result = [];
-    for j=(genetic.checkSize + 1):998
-        aux = network.eval(networkData.otherInput(j,2:3));
-        result(j) = networkData.otherExpected(j) - aux;
+    outs = []; 
+    for i=1:998; 
+        outs(i) = networkData.otherExpected(i) - network.eval(networkData.otherInput(i,2:3)); 
     end
     disp('ECM G6');
-    (sum(result.^2)/length(result))
+    genetic.otherecm2 = sum(outs.^2)/length(outs) 
+    outs = []; 
+    for i=1:(998 - genetic.checkSize); 
+        outs(i) = network.problem.expected(genetic.checkSize + i) - network.eval(network.testSet(genetic.checkSize + i,2:3)); 
+    end
+    disp('ECM Testeo');
+    genetic.testecm2 = sum(outs.^2)/length(outs)
+    
+    weights = genetic.best;
+    save('weights.txt', 'weights', '-ascii');
     
 end
     

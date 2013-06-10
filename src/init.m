@@ -79,13 +79,13 @@ genetic.method2K = 20;
 genetic.k = 10;
 
 % Cantidad de patrones de entrenamiento de backpropagation
-genetic.trainSize = 400;
+genetic.trainSize = 20;
 
 % Cantidad de iteraciones en el backpropagation
-genetic.iterations = 100;
+genetic.iterations = 20;
 
 % Cantidad de patrones de entrenamiento del AG.
-genetic.checkSize = 400;
+genetic.checkSize = 20;
 
 genetic.mixK = [ 5, 5 ];
 
@@ -111,13 +111,13 @@ genetic.endMethods = {genetic.generationContent, genetic.generationCount};
 genetic.endMethod = genetic.best;
 
 % Metodo de reemplazo
-genetic.replacementMethod = replacement.method2;
+genetic.replacementMethod = replacement.method3;
 % Metodo de crossover
-genetic.crossoverMethod = crossover.onePointCrossover;
+genetic.crossoverMethod = crossover.anularCrossOver;
 % Metodo de seleccion
 genetic.firstSelectionMethod = selection.roulette;
 % Segundo metodo de seleccion (para el metodo 2)
-genetic.secondSelectionMethod = selection.mix;
+genetic.secondSelectionMethod = selection.roulette;
 
 genetic.mutate = crossover.mutate;
 genetic.train = crossover.train;
