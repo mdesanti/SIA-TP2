@@ -79,13 +79,13 @@ genetic.method2K = 20;
 genetic.k = 10;
 
 % Cantidad de patrones de entrenamiento de backpropagation
-genetic.trainSize = 20;
+genetic.trainSize = 10;
 
 % Cantidad de iteraciones en el backpropagation
 genetic.iterations = 20;
 
 % Cantidad de patrones de entrenamiento del AG.
-genetic.checkSize = 20;
+genetic.checkSize = 10;
 
 genetic.mixK = [ 5, 5 ];
 

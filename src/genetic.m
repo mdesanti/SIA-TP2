@@ -122,7 +122,7 @@ function x = run()
                 result(j) = theExpected(j) - aux;
             end
             error(i) = (sum(result.^2)/length(result));
-            evaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + exp(error(i)));
+            evaluations(i) = 1/error(i);
         end
         
         if (min(error) < genetic.bestError) 
@@ -131,7 +131,8 @@ function x = run()
             bestNet = networks(ind).data;
         end
         
-        e1 = evaluations;
+        evaluations
+        
         allErrors = [allErrors mean(error)];
         minErrors = [minErrors min(error)];
         maxErrors = [maxErrors max(error)];

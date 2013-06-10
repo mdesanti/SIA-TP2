@@ -114,7 +114,7 @@ function x = rmethods3(networks, evaluations)
             result(j) = aux - network.problem.expected(j);
         end
         error(i) = sum(result.^2)/length(result);
-        nextGenerationEvaluations(i) = (1 - (1/(error(i)/4)) .^ (log((error(i)/4)) / log(100000))) / (-1 + exp(error(i)));
+        nextGenerationEvaluations(i) = 1/(error(i).^2);
     end
     len = length(evaluations);
     newLen = length(nextGenerationEvaluations);
